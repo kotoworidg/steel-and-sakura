@@ -140,3 +140,4 @@
 - Added four original English strings and five original TGA UI cards to the infantry pack. RPFM reopened the pack and extracted the card files with matching hashes.
 - Passed 79 offline checks and three regression tests. Backed up the previous installed prototype and synced the current build; original game archives and saves remain untouched.
 - In-game text/icon display and the other unit behaviors remain untested due to the unavailable GPU.
+- Built and reopened an isolated two-row artillery mechanics pack to expose the installed dormant `test_limber_gun`. It is not installed or distributed; movement and recruitment remain untested.

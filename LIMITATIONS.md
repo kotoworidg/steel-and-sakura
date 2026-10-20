@@ -6,7 +6,7 @@ The local pack is structurally valid and sets `men=40`. It reuses the installed 
 
 ## Type 97 Chi-Ha — BLOCKED
 
-Installed horse-drawn artillery provides an observed cannon/articulated-entity basis. It does not establish self-propelled tracks, turret rotation, armor behavior, or tank pathfinding. There is no licensed Chi-Ha model and no in-game evidence. A future artillery mechanics pack must be labeled as an artillery test; it must not be shipped as the tank unit.
+Installed horse-drawn artillery provides an observed cannon/articulated-entity basis. A separate, uninstalled research pack enables the base game's dormant `test_limber_gun` via two recruitment/permission rows and reopens in RPFM. It does not establish that the unit recruits or moves in-game, nor self-propelled tracks, turret rotation, armor behavior, or tank pathfinding. There is no licensed Chi-Ha model and no in-game evidence. The research pack is excluded from release ZIPs and must not be shipped as the tank unit.
 
 ## A6M Zero — BLOCKED
 

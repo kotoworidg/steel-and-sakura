@@ -139,6 +139,10 @@ records versions confirmed by decoding the installed pack.
   Gatling rigid model and animation paths exist in the installed model packs.
   This establishes an artillery prototype route for a tank experiment, but
   does not establish independent armored vehicle movement or a Chi-Ha model.
+- The base game also has a dormant `test_limber_gun` row with four Parrott guns,
+  40 crew, and `gun_train_2_horse`. A separate research pack adds only observed
+  Fort recruitment and `japan` permission row patterns for that existing unit.
+  RPFM reopened both rows. It remains uninstalled and excluded from release.
 - A path scan of 14,322 entries from `models.pack` and `models2.pack` found no
   names matching aircraft, A6M, Zero, airplane, aeroplane, biplane, or balloon.
   It is not proof of an engine limitation. There is no visible flying-aircraft

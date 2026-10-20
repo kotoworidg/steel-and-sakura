@@ -17,4 +17,4 @@ Use a disposable new Sengoku campaign and keep existing saves untouched. Record 
 
 ## Tank and aircraft gates
 
-For tank research, run a separate artillery experiment and capture actual movement, collision, aim/firing, and crew behavior. A horse-drawn gun does not pass the Chi-Ha acceptance gate. For aircraft, require on-screen 3D geometry continuously above the battlefield, verified movement/animation and meaningful game control or scripted behavior. An off-map strike or projectile does not pass.
+For tank research, `pwsh -NoProfile -File scripts/build.ps1 -ArtilleryTest` creates a separate pack in `build/`. Back up `mod_list.txt` before any temporary installation. Test whether the dormant limbered gun recruits from a Sengoku Fort and capture actual movement, collision, aim/firing, and crew behavior. Remove the research pack after testing. A horse-drawn gun does not pass the Chi-Ha acceptance gate. For aircraft, require on-screen 3D geometry continuously above the battlefield, verified movement/animation and meaningful game control or scripted behavior. An off-map strike or projectile does not pass.

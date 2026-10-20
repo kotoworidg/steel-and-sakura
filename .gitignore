@@ -3,6 +3,7 @@
 /dist/
 *.pack
 /source/infantry/*.json
+/source/tank/*.json
 
 # Backups may contain installed mod lists and local copies
 /backups/

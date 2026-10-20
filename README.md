@@ -15,6 +15,11 @@ the game. Its weapon is based on the installed FoTS Tosa repeating rifle;
 automatic fire remains unverified. The tank and visible aircraft are research
 tasks, with no unit entries authored yet.
 
+A separate, uninstalled artillery mechanics test pack can be built with
+`pwsh -NoProfile -File scripts/build.ps1 -ArtilleryTest`. It exposes the
+installed game's dormant limbered gun for future movement testing; it is not
+a Chi-Ha and is excluded from release archives.
+
 The prototype was copied to `data\MyMods` and added to the root
 `mod_list.txt`. That file was backed up first; original archives and saves
 remain unchanged. Project and mod-list backups are under `backups/`.

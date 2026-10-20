@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui')][string]$Action = 'list',
+    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','build-artillery','validate-artillery')][string]$Action = 'list',
     [string]$GameRoot = 'D:\Games\Total War - SHOGUN 2'
 )
 
@@ -163,6 +163,49 @@ if ($Action -eq 'list') {
     }
     Write-Output ('VERIFIED=icon files '+$assetFolders.Count)
     Write-Output ('VERIFIED=pack '+$output)
+} elseif ($Action -eq 'build-artillery') {
+    $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
+    $created = Invoke-Tool 'new_pack'
+    $packKey = ($created.content[0].text | ConvertFrom-Json -AsHashtable).String
+    if (!$packKey) { throw 'Could not determine artillery test pack key' }
+    $null = Invoke-Tool 'set_pack_file_type' @{ pack_key=$packKey; pack_file_type='"Mod"' }
+    foreach ($name in @('building_units_allowed','units_to_groupings_military_permissions')) {
+        $source = Get-Content -LiteralPath ('source\tank\'+$name+'.json') -Raw | ConvertFrom-Json -AsHashtable
+        $path = 'db/'+$source.table+'/steel_sakura_artillery_mechanics_test'
+        $newFile = @{ DB=@('steel_sakura_artillery_mechanics_test',$source.table,$source.version) } | ConvertTo-Json -Compress -Depth 5
+        $null = Invoke-Tool 'new_packed_file' @{ pack_key=$packKey; path=$path; new_file=$newFile }
+        $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$packKey; path=$path; source='PackFile' }
+        $wrapper = $decoded.content[0].text | ConvertFrom-Json -AsHashtable
+        $wrapper.DBRFileInfo[0].table.table_data = @(,$source.row)
+        $modified = @{ DB=$wrapper.DBRFileInfo[0] } | ConvertTo-Json -Depth 70 -Compress
+        $null = Invoke-Tool 'save_packed_file_from_view' @{ pack_key=$packKey; path=$path; data=$modified }
+        Write-Output ('ARTILLERY_TEST_TABLE='+$name)
+    }
+    $output = (Join-Path (Resolve-Path 'build').Path 'steel_sakura_artillery_mechanics_test.pack')
+    $null = Invoke-Tool 'save_pack_as' @{ pack_key=$packKey; path=$output }
+    Write-Output ('ARTILLERY_TEST_PACK='+$output)
+} elseif ($Action -eq 'validate-artillery') {
+    $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
+    $output = (Resolve-Path 'build\steel_sakura_artillery_mechanics_test.pack').Path
+    $opened = Invoke-Tool 'open_packfiles' @{ paths=@($output) }
+    $info = ($opened.content[0].text | ConvertFrom-Json -AsHashtable).StringContainerInfo[1]
+    if ($info.pfh_version -ne 'PFH3' -or $info.pfh_file_type -ne 'Mod') { throw 'Unexpected artillery test pack header' }
+    foreach ($name in @('building_units_allowed','units_to_groupings_military_permissions')) {
+        $source = Get-Content -LiteralPath ('source\tank\'+$name+'.json') -Raw | ConvertFrom-Json -AsHashtable
+        $path = 'db/'+$source.table+'/steel_sakura_artillery_mechanics_test'
+        $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$output; path=$path; source='PackFile' }
+        $table = ($decoded.content[0].text | ConvertFrom-Json -AsHashtable).DBRFileInfo[0].table
+        if ($table.definition.version -ne $source.version -or $table.table_data.Count -ne 1 -or $table.table_data[0].Count -ne $source.row.Count) {
+            throw "Artillery test table shape mismatch: $name"
+        }
+        for ($cellIndex=0; $cellIndex -lt $source.row.Count; $cellIndex++) {
+            $builtCell = $table.table_data[0][$cellIndex] | ConvertTo-Json -Depth 10 -Compress
+            $sourceCell = $source.row[$cellIndex] | ConvertTo-Json -Depth 10 -Compress
+            if ($builtCell -ne $sourceCell) { throw "Artillery test cell mismatch: $name column $cellIndex" }
+        }
+        Write-Output ('VERIFIED_ARTILLERY_TEST='+$name)
+    }
+    Write-Output ('VERIFIED_ARTILLERY_TEST_PACK='+$output)
 } elseif ($Action -eq 'assets') {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     foreach ($name in @('models.pack','models2.pack')) {

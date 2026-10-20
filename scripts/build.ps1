@@ -1,4 +1,4 @@
-param([switch]$SkipPrepare)
+param([switch]$SkipPrepare, [switch]$ArtilleryTest)
 
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -22,6 +22,15 @@ try { $null = Invoke-RestMethod 'http://127.0.0.1:45127/version' -TimeoutSec 2 }
 }
 $version = Invoke-RestMethod 'http://127.0.0.1:45127/version' -TimeoutSec 3
 if ($version.version -ne '5.2.0') { throw "Expected RPFM 5.2.0, found $($version.version)" }
+if ($ArtilleryTest) {
+    python scripts\prepare_artillery_test.py
+    if ($LASTEXITCODE -ne 0) { throw 'Artillery test source preparation failed' }
+    pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action build-artillery
+    if ($LASTEXITCODE -ne 0) { throw 'Artillery test pack build failed' }
+    pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action validate-artillery
+    if ($LASTEXITCODE -ne 0) { throw 'Artillery test pack validation failed' }
+    exit 0
+}
 if (!$SkipPrepare) { python scripts\prepare_infantry_source.py; if ($LASTEXITCODE -ne 0) { throw 'Source preparation failed' } }
 python scripts\generate_infantry_icon.py
 if ($LASTEXITCODE -ne 0) { throw 'Icon generation failed' }

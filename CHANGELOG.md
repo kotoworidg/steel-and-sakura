@@ -5,6 +5,7 @@
 - Added observed English unit localization keys and four authored strings.
 - Added five original TGA cards at dimensions measured from installed game assets; packaged and round-trip checked them in RPFM.
 - Expanded offline validation to localization and icon checks (79 passing checks, three regression tests), backed up the prior installed prototype, and synced the new pack.
+- Built a separate, uninstalled artillery mechanics research pack from the installed dormant `test_limber_gun` using only observed recruitment and permission table schemas.
 - Backed up the current project before offline handoff work.
 - Added source intent/specifications, offline row/schema/key checks, a corruption regression test, and packaging/checksum automation.
 - Added full research, architecture, limits, progress, install, test, and asset handoff documents.
