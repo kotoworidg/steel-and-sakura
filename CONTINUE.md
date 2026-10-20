@@ -16,3 +16,10 @@ Nuclear Shell. Read `docs/MODERN_ARTILLERY.md`. Its separate optional pack has
 passed offline table, localisation and reference validation, but has not been
 installed or tested in-game. Ability UI binding remains unverified. Rebuild
 using `scripts/build.ps1 -ModernArtillery`.
+# Latest UI evidence
+
+Read `docs/ABILITY_UI_FINDINGS.md`. Seven generic ability slots were observed
+in the installed battle layout. Custom-key support is still unverified.
+The existing Otomo mod changes shared Armstrong range and explosion values;
+Nuclear Shell tests should begin below range 550. Reproduce observations with
+the `inspect-ability-ui` action and `scripts/inspect_ability_evidence.py`.

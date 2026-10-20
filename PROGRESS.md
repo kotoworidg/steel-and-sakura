@@ -38,3 +38,14 @@ See `docs/progress.md` for the detailed dated history and `docs/github.md` for r
   explosion behavior, recruitment and interactions with the existing Otomo mod in-game.
 - No modern model or nuclear-specific visual effect exists yet. Pack remains uninstalled.
 - Details: `docs/MODERN_ARTILLERY.md`; rebuild: `scripts/build.ps1 -ModernArtillery`.
+# Ability UI research — 2026-10-20
+
+- Backed up tracked sources under `backups/before-ability-ui-20261020-233734`.
+- Extracted four installed UI files read-only; found seven generic ability slots.
+- Added repeatable UI extraction and a hash/byte-offset evidence report.
+- Compared shared Armstrong keys with the existing Otomo mod: range 550→600,
+  explosion radius 4→5 and speed 10→15 are potential runtime interactions.
+- Documented the range mismatch with Nuclear Shell and adjusted its manual test plan.
+- TODO: establish custom button binding in-game; then decide whether to isolate
+  ordinary ammunition from other mods. No runtime claims or UI binary edits.
+- See `docs/ABILITY_UI_FINDINGS.md`.

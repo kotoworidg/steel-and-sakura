@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','inspect-air','inspect-modern','build-artillery','validate-artillery','build-modern','validate-modern')][string]$Action = 'list',
+    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','inspect-air','inspect-modern','build-artillery','validate-artillery','build-modern','validate-modern','inspect-ability-ui')][string]$Action = 'list',
     [string]$GameRoot = 'D:\Games\Total War - SHOGUN 2'
 )
 
@@ -270,6 +270,16 @@ if ($Action -eq 'list') {
             $decoded.content[0].text | Set-Content ('build\inventory\existing_mod_'+$name+'.json') -Encoding utf8
         }
     }
+} elseif ($Action -eq 'inspect-ability-ui') {
+    $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
+    $pack = Join-Path (Join-Path $GameRoot 'data') 'data.pack'
+    $null = Invoke-Tool 'open_packfiles' @{ paths=@($pack) }
+    $paths = @('ui/battle ui/layout','ui/common ui/unit_ability_entry','ui/templates/template.unit_ability_entry.luac','ui/battle ui/root.luac')
+    $dest = Join-Path (Resolve-Path 'build\inventory').Path 'ability-ui'
+    New-Item -ItemType Directory -Force $dest | Out-Null
+    $map = @{PackFile=@($paths | ForEach-Object { @{File=$_} })} | ConvertTo-Json -Depth 5 -Compress
+    $null = Invoke-Tool 'extract_packed_files' @{pack_key=$pack;source_paths=$map;destination_path=$dest;export_as_tsv=$false}
+    Write-Output ('EXTRACTED_ABILITY_UI_FILES='+$paths.Count)
 } elseif ($Action -eq 'inspect-air') {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     $data = Join-Path (Join-Path $GameRoot 'data') 'data.pack'

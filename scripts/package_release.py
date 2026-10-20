@@ -59,6 +59,7 @@ def main():
             archive.write(modern, modern.name)
             archive.write(ROOT / "INSTALL.md", "INSTALL.md")
             archive.write(ROOT / "docs" / "MODERN_ARTILLERY.md", "MODERN_ARTILLERY.md")
+            archive.write(ROOT / "docs" / "ABILITY_UI_FINDINGS.md", "ABILITY_UI_FINDINGS.md")
             archive.write(modern_report, "modern-artillery-report.json")
         for file in (modern, modern_zip):
             manifest[file.name] = {"bytes": file.stat().st_size, "sha256": sha(file)}

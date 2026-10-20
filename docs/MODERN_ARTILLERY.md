@@ -41,6 +41,12 @@ are referenced, not overridden by this pack.
   ordinary artillery behavior. Test the prototype in isolation first.
 - No game launch or battle test has been performed.
 
+Further installed-file inspection found seven generic ability-button slots
+in the battle layout. This supports investigating dynamic binding but does
+not verify our custom key. The existing Otomo mod also changes ordinary
+Armstrong range to 600, versus this prototype's nuclear range of 550.
+See [UI evidence and compatibility findings](ABILITY_UI_FINDINGS.md).
+
 ## Rebuild and tune
 
 From the project directory:
@@ -77,7 +83,8 @@ mod list and move only this optional pack out of `MyMods`. Do not touch saves.
 1. Use a disposable campaign/custom battle; confirm model and forty crew.
 2. Confirm Fort recruitment and availability, then check normal shell fire.
 3. Check that Nuclear Shell is selectable and has the correct text.
-4. Activate while guns are loaded; record rounds fired, blast and visuals.
+4. Activate while guns are loaded and the target is less than 550 range away;
+   record rounds fired, blast and visuals.
 5. Confirm one activation limit, expiry and return to ordinary shells.
 6. Measure friendly fire, performance, and behavior with the existing mod.
 
