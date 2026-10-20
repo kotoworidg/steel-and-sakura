@@ -10,7 +10,7 @@ Installed horse-drawn artillery provides an observed cannon/articulated-entity b
 
 ## A6M Zero — BLOCKED
 
-No visible 3D aircraft model or aircraft-named path was found in the model-pack scan. No verified game movement/flight animation or player control interface has been identified. The RPFM glTF importer needed for an easy model pipeline is documented as unimplemented. This does **not** prove that all physical aircraft implementations are unsupported. An off-map strike, projectile, or ground unit would not satisfy the requested aircraft.
+No visible 3D aircraft model or aircraft-named path was found in the model-pack scan. Bird fauna meshes and a `bird_cycle.anim` exist, but no verified way to adapt their ambient animation into an aircraft unit or control its flight has been identified. The decoded `battle_entities` table has no altitude field or aircraft-named row; other systems may exist. The RPFM glTF importer needed for an easy model pipeline is documented as unimplemented. This does **not** prove that all physical aircraft implementations are unsupported. An off-map strike, projectile, or ground unit would not satisfy the requested aircraft.
 
 ## Project-wide
 

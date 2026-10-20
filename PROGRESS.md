@@ -14,6 +14,7 @@
 - [x] Backed up the older installed prototype under `backups/before-offline-sync-2026-10-20/` and synced the latest validated pack; installed and project SHA-256 hashes match.
 - [x] Recorded verified FoTS artillery and model-path observations; scanned model packs for aircraft names.
 - [x] Built and reopened a separate, uninstalled two-row artillery mechanics pack that exposes the base game's dormant `test_limber_gun` for future testing.
+- [x] Identified installed bird fauna meshes and an ambient bird animation as an aircraft research lead; decoded `battle_entities` without finding an aircraft/altitude route there.
 
 ## Pending
 

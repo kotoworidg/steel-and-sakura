@@ -147,3 +147,7 @@ records versions confirmed by decoding the installed pack.
   names matching aircraft, A6M, Zero, airplane, aeroplane, biplane, or balloon.
   It is not proof of an engine limitation. There is no visible flying-aircraft
   prototype yet, and no off-map strike is being substituted.
+- A broader scan found bird fauna meshes/textures and a `bird_cycle.anim` in
+  `data.pack`. `battle_entities_tables` v0 has 42 rows with movement, radius,
+  and height fields but no aircraft-named row or altitude field in that table.
+  Ambient bird animation is a research lead, not a flight-control proof.

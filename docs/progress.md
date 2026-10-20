@@ -141,3 +141,4 @@
 - Passed 79 offline checks and three regression tests. Backed up the previous installed prototype and synced the current build; original game archives and saves remain untouched.
 - In-game text/icon display and the other unit behaviors remain untested due to the unavailable GPU.
 - Built and reopened an isolated two-row artillery mechanics pack to expose the installed dormant `test_limber_gun`. It is not installed or distributed; movement and recruitment remain untested.
+- Scanned a wider range of flight-related paths and decoded `battle_entities`. Found bird fauna meshes and `bird_cycle.anim`, but no aircraft-named model or verified controllable flight path.

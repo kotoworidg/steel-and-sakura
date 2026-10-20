@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','build-artillery','validate-artillery')][string]$Action = 'list',
+    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','inspect-air','build-artillery','validate-artillery')][string]$Action = 'list',
     [string]$GameRoot = 'D:\Games\Total War - SHOGUN 2'
 )
 
@@ -215,10 +215,17 @@ if ($Action -eq 'list') {
     $result = Invoke-Tool 'get_packed_files_names_starting_with_path_from_all_sources' @{ path='{"Folder":""}' }
     $parsed = $result.content[0].text | ConvertFrom-Json -AsHashtable
     $paths = @($parsed.HashMapDataSourceHashSetContainerPath.PackFile | ForEach-Object { $_.File })
-    $matches = @($paths | Where-Object { $_ -match 'aircraft|a6m|zero|aeroplane|airplane|biplane|balloon|tank|armstrong|gatling|gun_train' } | Sort-Object)
+    $matches = @($paths | Where-Object { $_ -match 'aircraft|a6m|zero|aeroplane|airplane|biplane|balloon|flying|flight|bird|wing|airship|tank|armstrong|gatling|gun_train' } | Sort-Object)
     $matches | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\inventory\asset_path_matches.json' -Encoding utf8
     Write-Output ('ASSET_PATHS='+$paths.Count+' MATCHES='+$matches.Count)
     $matches | Select-Object -First 60
+} elseif ($Action -eq 'inspect-air') {
+    $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
+    $data = Join-Path (Join-Path $GameRoot 'data') 'data.pack'
+    $null = Invoke-Tool 'open_packfiles' @{ paths=@($data) }
+    $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$data; path='db/battle_entities_tables/battle_entities'; source='PackFile' }
+    $decoded.content[0].text | Set-Content -LiteralPath 'build\inventory\table_battle_entities.json' -Encoding utf8
+    Write-Output ('DECODE=battle_entities chars='+$decoded.content[0].text.Length)
 } elseif ($Action -eq 'inspect-ui') {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     $data = Join-Path (Join-Path $GameRoot 'data') 'data.pack'
