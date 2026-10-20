@@ -1,3 +1,7 @@
+> Archived research: the user stopped aircraft development on 2026-10-21.
+> This unit is no longer in active scope. Preserve these findings without
+> continuing aircraft experiments.
+
 # Visible A6M Zero research state
 
 ## Verified in installed data

@@ -1,10 +1,10 @@
 # Manual installation and removal
 
-The installed pack is an **untested infantry prototype** containing one new unit. The planned roster now has four units. A separate, uninstalled modern artillery prototype and its manual instructions are documented in [MODERN_ARTILLERY.md](docs/MODERN_ARTILLERY.md). Original game archives and saves are not overwritten.
+The installed pack is an **untested infantry prototype** containing one new unit. The active roster is rifle infantry and artillery, with a Chi-Ha conditional on feasibility. Aircraft is removed from scope. A separate, uninstalled modern artillery prototype and its manual instructions are documented in [MODERN_ARTILLERY.md](docs/MODERN_ARTILLERY.md). Original game archives and saves are not overwritten.
 
 ## Existing installation
 
-The project copied `build/steel_sakura_infantry_prototype.pack` to `D:\Games\Total War - SHOGUN 2\data\MyMods\steel_sakura_infantry_prototype.pack` and appended `steel_sakura_infantry_prototype.pack` to the root `mod_list.txt`. On 2026-10-20 the updated localization/icon pack was synced to that installed path after backing up the older copy under `backups/before-localisation-icon-sync-2026-10-20/`. The current installed and project pack SHA-256 is `A428212117948BE5776E4B56A7C45A9D367892374C782047FF0D101A35AB1D86`. The original mod list and earlier pack copies are in project `backups/`. The pre-existing `mods_modern_units_otomo.pack` entry was preserved. A future build in `build/` will not automatically replace the installed copy.
+The project copied `build/steel_sakura_infantry_prototype.pack` to `D:\Games\Total War - SHOGUN 2\data\MyMods\steel_sakura_infantry_prototype.pack` and appended `steel_sakura_infantry_prototype.pack` to the root `mod_list.txt`. On 2026-10-20 the updated localization/icon pack was synced to that installed path after backing up the older copy under `backups/before-localisation-icon-sync-2026-10-20/`. The older installed pack SHA-256 is `A428212117948BE5776E4B56A7C45A9D367892374C782047FF0D101A35AB1D86`. The original mod list and earlier pack copies are in project `backups/`. The pre-existing `mods_modern_units_otomo.pack` entry was preserved. A future build in `build/` will not automatically replace the installed copy.
 
 ## Rebuild and install later
 
@@ -18,3 +18,7 @@ The source ZIP cannot build a pack alone: it requires this Shogun 2/FoTS install
 ## Remove prototype
 
 Remove only the prototype's line from `mod_list.txt`, preserving every other line and the encoding. The prototype `.pack` may then be moved out of `data\MyMods` after verifying its exact filename. Do not touch saves or original game archives. The project backups can restore the previous mod list if needed.
+
+The current local rifle build includes the experimental grenade skill and differs
+from that installed copy. Back up the installed pack before replacing it. See
+`docs/RIFLE_GRENADES.md` for runtime checks.

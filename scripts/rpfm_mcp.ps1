@@ -74,7 +74,7 @@ if ($Action -eq 'list') {
     $packKey = $pack.String
     if (!$packKey) { throw 'Could not determine new pack key' }
     $null = Invoke-Tool 'set_pack_file_type' @{ pack_key=$packKey; pack_file_type='"Mod"' }
-    foreach ($name in @('unit_stats_land','units','building_units_allowed','units_to_groupings_military_permissions')) {
+    foreach ($name in @('unit_stats_land','units','building_units_allowed','units_to_groupings_military_permissions','unit_abilities','unit_special_abilities','unit_to_unit_abilities_junctions')) {
         $source = Get-Content -LiteralPath ('source\infantry\'+$name+'.json') -Raw | ConvertFrom-Json -AsHashtable
         $path = 'db/'+$source.table+'/steel_sakura_infantry'
         $newFile = @{ DB=@('steel_sakura_infantry',$source.table,$source.version) } | ConvertTo-Json -Compress -Depth 5
@@ -114,7 +114,7 @@ if ($Action -eq 'list') {
     $opened = Invoke-Tool 'open_packfiles' @{ paths=@($output) }
     $info = ($opened.content[0].text | ConvertFrom-Json -AsHashtable).StringContainerInfo[1]
     if ($info.pfh_version -ne 'PFH3' -or $info.pfh_file_type -ne 'Mod') { throw 'Unexpected pack header' }
-    foreach ($name in @('unit_stats_land','units','building_units_allowed','units_to_groupings_military_permissions')) {
+    foreach ($name in @('unit_stats_land','units','building_units_allowed','units_to_groupings_military_permissions','unit_abilities','unit_special_abilities','unit_to_unit_abilities_junctions')) {
         $source = Get-Content -LiteralPath ('source\infantry\'+$name+'.json') -Raw | ConvertFrom-Json -AsHashtable
         $path = 'db/'+$source.table+'/steel_sakura_infantry'
         $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$output; path=$path; source='PackFile' }

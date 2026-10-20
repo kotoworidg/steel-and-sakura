@@ -12,20 +12,20 @@
         "icon",
         "campaign recruitment",
         "custom battle availability",
-        "rendering"
-      ]
+        "rendering",
+        "grenade button",
+        "rifle-to-grenade animation switching",
+        "grenade throwing and return to rifle fire"
+      ],
+      "ability": "Throw Grenades: provisional projectile-switching ability, two 20-second activations, 90-second recharge."
     },
     {
       "name": "Type 97 Chi-Ha",
-      "status": "BLOCKED",
+      "status": "DEFERRED",
       "current_prototype": null,
-      "evidence": "FoTS horse-drawn artillery and model paths exist; tank movement and model integration are unverified"
-    },
-    {
-      "name": "Mitsubishi A6M Zero",
-      "status": "BLOCKED",
-      "current_prototype": null,
-      "evidence": "No aircraft-named model path in scanned model packs; no verified flight control or animation path"
+      "evidence": "FoTS horse-drawn artillery and model paths exist; tank movement and model integration are unverified",
+      "release_inclusion": "Conditional: exclude unless a visible mobile cannon vehicle is demonstrated in-game.",
+      "decision": "Retained for later; no active tank development while rifle and artillery are the priorities."
     },
     {
       "name": "Modern Artillery Battery",
@@ -39,6 +39,13 @@
         "recruitment",
         "modern model"
       ]
+    }
+  ],
+  "excluded_units": [
+    {
+      "name": "Mitsubishi A6M Zero",
+      "status": "REMOVED_FROM_SCOPE",
+      "reason": "User stopped aircraft development on 2026-10-21; retain historical research only."
     }
   ]
 }

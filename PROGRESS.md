@@ -1,3 +1,21 @@
+## Current priorities — 2026-10-21
+
+Focus on rifle infantry and artillery. Keep Chi-Ha research for later; do not
+continue tank experiments now. Aircraft remains removed. Added a provisional
+Throw Grenades skill to the rifle build using installed grenade references.
+Seven DB rows and seven strings passed RPFM reopening; 119 offline checks and
+three existing tests pass. Visible throwing and custom button remain unverified.
+The installed infantry pack is still the older version. See `docs/RIFLE_GRENADES.md`.
+
+## Scope decision — 2026-10-21
+
+- Removed the Zero from active unit specifications at the user's request.
+- Priorities: rifle squad, modern artillery, then conditional Chi-Ha feasibility.
+- Tank is excluded from the playable release until movement, model, cannon and
+  damage behavior are demonstrated together in-game.
+- Existing artillery data establishes a test basis, not tank support.
+- Preserved historical aircraft research and backed up changed project files.
+
 # Progress and next work
 
 ## Completed offline

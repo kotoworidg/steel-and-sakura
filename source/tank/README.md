@@ -1,3 +1,6 @@
+> Deferred at the user's request on 2026-10-21. Preserve this work for later;
+> current development focuses on rifle infantry and artillery.
+
 # Chi-Ha research state
 
 ## Verified in installed data
@@ -38,3 +41,23 @@ separately from the infantry prototype, then observe recruitment, movement,
 aiming, firing, collision, and crew behavior in battle. Remove it afterward.
 Keep it labeled as an artillery test until a real tank model and vehicle
 behavior are demonstrated.
+
+## Scope and acceptance gate — 2026-10-21
+
+The Chi-Ha is conditional and is not promised for the playable release.
+The current evidence proves neither feasibility nor impossibility.
+Prioritize the rifle and artillery prototypes while runtime testing is blocked.
+
+To include the Chi-Ha, demonstrate all of the following together:
+
+1. A permitted Chi-Ha model successfully imported and rendered in-game.
+2. Player-controlled movement and turning with plausible ground contact and
+   collision; horse-drawn movement alone does not satisfy this requirement.
+3. A cannon firing from the visible vehicle, with usable aiming and reload.
+4. Damage, destruction, crew and armor behavior that do not break the unit.
+
+Independent turret control and animated tracks are unverified requirements
+that need explicit feasibility decisions; existing table fields do not establish
+these capabilities. If the available engine mechanics cannot satisfy the core
+vehicle behavior, cut the Chi-Ha and ship the rifle/artillery roster. Until an
+experiment establishes that limit, describe it as unproven rather than impossible.

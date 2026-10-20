@@ -44,6 +44,7 @@ def main():
         for name in ("INSTALL.md", "TESTING.md", "LIMITATIONS.md"):
             archive.write(ROOT / name, name)
         archive.write(report, "offline-report.json")
+        archive.write(ROOT / "docs" / "RIFLE_GRENADES.md", "RIFLE_GRENADES.md")
     manifest = {file.name: {"bytes": file.stat().st_size, "sha256": sha(file)}
                 for file in (source_zip, prototype_zip, PACK)}
     modern = ROOT / "build" / "steel_sakura_modern_artillery_prototype.pack"

@@ -20,6 +20,21 @@
       "key": "unit_description_texts_strengths_and_weaknesses_SteelSakura_Automatic_Rifle_Squad",
       "text": "Repeating rifles.||Forty-soldier database target.||Battlefield behavior untested.",
       "tooltip": true
+    },
+    {
+      "key": "unit_abilities_bullet_text_steel_sakura_throw_grenades",
+      "text": "Throw Grenades",
+      "tooltip": true
+    },
+    {
+      "key": "unit_abilities_info_card_tooltip_text_steel_sakura_throw_grenades",
+      "text": "Temporarily throw explosive grenades at nearby enemies.",
+      "tooltip": true
+    },
+    {
+      "key": "unit_abilities_button_tooltip_text_steel_sakura_throw_grenades",
+      "text": "Throw Grenades ||Short-range explosive grenades. Two activations per battle.",
+      "tooltip": true
     }
   ]
 }

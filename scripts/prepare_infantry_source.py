@@ -45,7 +45,14 @@ def set_value(row, fields, column, new_value):
 
 def emit(name, source_key, changes):
     db, fields, source_path = table(name)
-    row = find_row(db, fields, "key" if name != "units_to_groupings_military_permissions" else "unit", source_key)
+    key_field = {"units_to_groupings_military_permissions": "unit", "unit_to_unit_abilities_junctions": "unit_name"}.get(name, "key")
+    if name == "unit_to_unit_abilities_junctions":
+        matches = [r for r in db["table_data"] if value(r[fields.index(key_field)]) == source_key and value(r[fields.index("ability")]) == "blinding_grenade"]
+        if len(matches) != 1:
+            raise ValueError("Expected one installed ninja grenade ability link")
+        row = deepcopy(matches[0])
+    else:
+        row = find_row(db, fields, key_field, source_key)
     for field, new_value in changes.items():
         set_value(row, fields, field, new_value)
     document = {
@@ -85,3 +92,23 @@ emit("units_to_groupings_military_permissions", "Inf_Missile_Matchlock_Ashigaru"
     "military_group": "japan",
 })
 print(f"Prepared {KEY} in {DEST}")
+
+# The installed ninja ability establishes the projectile-switching mechanism.
+# Rifle animation support remains an in-game hypothesis.
+ABILITY = "steel_sakura_throw_grenades"
+assert_unused("unit_abilities", "key", ABILITY)
+assert_unused("unit_special_abilities", "key", ABILITY)
+assert_unused("unit_to_unit_abilities_junctions", "unit_name", KEY)
+emit("unit_abilities", "blinding_grenade", {
+    "key": ABILITY, "requires_effect_enabling": False,
+    "bullet_text": "Throw Grenades",
+    "info_card_tooltip_text": "Temporarily throw explosive grenades at nearby enemies.",
+    "button_tooltip_text": "Throw Grenades ||Short-range explosive grenades. Two activations per battle.",
+})
+emit("unit_special_abilities", "blinding_grenade", {
+    "key": ABILITY, "activated_projectile": "grenade",
+    "active_time": 20.0, "recharge_time": 90.0, "num_uses": 2,
+})
+emit("unit_to_unit_abilities_junctions", "Boshin_Inf_Special_Kisho_Ninjas", {
+    "unit_name": KEY, "ability": ABILITY,
+})

@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 KEY = "SteelSakura_Automatic_Rifle_Squad"
-TABLES = ("unit_stats_land", "units", "building_units_allowed", "units_to_groupings_military_permissions")
+TABLES = ("unit_stats_land", "units", "building_units_allowed", "units_to_groupings_military_permissions", "unit_abilities", "unit_special_abilities", "unit_to_unit_abilities_junctions")
 
 
 def scalar(cell):
@@ -49,11 +49,13 @@ def check(root=ROOT):
         require(len(src["row"]) == len(fields), f"{name}: cell count")
         if len(src["row"]) != len(fields) or src["fields"] != fields:
             continue
-        key_field = "unit" if name == "units_to_groupings_military_permissions" else "key"
+        key_field = {"units_to_groupings_military_permissions": "unit", "unit_to_unit_abilities_junctions": "unit_name"}.get(name, "key")
         source_idx = fields.index(key_field)
         originals = [row for row in base["table_data"] if scalar(row[source_idx]) == src["source_row"]]
         if name == "units_to_groupings_military_permissions":
             originals = [row for row in originals if scalar(row[fields.index("military_group")]) == "japan"]
+        if name == "unit_to_unit_abilities_junctions":
+            originals = [r for r in originals if scalar(r[fields.index("ability")]) == "blinding_grenade"]
         require(len(originals) == 1, f"{name}: unique installed source row")
         if len(originals) == 1:
             expected = json.loads(json.dumps(originals[0]))
@@ -72,12 +74,19 @@ def check(root=ROOT):
                              ("units_to_groupings_military_permissions", "unit")):
             require(sources[name][column] == KEY, f"{name}: shared unit key")
         require(sources["unit_stats_land"]["men"] == 40, "infantry: 40 soldiers")
+        ability = "steel_sakura_throw_grenades"
+        require(sources["unit_to_unit_abilities_junctions"]["unit_name"] == KEY, "grenades: unit link")
+        require(sources["unit_to_unit_abilities_junctions"]["ability"] == sources["unit_abilities"]["key"] == sources["unit_special_abilities"]["key"] == ability, "grenades: ability links")
+        require(sources["unit_special_abilities"]["activated_projectile"] == "grenade", "grenades: explosive projectile")
+        require(sources["unit_abilities"]["requires_effect_enabling"] is False, "grenades: no borrowed ninja unlock required")
+        require(sources["unit_special_abilities"]["num_uses"] == 2, "grenades: two activations")
         projectile_path = inventory / "table_projectiles.json"
         if projectile_path.is_file():
             projectiles = read_table(projectile_path)
             projectile_fields = [f["name"] for f in projectiles["definition"]["fields"]]
             projectile_index = projectile_fields.index("key")
             missile = sources["unit_stats_land"]["default_missile_type"]
+            require(any(scalar(row[projectile_index]) == "grenade" for row in projectiles["table_data"]), "grenades: installed projectile exists")
             require(any(scalar(row[projectile_index]) == missile for row in projectiles["table_data"]),
                     f"infantry: projectile {missile!r} exists in installed table")
         else:
@@ -108,18 +117,19 @@ def check(root=ROOT):
         loc = json.loads(loc_path.read_text(encoding="utf-8"))
         entries = loc.get("entries", [])
         require(loc.get("unit_key") == KEY, "localisation: intended unit key")
-        require(len(entries) == 4, "localisation: four authored strings")
+        require(len(entries) == 7, "localisation: seven authored strings")
         keys = [entry.get("key") for entry in entries]
         require(len(set(keys)) == len(keys), "localisation: unique keys")
         required_prefixes = ("units_on_screen_name_", "unit_description_texts_description_text_",
                              "unit_description_texts_long_description_text_",
                              "unit_description_texts_strengths_and_weaknesses_")
-        require(set(keys) == {prefix + KEY for prefix in required_prefixes}, "localisation: observed key patterns")
+        ability_keys = {"unit_abilities_" + field + "_steel_sakura_throw_grenades" for field in ("bullet_text", "info_card_tooltip_text", "button_tooltip_text")}
+        require(set(keys) == {prefix + KEY for prefix in required_prefixes} | ability_keys, "localisation: observed key patterns")
         require(all(isinstance(entry.get("text"), str) and entry["text"].strip() and
                     isinstance(entry.get("tooltip"), bool) for entry in entries),
                 "localisation: nonempty text and Boolean tooltip")
         existing = set()
-        for name in ("units", "unit_description_texts"):
+        for name in ("units", "unit_description_texts", "unit_abilities"):
             path = inventory / f"loc_{name}.json"
             if path.is_file():
                 table = json.loads(path.read_text(encoding="utf-8-sig"))["LocRFileInfo"][0]["table"]
