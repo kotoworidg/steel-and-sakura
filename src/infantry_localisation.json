@@ -1,0 +1,25 @@
+{
+  "unit_key": "SteelSakura_Automatic_Rifle_Squad",
+  "entries": [
+    {
+      "key": "units_on_screen_name_SteelSakura_Automatic_Rifle_Squad",
+      "text": "Automatic Rifle Squad",
+      "tooltip": true
+    },
+    {
+      "key": "unit_description_texts_description_text_SteelSakura_Automatic_Rifle_Squad",
+      "text": "Forty riflemen equipped with fast-firing repeating rifles.",
+      "tooltip": true
+    },
+    {
+      "key": "unit_description_texts_long_description_text_SteelSakura_Automatic_Rifle_Squad",
+      "text": "This experimental Steel & Sakura formation fields forty soldiers with repeating rifles. It is intended to deliver sustained ranged fire, but its actual rate of fire, battlefield appearance, and campaign behavior still require in-game testing.",
+      "tooltip": true
+    },
+    {
+      "key": "unit_description_texts_strengths_and_weaknesses_SteelSakura_Automatic_Rifle_Squad",
+      "text": "Repeating rifles.||Forty-soldier database target.||Battlefield behavior untested.",
+      "tooltip": true
+    }
+  ]
+}

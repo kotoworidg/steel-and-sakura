@@ -7,6 +7,6 @@
 | FoTS Armstrong/Gatling models and animations | Filename observations only | Creative Assembly installation; no files copied into this repository |
 | Chi-Ha model, rig, textures, sound | Missing | Requires original work or explicit distribution license |
 | A6M Zero model, rig, textures, sound | Missing | Requires original work or explicit distribution license |
-| Infantry icon, portrait, localization text | Missing | Requires original work or an appropriate license and verified game integration |
+| Infantry UI cards and English text | Five original TGA cards and four authored strings packed | Reproducibly drawn/written in this project; in-game lookup unverified |
 
 No third-party model has been selected. Record creator, source URL, license, modifications, and attribution in this file before adding assets. RPFM cannot be assumed to import glTF rigid models directly; see `RESEARCH.md`.

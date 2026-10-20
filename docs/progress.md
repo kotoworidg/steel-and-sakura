@@ -132,3 +132,11 @@
 - [ ] Investigate tank mechanics using existing artillery and vehicle assets.
 - [ ] Investigate actual visible aircraft movement and animation.
 - [ ] Package exactly three units only after feature evidence supports them.
+
+## 2026-10-20 — English text and original icon assets
+
+- Backed up the 32 tracked files before editing.
+- Decoded installed English unit name/description localization and measured five installed TGA card formats without modifying game archives.
+- Added four original English strings and five original TGA UI cards to the infantry pack. RPFM reopened the pack and extracted the card files with matching hashes.
+- Passed 79 offline checks and three regression tests. Backed up the previous installed prototype and synced the current build; original game archives and saves remain untouched.
+- In-game text/icon display and the other unit behaviors remain untested due to the unavailable GPU.

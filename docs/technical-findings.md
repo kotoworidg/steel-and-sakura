@@ -112,9 +112,11 @@ records versions confirmed by decoding the installed pack.
   `units_tables` row is based on Sengoku Matchlock Ashigaru, with a new key,
   display name, description key, and unique index. Recruitment clones its
   observed `SHO_Castle_1_Fort` entry. Military grouping uses observed `japan`.
-- The project output is a PFH3 Mod pack containing four DB files. RPFM reopened
-  it and verified exactly one row in each file, expected table versions, and
-  `men=40`. This is a structural validation, not an in-game result.
+- The current project output is a PFH3 Mod pack containing four DB files, one
+  localization file with four strings, and five original TGA UI cards. RPFM
+  reopened it, verified exactly one row in each DB file, expected table
+  versions, `men=40`, localization text, and matching extracted icon bytes.
+  This is a structural validation, not an in-game result.
 - The pack was installed into `data\MyMods` after backing up the root
   `mod_list.txt`; the original enabled mod entry remains. The installed copy's
   SHA-256 matches the project output. The next check is recruitment and battle
@@ -124,9 +126,9 @@ records versions confirmed by decoding the installed pack.
   1464, or recruitment key 4720. This checks direct key collisions in the
   observed pack; it does not establish full compatibility between mods.
 - `scripts/build.ps1` completed preparation, packaging, reopen validation,
-  offline checks, and regression tests in one command. After the 2026-10-20
-  backup and sync, the current output and installed copy share SHA-256
-  `EB2485BDAFEB2D52EFB41DCBFEB87D460BA7325034A99E528062DC0847B1161B`.
+  79 offline checks, and three regression tests in one command. After the
+  2026-10-20 backup and sync, the current output and installed copy share
+  SHA-256 `A428212117948BE5776E4B56A7C45A9D367892374C782047FF0D101A35AB1D86`.
 - The Windows computer-use helper failed to initialize twice, so an in-game
   test could not be performed in this turn. No gameplay success is claimed.
 

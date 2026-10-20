@@ -9,7 +9,8 @@ the original Sengoku campaign with Fall of the Samurai content installed.
 
 The first infantry prototype is in
 `build/steel_sakura_infantry_prototype.pack`. RPFM reopened it and verified
-four DB rows, including a 40-soldier land unit. It has **not** been tested in
+four DB rows, four English localization strings, and five original TGA cards,
+including a 40-soldier land unit. It has **not** been tested in
 the game. Its weapon is based on the installed FoTS Tosa repeating rifle;
 automatic fire remains unverified. The tank and visible aircraft are research
 tasks, with no unit entries authored yet.
@@ -28,7 +29,7 @@ pwsh -NoProfile -File scripts/build.ps1
 
 The script prepares source rows from decoded installed tables, starts the
 project-local RPFM backend if needed, builds the pack, reopens it, and checks
-the four DB rows. RPFM's configuration redirect must point to
+the DB, localization, and icon files. RPFM's configuration redirect must point to
 `tools/rpfm-config/data`. The tool bundle is in `tools/rpfm-5.2.0/`.
 
 The command also runs offline data checks and Python regression tests.

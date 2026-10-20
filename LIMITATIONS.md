@@ -2,7 +2,7 @@
 
 ## Automatic Rifle Squad — PROVISIONAL
 
-The local pack is structurally valid and sets `men=40`. It reuses the installed FoTS Tosa repeating-rifle row; true automatic fire is unverified. No custom model, recruitment icon, custom description text resource, or custom-battle evidence exists. Without a working GPU, campaign recruitment, battlefield behavior, animation, and stability cannot be tested. The current installed copy is an experiment, not a gameplay-certified release.
+The local pack is structurally valid and sets `men=40`. It reuses the installed FoTS Tosa repeating-rifle row; true automatic fire is unverified. Four authored English text entries and five original TGA cards are packed and reopen correctly, but their in-game display is unverified. There is no custom soldier model or custom-battle evidence. Without a working GPU, campaign recruitment, battlefield behavior, animation, and stability cannot be tested. The current installed copy is an experiment, not a gameplay-certified release.
 
 ## Type 97 Chi-Ha — BLOCKED
 

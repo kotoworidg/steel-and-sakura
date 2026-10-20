@@ -7,6 +7,8 @@
 - RPFM v5 has a local server with an MCP interface, used by `scripts/rpfm_mcp.ps1`; the v5 Windows bundle has no `rpfm_cli.exe`. [Official server documentation](https://frodo45127.github.io/rpfm/manual/server/overview.html). Confidence: high for the installed v5.2.0 bundle.
 - Installed FoTS `Boshin_Inf_Light_Tosa_Riflemen` uses a repeating-rifle missile type, a FoTS rifle animation, and a FoTS equipment theme. Existing Sengoku `Inf_Missile_Matchlock_Ashigaru` supplies the companion unit and Japanese military-group prototype. Evidence: decoded local rows. Confidence: high for references, no confidence yet for their combined in-game behavior.
 - Installed FoTS Armstrong and Gatling artillery use an articulated horse-drawn gun entity. Model-pack filenames include their rigid models and animations. This is an artillery experiment basis only. Evidence: local DB and 14,322 model-pack path scan. Confidence: high for path and row observations.
+- Installed English `text/db/units.loc` has `units_on_screen_name_<unit key>` entries. `text/db/unit_description_texts.loc` has description, long description, and strengths/weaknesses keys for both Matchlock Ashigaru and Tosa Riflemen. The prototype uses these observed key patterns with original English copy. Evidence: locally decoded `build/inventory/loc_*.json`. Confidence: high for format and local key pattern; in-game lookup untested.
+- Installed Matchlock Ashigaru UI assets are uncompressed 32-bit TGA at 64×118 (`icons`), 46×46 (`icons_square`), 128×236 (`info`), 75×75 (`recruitment_large`), and 64×64 (`recruitment_small`). The project draws original cards at these measured sizes. Evidence: local RPFM extraction into ignored `build/inventory/sample-icon/` and TGA header inspection. Confidence: high for file format/dimensions, low for lookup of newly named assets.
 - The same model-pack filename scan found no aircraft/A6M/Zero/airplane/aeroplane/biplane/balloon name. A filename scan cannot prove an engine feature is impossible. Confidence: high for the scan, low for any engine inference.
 
 ## Model import constraints
@@ -16,7 +18,7 @@
 
 ## PROVISIONAL conclusions
 
-- The built infantry pack reopens in RPFM and passes source/schema/collision checks. This does not verify recruitment, custom battle inclusion, visible appearance, text/icon, automatic fire, or game stability.
+- The built infantry pack reopens in RPFM and passes source/schema/collision checks. Its English strings and five TGA files round-trip through RPFM. This does not verify recruitment, custom battle inclusion, visible appearance, text/icon lookup, automatic fire, or game stability.
 - A horse-drawn artillery unit might be a useful movement and cannon test for a tank, but it does not make a Chi-Ha.
 - No route to a visible flying aircraft has been verified. No off-map strike is counted as a Zero.
 

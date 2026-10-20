@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('list','probe','build','validate','assets','existing-mod')][string]$Action = 'list',
+    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui')][string]$Action = 'list',
     [string]$GameRoot = 'D:\Games\Total War - SHOGUN 2'
 )
 
@@ -88,6 +88,23 @@ if ($Action -eq 'list') {
         $saved = Invoke-Tool 'save_packed_file_from_view' @{ pack_key=$packKey; path=$path; data=$modified }
         Write-Output ('TABLE='+$name+' result='+($saved.content[0].text))
     }
+    $strings = Get-Content -LiteralPath 'src\infantry_localisation.json' -Raw | ConvertFrom-Json -AsHashtable
+    $locPath = 'text/db/steel_sakura_units.loc'
+    $null = Invoke-Tool 'new_packed_file' @{ pack_key=$packKey; path=$locPath; new_file='{"Loc":"steel_sakura_units"}' }
+    $locDecoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$packKey; path=$locPath; source='PackFile' }
+    $locWrapper = $locDecoded.content[0].text | ConvertFrom-Json -AsHashtable
+    $locTable = $locWrapper.LocRFileInfo[0].table
+    $locTable.table_data = @($strings.entries | ForEach-Object { ,@(@{StringU16=$_.key},@{StringU16=$_.text},@{Boolean=$_.tooltip}) })
+    $locWrapper.LocRFileInfo[0].table = $locTable
+    $locModified = @{ Loc=$locWrapper.LocRFileInfo[0] } | ConvertTo-Json -Depth 70 -Compress
+    $locSaved = Invoke-Tool 'save_packed_file_from_view' @{ pack_key=$packKey; path=$locPath; data=$locModified }
+    Write-Output ('LOC=steel_sakura_units result='+($locSaved.content[0].text))
+    $assetName = 'steel_sakura_automatic_rifle_squad.tga'
+    $assetFolders = @('icons','icons_square','info','recruitment_large','recruitment_small')
+    $assetSources = @($assetFolders | ForEach-Object { (Resolve-Path -LiteralPath ('assets\infantry\'+$_+'\'+$assetName)).Path })
+    $assetDestinations = @($assetFolders | ForEach-Object { @{ File=('ui/units/'+$_+'/'+$assetName) } }) | ConvertTo-Json -Depth 5 -Compress
+    $added = Invoke-Tool 'add_packed_files' @{ pack_key=$packKey; source_paths=$assetSources; destination_paths=$assetDestinations }
+    Write-Output ('ICON_FILES='+$assetSources.Count+' result='+($added.content[0].text))
     $output = (Join-Path (Resolve-Path 'build').Path 'steel_sakura_infantry_prototype.pack')
     $savedPack = Invoke-Tool 'save_pack_as' @{ pack_key=$packKey; path=$output }
     Write-Output ('PACK='+$output+' result='+($savedPack.content[0].text))
@@ -105,6 +122,11 @@ if ($Action -eq 'list') {
         if ($table.definition.version -ne $source.version) { throw "Version mismatch: $name" }
         if ($table.table_data.Count -ne 1) { throw "Row count mismatch: $name" }
         if ($table.table_data[0].Count -ne $source.row.Count) { throw "Field count mismatch: $name" }
+        for ($cellIndex=0; $cellIndex -lt $source.row.Count; $cellIndex++) {
+            $builtCell = $table.table_data[0][$cellIndex] | ConvertTo-Json -Depth 10 -Compress
+            $sourceCell = $source.row[$cellIndex] | ConvertTo-Json -Depth 10 -Compress
+            if ($builtCell -ne $sourceCell) { throw "Cell mismatch: $name column $cellIndex" }
+        }
         Write-Output ('VERIFIED='+$name+' version='+$table.definition.version+' cells='+$table.table_data[0].Count)
         if ($name -eq 'unit_stats_land') {
             $men = $table.table_data[0][$source.fields.IndexOf('men')].I32
@@ -112,6 +134,34 @@ if ($Action -eq 'list') {
             Write-Output 'VERIFIED=men 40'
         }
     }
+    $locPath = 'text/db/steel_sakura_units.loc'
+    $locDecoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$output; path=$locPath; source='PackFile' }
+    $locTable = ($locDecoded.content[0].text | ConvertFrom-Json -AsHashtable).LocRFileInfo[0].table
+    $expectedLoc = (Get-Content -LiteralPath 'src\infantry_localisation.json' -Raw | ConvertFrom-Json -AsHashtable).entries
+    if ($locTable.table_data.Count -ne $expectedLoc.Count) { throw 'Localisation row count mismatch' }
+    for ($i=0; $i -lt $expectedLoc.Count; $i++) {
+        $row = $locTable.table_data[$i]
+        if ($row[0].StringU16 -ne $expectedLoc[$i].key -or $row[1].StringU16 -ne $expectedLoc[$i].text -or $row[2].Boolean -ne $expectedLoc[$i].tooltip) {
+            throw "Localisation mismatch at row $i"
+        }
+    }
+    Write-Output ('VERIFIED=localisation rows='+$locTable.table_data.Count)
+    $assetName = 'steel_sakura_automatic_rifle_squad.tga'
+    $assetFolders = @('icons','icons_square','info','recruitment_large','recruitment_small')
+    $assetContainerPaths = @($assetFolders | ForEach-Object { @{ File=('ui/units/'+$_+'/'+$assetName) } })
+    $assetMap = @{ PackFile=$assetContainerPaths } | ConvertTo-Json -Depth 5 -Compress
+    $verifyDestination = Join-Path (Resolve-Path 'build\validation').Path ('pack-assets-'+[guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Force -Path $verifyDestination | Out-Null
+    $null = Invoke-Tool 'extract_packed_files' @{ pack_key=$output; source_paths=$assetMap; destination_path=$verifyDestination; export_as_tsv=$false }
+    foreach ($folder in $assetFolders) {
+        $sourceFile = (Resolve-Path -LiteralPath ('assets\infantry\'+$folder+'\'+$assetName)).Path
+        $extractedFile = Join-Path $verifyDestination ('ui\units\'+$folder+'\'+$assetName)
+        if (!(Test-Path -LiteralPath $extractedFile)) { throw "Missing packed icon: $folder" }
+        $sourceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourceFile).Hash
+        $extractedHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $extractedFile).Hash
+        if ($sourceHash -ne $extractedHash) { throw "Packed icon differs: $folder" }
+    }
+    Write-Output ('VERIFIED=icon files '+$assetFolders.Count)
     Write-Output ('VERIFIED=pack '+$output)
 } elseif ($Action -eq 'assets') {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
@@ -126,6 +176,44 @@ if ($Action -eq 'list') {
     $matches | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\inventory\asset_path_matches.json' -Encoding utf8
     Write-Output ('ASSET_PATHS='+$paths.Count+' MATCHES='+$matches.Count)
     $matches | Select-Object -First 60
+} elseif ($Action -eq 'inspect-ui') {
+    $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
+    $data = Join-Path (Join-Path $GameRoot 'data') 'data.pack'
+    $loc = Join-Path (Join-Path $GameRoot 'data') 'local_en.pack'
+    $null = Invoke-Tool 'open_packfiles' @{ paths=@($data) }
+    $paths = @(
+        'db/battle_type_unit_to_faction_presets_tables/battle_type_unit_to_faction_presets',
+        'db/battle_type_faction_presets_tables/battle_type_faction_presets'
+    )
+    foreach ($path in $paths) {
+        $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$data; path=$path; source='PackFile' }
+        $name = ($path -split '/')[1] -replace '_tables$',''
+        $decoded.content[0].text | Set-Content -LiteralPath ('build\inventory\table_'+$name+'.json') -Encoding utf8
+        Write-Output ('DECODE='+$name+' chars='+$decoded.content[0].text.Length)
+    }
+    $null = Invoke-Tool 'open_packfiles' @{ paths=@($loc) }
+    $locDecoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$loc; path='text/db/units.loc'; source='PackFile' }
+    $locDecoded.content[0].text | Set-Content -LiteralPath 'build\inventory\loc_units.json' -Encoding utf8
+    Write-Output ('DECODE=units.loc chars='+$locDecoded.content[0].text.Length)
+    $descriptionDecoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$loc; path='text/db/unit_description_texts.loc'; source='PackFile' }
+    $descriptionDecoded.content[0].text | Set-Content -LiteralPath 'build\inventory\loc_unit_description_texts.json' -Encoding utf8
+    Write-Output ('DECODE=unit_description_texts.loc chars='+$descriptionDecoded.content[0].text.Length)
+    $samplePaths = @('icons_square','icons','info','recruitment_large','recruitment_small') | ForEach-Object {
+        @{ File=('ui/units/'+$_+'/ashigaru_inf_matchlock_ashigaru.tga') }
+    }
+    $sampleSource = @{ PackFile=$samplePaths } | ConvertTo-Json -Depth 5 -Compress
+    $sampleTarget = (Join-Path (Resolve-Path 'build\inventory').Path 'sample-icon')
+    New-Item -ItemType Directory -Force -Path $sampleTarget | Out-Null
+    $extracted = Invoke-Tool 'extract_packed_files' @{ pack_key=$data; source_paths=$sampleSource; destination_path=$sampleTarget; export_as_tsv=$false }
+    Write-Output ('EXTRACT_SAMPLE_ICON=' + ($extracted.content[0].text))
+    $result = Invoke-Tool 'get_packed_files_names_starting_with_path_from_all_sources' @{ path='{"Folder":""}' }
+    $parsed = $result.content[0].text | ConvertFrom-Json -AsHashtable
+    $paths = @($parsed.HashMapDataSourceHashSetContainerPath.PackFile | ForEach-Object { $_.File })
+    $paths | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\inventory\all_data_local_paths.json' -Encoding utf8
+    $matches = @($paths | Where-Object { $_ -match '(^text/|^ui/|\.loc$|unit_card|unit_icon|unit_info)' } | Sort-Object)
+    $matches | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\inventory\ui_localisation_paths.json' -Encoding utf8
+    Write-Output ('UI_LOCALISATION_PATHS='+$matches.Count)
+    $matches | Select-Object -First 80
 } else {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     $mod = Join-Path (Join-Path $GameRoot 'data\MyMods') 'mods_modern_units_otomo.pack'

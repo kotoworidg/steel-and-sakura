@@ -6,6 +6,7 @@ This checks data consistency and pack structure, not in-game behavior.
 import argparse
 import hashlib
 import json
+import struct
 import sys
 from pathlib import Path
 
@@ -102,6 +103,49 @@ def check(root=ROOT):
                 require(not any(scalar(row[idx]) == candidate for row in table["table_data"]),
                         f"{name}: {column}={candidate!r} unused in {prefix}")
 
+    loc_path = root / "src" / "infantry_localisation.json"
+    if loc_path.is_file():
+        loc = json.loads(loc_path.read_text(encoding="utf-8"))
+        entries = loc.get("entries", [])
+        require(loc.get("unit_key") == KEY, "localisation: intended unit key")
+        require(len(entries) == 4, "localisation: four authored strings")
+        keys = [entry.get("key") for entry in entries]
+        require(len(set(keys)) == len(keys), "localisation: unique keys")
+        required_prefixes = ("units_on_screen_name_", "unit_description_texts_description_text_",
+                             "unit_description_texts_long_description_text_",
+                             "unit_description_texts_strengths_and_weaknesses_")
+        require(set(keys) == {prefix + KEY for prefix in required_prefixes}, "localisation: observed key patterns")
+        require(all(isinstance(entry.get("text"), str) and entry["text"].strip() and
+                    isinstance(entry.get("tooltip"), bool) for entry in entries),
+                "localisation: nonempty text and Boolean tooltip")
+        existing = set()
+        for name in ("units", "unit_description_texts"):
+            path = inventory / f"loc_{name}.json"
+            if path.is_file():
+                table = json.loads(path.read_text(encoding="utf-8-sig"))["LocRFileInfo"][0]["table"]
+                fields = [field["name"] for field in table["definition"]["fields"]]
+                require(fields == ["key", "text", "tooltip"], f"localisation: installed {name} schema")
+                existing.update(scalar(row[0]) for row in table["table_data"])
+            else:
+                errors.append(f"Missing localisation collision input: {path}")
+        require(not any(key in existing for key in keys), "localisation: keys unused in installed English files")
+    else:
+        errors.append(f"Missing {loc_path}")
+
+    icon_name = "steel_sakura_automatic_rifle_squad.tga"
+    icon_sizes = {"icons": (64, 118), "icons_square": (46, 46), "info": (128, 236),
+                  "recruitment_large": (75, 75), "recruitment_small": (64, 64)}
+    for folder, size in icon_sizes.items():
+        icon_path = root / "assets" / "infantry" / folder / icon_name
+        if not icon_path.is_file():
+            errors.append(f"Missing original icon: {icon_path}")
+            continue
+        image = icon_path.read_bytes()
+        require(len(image) >= 18, f"icon {folder}: TGA header")
+        if len(image) >= 18:
+            require(image[2] == 2 and image[16] == 32, f"icon {folder}: uncompressed 32-bit TGA")
+            require(struct.unpack_from("<HH", image, 12) == size, f"icon {folder}: observed dimensions")
+
     pack = root / "build" / "steel_sakura_infantry_prototype.pack"
     if pack.is_file():
         data = pack.read_bytes()
@@ -110,7 +154,7 @@ def check(root=ROOT):
         details["pack_sha256"] = hashlib.sha256(data).hexdigest().upper()
     else:
         errors.append(f"Missing {pack}; run scripts/build.ps1")
-    details["note"] = "Static checks cannot prove recruitment, rendering, firing, movement, or campaign behavior."
+    details["note"] = "Static checks cannot prove recruitment, localisation display, icon lookup, firing, movement, or campaign behavior."
     return {"status": "VERIFIED" if not errors else "FAILED", "checks_passed": len(checks),
             "checks": checks, "errors": errors, "details": details}
 

@@ -23,6 +23,8 @@ try { $null = Invoke-RestMethod 'http://127.0.0.1:45127/version' -TimeoutSec 2 }
 $version = Invoke-RestMethod 'http://127.0.0.1:45127/version' -TimeoutSec 3
 if ($version.version -ne '5.2.0') { throw "Expected RPFM 5.2.0, found $($version.version)" }
 if (!$SkipPrepare) { python scripts\prepare_infantry_source.py; if ($LASTEXITCODE -ne 0) { throw 'Source preparation failed' } }
+python scripts\generate_infantry_icon.py
+if ($LASTEXITCODE -ne 0) { throw 'Icon generation failed' }
 pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action build
 if ($LASTEXITCODE -ne 0) { throw 'Pack build failed' }
 pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action validate

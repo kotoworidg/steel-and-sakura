@@ -29,6 +29,8 @@ def main():
     sources += sorted((ROOT / "docs").glob("*.md"))
     sources += sorted((ROOT / "tests").glob("*.py")) + sorted((ROOT / "tests").glob("*.md"))
     sources += sorted((ROOT / "src").glob("*")) + sorted((ROOT / "assets").glob("*.md"))
+    sources += sorted((ROOT / "assets" / "infantry").rglob("*.tga"))
+    sources += sorted((ROOT / "assets" / "infantry").glob("*.md"))
     sources += sorted((ROOT / "source" / "tank").glob("*.md")) + sorted((ROOT / "source" / "aircraft").glob("*.md"))
     sources += [ROOT / ".gitignore"]
     source_zip = OUT / "steel-and-sakura-source.zip"

@@ -7,7 +7,9 @@
 - [x] Installed official RPFM v5.2.0 locally and automated its MCP pack operations.
 - [x] Decoded installed schema/table rows, authored one 40-soldier infantry prototype from those rows, and built a PFH3 Mod pack.
 - [x] Reopened the pack in RPFM and passed offline consistency/collision checks and regression tests.
-- [x] Offline validator also checks the referenced projectile in the decoded installed table; currently 56 checks pass.
+- [x] Offline validator checks the referenced projectile, English localization keys, and original TGA headers; currently 79 checks and three regression tests pass.
+- [x] Added four English unit strings and five original UI cards to the prototype pack; RPFM reopened the localization and extracted icon bytes match their sources.
+- [x] Backed up the previously installed prototype under `backups/before-localisation-icon-sync-2026-10-20/` and synced the new build; project and installed hashes match.
 - [x] Copied the prototype into `data\MyMods` and appended its name to `mod_list.txt` after backups; existing mod remains enabled.
 - [x] Backed up the older installed prototype under `backups/before-offline-sync-2026-10-20/` and synced the latest validated pack; installed and project SHA-256 hashes match.
 - [x] Recorded verified FoTS artillery and model-path observations; scanned model packs for aircraft names.
