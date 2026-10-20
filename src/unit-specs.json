@@ -1,0 +1,24 @@
+{
+  "target": "Original Shogun 2 Sengoku campaign, with Fall of the Samurai data installed",
+  "units": [
+    {
+      "name": "Automatic Rifle Squad",
+      "status": "PROVISIONAL",
+      "target_soldiers": 40,
+      "current_prototype": "FoTS Tosa repeating-rifle data with a Sengoku unit and Fort recruitment row",
+      "unverified": ["automatic fire", "display text", "icon", "campaign recruitment", "custom battle availability", "rendering"]
+    },
+    {
+      "name": "Type 97 Chi-Ha",
+      "status": "BLOCKED",
+      "current_prototype": null,
+      "evidence": "FoTS horse-drawn artillery and model paths exist; tank movement and model integration are unverified"
+    },
+    {
+      "name": "Mitsubishi A6M Zero",
+      "status": "BLOCKED",
+      "current_prototype": null,
+      "evidence": "No aircraft-named model path in scanned model packs; no verified flight control or animation path"
+    }
+  ]
+}

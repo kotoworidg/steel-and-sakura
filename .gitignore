@@ -1,0 +1,21 @@
+# Local game-derived data, extracted tables, and built packs
+/build/
+/dist/
+*.pack
+/source/infantry/*.json
+
+# Backups may contain installed mod lists and local copies
+/backups/
+
+# Downloaded/editor binaries and user-specific RPFM settings
+/tools/rpfm-5.2.0/
+/tools/rpfm-config/
+
+# Local and editor-generated state
+.DS_Store
+Thumbs.db
+*.pdb
+*.tmp
+*.log
+__pycache__/
+*.pyc

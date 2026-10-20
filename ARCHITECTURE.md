@@ -1,0 +1,7 @@
+# Architecture
+
+The target is a manual Shogun 2 PFH3 Mod pack for the original Sengoku campaign. `scripts/prepare_infantry_source.py` clones verified rows from the user's installed game tables into four local JSON inputs. `scripts/rpfm_mcp.ps1` passes those rows to RPFM v5.2.0's MCP server, saves a Mod pack, then reopens the pack to inspect the four DB files. `scripts/validate_offline.py` compares every generated row to its installed source row and checks field order, types, table versions, shared keys, unit size, and observed key collisions. `scripts/build.ps1` runs these steps and regression tests in order.
+
+The actual pack now contains **one provisional new unit**, Automatic Rifle Squad. The eventual three-unit goal is retained in `src/unit-specs.json`; tank and aircraft have no DB rows or disguised substitutes. Generated game-derived JSON, decoded tables, editor binaries, backups, and pack outputs are Git-ignored. The safe source ZIP includes scripts and intent/specification files; the local prototype ZIP includes the generated pack and explicit test limits.
+
+The current infantry row joins four observed game tables: land stats, unit metadata, Fort recruitment, and `japan` military permission. Other candidate requirements, including a localization text entry, unit card/icon, variant, and custom-battle integration, remain unverified and are listed in `LIMITATIONS.md`. Schema and packaging success must never be interpreted as runtime success.

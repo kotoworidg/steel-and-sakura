@@ -1,0 +1,24 @@
+# Progress and next work
+
+## Completed offline
+
+- [x] Backed up project states and the game's original mod list before changes. Latest project backup: `backups/before-offline-handoff-2026-10-20/`.
+- [x] Inventoried local game packs and executable metadata without editing original archives.
+- [x] Installed official RPFM v5.2.0 locally and automated its MCP pack operations.
+- [x] Decoded installed schema/table rows, authored one 40-soldier infantry prototype from those rows, and built a PFH3 Mod pack.
+- [x] Reopened the pack in RPFM and passed offline consistency/collision checks and regression tests.
+- [x] Offline validator also checks the referenced projectile in the decoded installed table; currently 56 checks pass.
+- [x] Copied the prototype into `data\MyMods` and appended its name to `mod_list.txt` after backups; existing mod remains enabled.
+- [x] Backed up the older installed prototype under `backups/before-offline-sync-2026-10-20/` and synced the latest validated pack; installed and project SHA-256 hashes match.
+- [x] Recorded verified FoTS artillery and model-path observations; scanned model packs for aircraft names.
+
+## Pending
+
+- [ ] Test original Sengoku campaign recruitment, battlefield spawn, rifle fire and reload, visual attachments, text/icon, and custom battle when a GPU is available.
+- [ ] Fix any observed infantry runtime problems; add legitimate art/localization and revalidate.
+- [ ] Build a separate artillery mechanics experiment, observe movement and firing, then decide whether a physical Chi-Ha is feasible. A licensed model and compatible import path are missing.
+- [ ] Identify and test a real visible airborne entity path for the A6M Zero; obtain an original/licensed model and animation pipeline.
+- [ ] Package exactly three real units only after each can be demonstrated. Current pack intentionally contains only the infantry experiment.
+- [ ] Publish to the user-provided GitHub repository once it is accessible; never push extracted game rows, packs, backups, or editor binaries without separate review.
+
+See `docs/progress.md` for the detailed dated history and `docs/github.md` for repository access state.
