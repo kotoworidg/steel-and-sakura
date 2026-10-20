@@ -15,3 +15,10 @@ No visible 3D aircraft model or aircraft-named path was found in the model-pack 
 ## Project-wide
 
 The executable version metadata is not a runtime build number. FoTS files are present, but exact DLC entitlement cannot be confirmed without launch. Direct key collisions were checked against decoded vanilla tables and one installed mod; other possible mod interactions remain untested. No gameplay status is marked VERIFIED.
+# Modern artillery limitation
+
+The fourth requested unit is an optional Armstrong-based prototype. Its
+Nuclear Shell ability has one 30-second activation, not guaranteed one
+projectile. Selectable UI binding, damage, visuals and recruitment have no
+runtime evidence. There is no modern model or mushroom-cloud effect.
+See `docs/MODERN_ARTILLERY.md`.

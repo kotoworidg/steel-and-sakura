@@ -9,3 +9,10 @@ Current local outputs live in `build/` and `dist/`, both ignored by Git. The pro
 An additional **uninstalled** artillery mechanics experiment can be rebuilt with `pwsh -NoProfile -File scripts/build.ps1 -ArtilleryTest`. It enables the game's existing `test_limber_gun` through two rows; it is not a Chi-Ha and is excluded from releases.
 
 Aircraft research found bird fauna meshes and `bird_cycle.anim` in installed archives. This is only an ambient animation lead; no Zero model, flight control, or airborne unit has been demonstrated. See `source/aircraft/README.md`.
+# Latest addition
+
+The roster now includes a fourth requested unit, Modern Artillery Battery with
+Nuclear Shell. Read `docs/MODERN_ARTILLERY.md`. Its separate optional pack has
+passed offline table, localisation and reference validation, but has not been
+installed or tested in-game. Ability UI binding remains unverified. Rebuild
+using `scripts/build.ps1 -ModernArtillery`.

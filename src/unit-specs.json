@@ -6,7 +6,14 @@
       "status": "PROVISIONAL",
       "target_soldiers": 40,
       "current_prototype": "FoTS Tosa repeating-rifle data with a Sengoku unit and Fort recruitment row",
-      "unverified": ["automatic fire", "display text", "icon", "campaign recruitment", "custom battle availability", "rendering"]
+      "unverified": [
+        "automatic fire",
+        "display text",
+        "icon",
+        "campaign recruitment",
+        "custom battle availability",
+        "rendering"
+      ]
     },
     {
       "name": "Type 97 Chi-Ha",
@@ -19,6 +26,19 @@
       "status": "BLOCKED",
       "current_prototype": null,
       "evidence": "No aircraft-named model path in scanned model packs; no verified flight control or animation path"
+    },
+    {
+      "name": "Modern Artillery Battery",
+      "status": "PROVISIONAL",
+      "current_prototype": "FoTS Armstrong battery with forty crew, four guns, and a namespaced Nuclear Shell projectile-switching ability",
+      "ability": "One 30-second activation; not guaranteed exactly one shell",
+      "unverified": [
+        "custom ability button",
+        "projectile switching",
+        "blast damage and visuals",
+        "recruitment",
+        "modern model"
+      ]
     }
   ]
 }

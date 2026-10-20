@@ -1,11 +1,19 @@
 # Steel & Sakura
 
-**Offline handoff status (2026-10-20):** One structurally validated, gameplay-untested infantry prototype exists. The physical Chi-Ha and visible flying A6M Zero remain blocked research goals. The user currently cannot launch the game because there is no working GPU. See [PROGRESS.md](PROGRESS.md), [LIMITATIONS.md](LIMITATIONS.md), and [TESTING.md](TESTING.md).
+**Offline handoff status (2026-10-20):** Infantry and a separate modern artillery prototype have passed structural checks; neither has gameplay evidence. The physical Chi-Ha and visible flying A6M Zero remain blocked research goals. The user currently cannot launch the game because there is no working GPU. See [PROGRESS.md](PROGRESS.md), [LIMITATIONS.md](LIMITATIONS.md), and [TESTING.md](TESTING.md).
 
 Research and development workspace for a manual-install Shogun 2 mod targeting
 the original Sengoku campaign with Fall of the Samurai content installed.
 
 ## Current status
+
+The user extended the scope to four units by requesting modern artillery
+with a nuclear-shell skill. Build this optional prototype with
+`pwsh -NoProfile -File scripts/build.ps1 -ModernArtillery`.
+It uses Armstrong gun graphics and a namespaced projectile-switching ability,
+with one 30-second activation and increased blast parameters. It is not
+installed. The ability button and actual firing behavior remain unverified;
+see [modern artillery findings and instructions](docs/MODERN_ARTILLERY.md).
 
 The first infantry prototype is in
 `build/steel_sakura_infantry_prototype.pack`. RPFM reopened it and verified

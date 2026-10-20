@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','inspect-air','build-artillery','validate-artillery')][string]$Action = 'list',
+    [ValidateSet('list','probe','build','validate','assets','existing-mod','inspect-ui','inspect-air','inspect-modern','build-artillery','validate-artillery','build-modern','validate-modern')][string]$Action = 'list',
     [string]$GameRoot = 'D:\Games\Total War - SHOGUN 2'
 )
 
@@ -163,16 +163,20 @@ if ($Action -eq 'list') {
     }
     Write-Output ('VERIFIED=icon files '+$assetFolders.Count)
     Write-Output ('VERIFIED=pack '+$output)
-} elseif ($Action -eq 'build-artillery') {
+} elseif ($Action -in @('build-artillery','build-modern')) {
+    $modern = $Action -eq 'build-modern'
+    $sourceFolder = if ($modern) { 'source\modern_artillery' } else { 'source\tank' }
+    $artifact = if ($modern) { 'steel_sakura_modern_artillery_prototype' } else { 'steel_sakura_artillery_mechanics_test' }
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     $created = Invoke-Tool 'new_pack'
     $packKey = ($created.content[0].text | ConvertFrom-Json -AsHashtable).String
     if (!$packKey) { throw 'Could not determine artillery test pack key' }
     $null = Invoke-Tool 'set_pack_file_type' @{ pack_key=$packKey; pack_file_type='"Mod"' }
-    foreach ($name in @('building_units_allowed','units_to_groupings_military_permissions')) {
-        $source = Get-Content -LiteralPath ('source\tank\'+$name+'.json') -Raw | ConvertFrom-Json -AsHashtable
-        $path = 'db/'+$source.table+'/steel_sakura_artillery_mechanics_test'
-        $newFile = @{ DB=@('steel_sakura_artillery_mechanics_test',$source.table,$source.version) } | ConvertTo-Json -Compress -Depth 5
+    foreach ($file in Get-ChildItem -LiteralPath $sourceFolder -Filter '*.json') {
+        $name = $file.BaseName
+        $source = Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json -AsHashtable
+        $path = 'db/'+$source.table+'/'+$artifact
+        $newFile = @{ DB=@($artifact,$source.table,$source.version) } | ConvertTo-Json -Compress -Depth 5
         $null = Invoke-Tool 'new_packed_file' @{ pack_key=$packKey; path=$path; new_file=$newFile }
         $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$packKey; path=$path; source='PackFile' }
         $wrapper = $decoded.content[0].text | ConvertFrom-Json -AsHashtable
@@ -181,18 +185,31 @@ if ($Action -eq 'list') {
         $null = Invoke-Tool 'save_packed_file_from_view' @{ pack_key=$packKey; path=$path; data=$modified }
         Write-Output ('ARTILLERY_TEST_TABLE='+$name)
     }
-    $output = (Join-Path (Resolve-Path 'build').Path 'steel_sakura_artillery_mechanics_test.pack')
+    if ($modern) {
+        $strings = Get-Content 'build\modern_localisation.json' -Raw | ConvertFrom-Json -AsHashtable
+        $locPath = 'text/db/steel_sakura_modern_artillery.loc'
+        $null = Invoke-Tool 'new_packed_file' @{ pack_key=$packKey; path=$locPath; new_file='{"Loc":"steel_sakura_modern_artillery"}' }
+        $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$packKey; path=$locPath; source='PackFile' }
+        $wrapper = $decoded.content[0].text | ConvertFrom-Json -AsHashtable
+        $wrapper.LocRFileInfo[0].table.table_data = @($strings | ForEach-Object { ,@(@{StringU16=$_.key},@{StringU16=$_.text},@{Boolean=$_.tooltip}) })
+        $null = Invoke-Tool 'save_packed_file_from_view' @{ pack_key=$packKey; path=$locPath; data=(@{Loc=$wrapper.LocRFileInfo[0]} | ConvertTo-Json -Depth 70 -Compress) }
+    }
+    $output = (Join-Path (Resolve-Path 'build').Path ($artifact+'.pack'))
     $null = Invoke-Tool 'save_pack_as' @{ pack_key=$packKey; path=$output }
     Write-Output ('ARTILLERY_TEST_PACK='+$output)
-} elseif ($Action -eq 'validate-artillery') {
+} elseif ($Action -in @('validate-artillery','validate-modern')) {
+    $modern = $Action -eq 'validate-modern'
+    $sourceFolder = if ($modern) { 'source\modern_artillery' } else { 'source\tank' }
+    $artifact = if ($modern) { 'steel_sakura_modern_artillery_prototype' } else { 'steel_sakura_artillery_mechanics_test' }
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
-    $output = (Resolve-Path 'build\steel_sakura_artillery_mechanics_test.pack').Path
+    $output = (Resolve-Path ('build\'+$artifact+'.pack')).Path
     $opened = Invoke-Tool 'open_packfiles' @{ paths=@($output) }
     $info = ($opened.content[0].text | ConvertFrom-Json -AsHashtable).StringContainerInfo[1]
     if ($info.pfh_version -ne 'PFH3' -or $info.pfh_file_type -ne 'Mod') { throw 'Unexpected artillery test pack header' }
-    foreach ($name in @('building_units_allowed','units_to_groupings_military_permissions')) {
-        $source = Get-Content -LiteralPath ('source\tank\'+$name+'.json') -Raw | ConvertFrom-Json -AsHashtable
-        $path = 'db/'+$source.table+'/steel_sakura_artillery_mechanics_test'
+    foreach ($file in Get-ChildItem -LiteralPath $sourceFolder -Filter '*.json') {
+        $name = $file.BaseName
+        $source = Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json -AsHashtable
+        $path = 'db/'+$source.table+'/'+$artifact
         $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$output; path=$path; source='PackFile' }
         $table = ($decoded.content[0].text | ConvertFrom-Json -AsHashtable).DBRFileInfo[0].table
         if ($table.definition.version -ne $source.version -or $table.table_data.Count -ne 1 -or $table.table_data[0].Count -ne $source.row.Count) {
@@ -206,6 +223,19 @@ if ($Action -eq 'list') {
         Write-Output ('VERIFIED_ARTILLERY_TEST='+$name)
     }
     Write-Output ('VERIFIED_ARTILLERY_TEST_PACK='+$output)
+    if ($modern) {
+        $strings = @(Get-Content 'build\modern_localisation.json' -Raw | ConvertFrom-Json -AsHashtable)
+        $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$output; path='text/db/steel_sakura_modern_artillery.loc'; source='PackFile' }
+        $rows = ($decoded.content[0].text | ConvertFrom-Json -AsHashtable).LocRFileInfo[0].table.table_data
+        if ($rows.Count -ne $strings.Count) { throw 'Modern localisation count mismatch' }
+        for ($i=0; $i -lt $strings.Count; $i++) {
+            if ($rows[$i][0].StringU16 -ne $strings[$i].key -or $rows[$i][1].StringU16 -ne $strings[$i].text -or $rows[$i][2].Boolean -ne $strings[$i].tooltip) {
+                throw "Modern localisation mismatch: $i"
+            }
+        }
+        New-Item -ItemType Directory -Force 'build\validation' | Out-Null
+        @{ status='VERIFIED_OFFLINE_ONLY'; pack_sha256=(Get-FileHash -LiteralPath $output -Algorithm SHA256).Hash; runtime_tested=$false; tables=10 } | ConvertTo-Json | Set-Content 'build\validation\modern-artillery-report.json' -Encoding utf8
+    }
 } elseif ($Action -eq 'assets') {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     foreach ($name in @('models.pack','models2.pack')) {
@@ -219,6 +249,27 @@ if ($Action -eq 'list') {
     $matches | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\inventory\asset_path_matches.json' -Encoding utf8
     Write-Output ('ASSET_PATHS='+$paths.Count+' MATCHES='+$matches.Count)
     $matches | Select-Object -First 60
+} elseif ($Action -eq 'inspect-modern') {
+    $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
+    $data = Join-Path (Join-Path $GameRoot 'data') 'data.pack'
+    $null = Invoke-Tool 'open_packfiles' @{ paths=@($data) }
+    foreach ($name in @('gun_types','gun_type_to_projectiles','projectiles_explosions','unit_abilities','unit_special_abilities','unit_to_unit_abilities_junctions','uniforms')) {
+        $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$data; path=('db/'+$name+'_tables/'+$name); source='PackFile' }
+        $decoded.content[0].text | Set-Content -LiteralPath ('build\inventory\table_'+$name+'.json') -Encoding utf8
+        Write-Output ('DECODE='+$name+' chars='+$decoded.content[0].text.Length)
+    }
+    $loc = Join-Path (Join-Path $GameRoot 'data') 'local_en.pack'
+    $null = Invoke-Tool 'open_packfiles' @{ paths=@($loc) }
+    $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$loc; path='text/db/unit_abilities.loc'; source='PackFile' }
+    $decoded.content[0].text | Set-Content 'build\inventory\loc_unit_abilities.json' -Encoding utf8
+    $mod = Join-Path (Join-Path $GameRoot 'data\MyMods') 'mods_modern_units_otomo.pack'
+    if (Test-Path -LiteralPath $mod) {
+        $null = Invoke-Tool 'open_packfiles' @{ paths=@($mod) }
+        foreach ($name in @('gun_types','gun_type_to_projectiles','projectiles','projectiles_explosions','uniforms','unit_abilities','unit_special_abilities','unit_to_unit_abilities_junctions')) {
+            $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$mod; path=('db/'+$name+'_tables/'+$name); source='PackFile' }
+            $decoded.content[0].text | Set-Content ('build\inventory\existing_mod_'+$name+'.json') -Encoding utf8
+        }
+    }
 } elseif ($Action -eq 'inspect-air') {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
     $data = Join-Path (Join-Path $GameRoot 'data') 'data.pack'

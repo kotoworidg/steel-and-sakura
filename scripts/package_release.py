@@ -46,6 +46,22 @@ def main():
         archive.write(report, "offline-report.json")
     manifest = {file.name: {"bytes": file.stat().st_size, "sha256": sha(file)}
                 for file in (source_zip, prototype_zip, PACK)}
+    modern = ROOT / "build" / "steel_sakura_modern_artillery_prototype.pack"
+    if modern.exists():
+        modern_report = ROOT / "build" / "validation" / "modern-artillery-report.json"
+        receipt = json.loads(modern_report.read_text(encoding="utf-8-sig"))
+        if (receipt.get("status") != "VERIFIED_OFFLINE_ONLY" or
+                receipt.get("source_provenance_and_reference_chain") != "VERIFIED" or
+                receipt.get("pack_sha256") != sha(modern)):
+            raise SystemExit("Modern artillery pack needs a matching offline validation report")
+        modern_zip = OUT / "steel-and-sakura-modern-artillery-prototype-local.zip"
+        with zipfile.ZipFile(modern_zip, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.write(modern, modern.name)
+            archive.write(ROOT / "INSTALL.md", "INSTALL.md")
+            archive.write(ROOT / "docs" / "MODERN_ARTILLERY.md", "MODERN_ARTILLERY.md")
+            archive.write(modern_report, "modern-artillery-report.json")
+        for file in (modern, modern_zip):
+            manifest[file.name] = {"bytes": file.stat().st_size, "sha256": sha(file)}
     (OUT / "SHA256SUMS.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     for name, info in manifest.items():
         print(f"{name}: {info['bytes']} bytes SHA256 {info['sha256']}")

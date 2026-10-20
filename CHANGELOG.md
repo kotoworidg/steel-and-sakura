@@ -19,3 +19,10 @@
 - Built and reopened the first PFH3 infantry prototype from observed game rows.
 - Installed the prototype into `data\MyMods` after backing up `mod_list.txt` and the prior output.
 - Recorded artillery and model-pack observations. No in-game test was possible.
+## 2026-10-20 — Modern artillery prototype
+
+- Added a fourth requested unit with an experimental Nuclear Shell skill.
+- Added installed-data preparation, isolated pack build, localisation,
+  RPFM round-trip checks, reference validation and optional local ZIP.
+- Preserved ordinary artillery keys; generated rows and packs remain ignored.
+- Kept gameplay, custom ability UI and nuclear visuals explicitly unverified.

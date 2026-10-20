@@ -1,0 +1,16 @@
+{
+  "unit_key": "SteelSakura_Modern_Artillery",
+  "ability_key": "steel_sakura_nuclear_shell",
+  "projectile_key": "steel_sakura_nuclear_projectile",
+  "explosion_key": "steel_sakura_nuclear_explosion",
+  "unique_index": 1465,
+  "recruitment_key": 4722,
+  "ability_active_time": 30.0,
+  "ability_uses": 1,
+  "blast_radius": 70.0,
+  "blast_damage": 100.0,
+  "display_name": "Modern Artillery Battery",
+  "ability_name": "Nuclear Shell",
+  "ability_description": "Temporarily fires experimental high-blast shells. One activation per battle. Keep friendly troops clear.",
+  "status": "PROVISIONAL: uses Armstrong guns and existing explosion graphics; no runtime evidence."
+}

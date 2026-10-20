@@ -1,6 +1,6 @@
 # Manual installation and removal
 
-The current pack is an **untested infantry prototype**. It contains one new unit, not the planned three-unit release. Original game archives and saves are not overwritten.
+The installed pack is an **untested infantry prototype** containing one new unit. The planned roster now has four units. A separate, uninstalled modern artillery prototype and its manual instructions are documented in [MODERN_ARTILLERY.md](docs/MODERN_ARTILLERY.md). Original game archives and saves are not overwritten.
 
 ## Existing installation
 

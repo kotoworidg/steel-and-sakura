@@ -1,4 +1,4 @@
-param([switch]$SkipPrepare, [switch]$ArtilleryTest)
+param([switch]$SkipPrepare, [switch]$ArtilleryTest, [switch]$ModernArtillery)
 
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
@@ -22,6 +22,19 @@ try { $null = Invoke-RestMethod 'http://127.0.0.1:45127/version' -TimeoutSec 2 }
 }
 $version = Invoke-RestMethod 'http://127.0.0.1:45127/version' -TimeoutSec 3
 if ($version.version -ne '5.2.0') { throw "Expected RPFM 5.2.0, found $($version.version)" }
+if ($ModernArtillery) {
+    pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action inspect-modern -GameRoot 'D:\Games\Total War - SHOGUN 2'
+    if ($LASTEXITCODE -ne 0) { throw 'Modern artillery data inspection failed' }
+    python scripts\prepare_modern_artillery.py
+    if ($LASTEXITCODE -ne 0) { throw 'Modern artillery preparation failed' }
+    pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action build-modern
+    if ($LASTEXITCODE -ne 0) { throw 'Modern artillery build failed' }
+    pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action validate-modern
+    if ($LASTEXITCODE -ne 0) { throw 'Modern artillery validation failed' }
+    python scripts\validate_modern_artillery.py
+    if ($LASTEXITCODE -ne 0) { throw 'Modern artillery reference validation failed' }
+    exit 0
+}
 if ($ArtilleryTest) {
     python scripts\prepare_artillery_test.py
     if ($LASTEXITCODE -ne 0) { throw 'Artillery test source preparation failed' }

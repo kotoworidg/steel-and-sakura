@@ -4,6 +4,7 @@
 *.pack
 /source/infantry/*.json
 /source/tank/*.json
+/source/modern_artillery/*.json
 
 # Backups may contain installed mod lists and local copies
 /backups/

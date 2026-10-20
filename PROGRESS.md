@@ -26,3 +26,15 @@
 - [ ] Publish to the user-provided GitHub repository once it is accessible; never push extracted game rows, packs, backups, or editor binaries without separate review.
 
 See `docs/progress.md` for the detailed dated history and `docs/github.md` for repository access state.
+# Modern artillery addition — 2026-10-20
+
+- Backed up the 41 previously tracked project files to `backups/before-modern-artillery-2026-10-20`.
+- User extended the roster to four units with modern artillery and a nuclear-shell skill.
+- Inspected installed ability, projectile, explosion, uniform and localisation data.
+- Built an optional PFH3 Mod pack with ten new DB rows and seven strings.
+- RPFM reopened and compared all rows/strings; clone provenance and reference checks passed.
+- Uses Armstrong graphics, a one-use 30-second firing ability, and larger blast values.
+- TODO: verify custom ability button, projectile switching, firing-window round count,
+  explosion behavior, recruitment and interactions with the existing Otomo mod in-game.
+- No modern model or nuclear-specific visual effect exists yet. Pack remains uninstalled.
+- Details: `docs/MODERN_ARTILLERY.md`; rebuild: `scripts/build.ps1 -ModernArtillery`.
