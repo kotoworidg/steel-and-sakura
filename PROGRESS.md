@@ -1,3 +1,58 @@
+## 2026-10-21: user confirms two bullets followed by a reload
+
+User report: "yep confirmed two bullets and a reload" for the latest installed
+Type 20 burst experiment. Record this as **user-confirmed two-shot burst behavior**.
+Sustained automatic fire, the exact 0.15-second interval, and removal of the reload
+animation are not confirmed. The earlier inconclusive control remains historical.
+Preserve this working burst build before any further experiments. No combat,
+animation, artillery, grenade, or installed pack changes were made for this update.
+The detailed report below retains the pre-test expectations as historical context.
+
+## 2026-10-21: isolated Type 20 burst test installed — runtime unconfirmed
+
+Current instructions and engine evidence: [TYPE20_BURST_TEST.md](docs/TYPE20_BURST_TEST.md).
+Oda ranged infantry: **TYPE20 BURST TEST - two timed shots**. Unique registry,
+two timed events 0.15 s apart, repeated source recoil poses, and aimed recovery.
+Combat DB statistics and all 20 working fallback payloads are unchanged.
+No sustained automatic-fire success is claimed. The previous path control was
+inconclusive. Build/validate/install: `powershell -File scripts/build_type20_burst.ps1 -Install`.
+Rollback: `python scripts/type20_burst.py rollback`. See the report for exact
+installed hash, backup record and short gameplay test. Historical entries follow.
+
+## 2026-10-21: path-control gameplay result is inconclusive
+
+The user initially reported: "yeah i think it work shot then wait 4 secs then shoots".
+On direct comparison, the user then clarified: "Both units pause about the same".
+
+Do not treat this as a successful positive control. It does not demonstrate a
+control-specific delay or confirm that the private clip/event path is consumed.
+The initial report describes a pause AFTER a shot; it does not measure latency
+between entering FIRE and the first projectile. Automatic fire remains unimplemented.
+No new pack was built or installed in response to this comparison.
+
+Read-only follow-up:
+- The existing data.pack path inventory lists 4,097 .anim files and 291 animation
+  .txt files, including both standard and custom animation registries.
+- No obvious separate compiled animation container was found in that inventory.
+  This is not proof that no other pack/cache can affect selection.
+- The actual empire.retail.dll contains standard/custom animation-table directory
+  names, the battleconfiguration directory, FIRE_TIME and FIRE_TIME_2.
+- A static PE audit records literal addresses and .text references for those strings:
+  build/type20-path-control/engine-loader-evidence.json.
+- Engine SHA256:
+  022FAE2E2DA92B59B8B1B8EE52887003C624E3C8ECA060B209F5D792A7F874F5.
+- Loader string references: standard registry RVA 0x59fe1; custom registry RVA
+  0x59fc1 and 0xfd712b. FIRE_TIME reference RVA 0xd39e98; FIRE_TIME_2 RVA 0xd39eae.
+  These are investigation leads, not recovered function semantics.
+- RPFM's man_animations_table schema points to battle_animations_table/key, but
+  that referenced table was not found in the inventoried packed DB paths.
+  Do not invent a row/schema to fill the gap.
+- No executable was modified, run, patched or injected. No software was installed.
+
+Next gate: trace registry/table selection and event dispatch; seek a distinctive
+animation-selection observation before any further burst experiment.
+Keep the current installed pack unchanged until a supported next step is established.
+
 > Current result: the user tested the separate Type 20 unit and reports no automatic fire. The two-event experiment failed its gameplay objective. A one-shot animation-path control is now installed; see [TYPE20_PATH_CONTROL.md](docs/TYPE20_PATH_CONTROL.md). Historical build details below are retained.
 
 # Current Type 20 research status

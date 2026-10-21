@@ -1,3 +1,37 @@
+## 2026-10-21: path-control gameplay result is inconclusive
+
+The user initially reported: "yeah i think it work shot then wait 4 secs then shoots".
+On direct comparison, the user then clarified: "Both units pause about the same".
+
+Do not treat this as a successful positive control. It does not demonstrate a
+control-specific delay or confirm that the private clip/event path is consumed.
+The initial report describes a pause AFTER a shot; it does not measure latency
+between entering FIRE and the first projectile. Automatic fire remains unimplemented.
+No new pack was built or installed in response to this comparison.
+
+Read-only follow-up:
+- The existing data.pack path inventory lists 4,097 .anim files and 291 animation
+  .txt files, including both standard and custom animation registries.
+- No obvious separate compiled animation container was found in that inventory.
+  This is not proof that no other pack/cache can affect selection.
+- The actual empire.retail.dll contains standard/custom animation-table directory
+  names, the battleconfiguration directory, FIRE_TIME and FIRE_TIME_2.
+- A static PE audit records literal addresses and .text references for those strings:
+  build/type20-path-control/engine-loader-evidence.json.
+- Engine SHA256:
+  022FAE2E2DA92B59B8B1B8EE52887003C624E3C8ECA060B209F5D792A7F874F5.
+- Loader string references: standard registry RVA 0x59fe1; custom registry RVA
+  0x59fc1 and 0xfd712b. FIRE_TIME reference RVA 0xd39e98; FIRE_TIME_2 RVA 0xd39eae.
+  These are investigation leads, not recovered function semantics.
+- RPFM's man_animations_table schema points to battle_animations_table/key, but
+  that referenced table was not found in the inventoried packed DB paths.
+  Do not invent a row/schema to fill the gap.
+- No executable was modified, run, patched or injected. No software was installed.
+
+Next gate: trace registry/table selection and event dispatch; seek a distinctive
+animation-selection observation before any further burst experiment.
+Keep the current installed pack unchanged until a supported next step is established.
+
 # Type 20 animation-path control
 
 Date: 2026-10-21. Current installed diagnostic; not an automatic-fire implementation.

@@ -83,25 +83,38 @@
     "filename": "steel_sakura_combined_test.pack",
     "install_subdirectory": "data",
     "faction": "oda",
-    "milestone": "PENDING_GRENADE_DAMAGE_AND_COMBINED_BEHAVIOR_TEST",
+    "milestone": "USER_CONFIRMED_TWO_SHOT_BURST_THEN_RELOAD",
     "ability_ui": "Vanilla blinding_grenade / shrapnel_shot controls; final named custom skills deferred until buttons activate",
-    "mode": "INFANTRY_FRAGMENTATION_TEST_V1",
-    "automatic_fire": "NOT_IMPLEMENTED"
+    "mode": "TYPE20_ISOLATED_BURST_HYPOTHESIS",
+    "automatic_fire": "TWO_SHOT_BURST_USER_CONFIRMED_SUSTAINED_FIRE_UNCONFIRMED"
   },
   "experimental_infantry": {
     "key": "steel_sakura_type20_automatic_fire_test",
     "name": "Steel & Sakura \u2014 Type 20 Automatic Fire Test",
-    "status": "USER_REPORT_NO_AUTOMATIC_FIRE",
+    "status": "USER_CONFIRMED_TWO_SHOT_BURST_THEN_RELOAD",
     "men": 40,
     "report": "docs/TYPE20_RESEARCH.md",
-    "purpose": "Test numbered second shot marker with unchanged reload/ballistics; not proven automatic fire",
+    "purpose": "Preserve user-confirmed two-shot burst baseline; sustained automatic fire and magazine reload remain unresolved.",
     "campaign_recruitment": false,
     "visuals": "Spencer/Tosa placeholder; original blockout exported separately, not installed",
     "current_control": {
       "display_name": "TYPE20 ANIMATION CHECK - 4s HOLD / ONE SHOT",
-      "status": "INSTALLED_RUNTIME_PENDING",
+      "status": "INCONCLUSIVE_USER_REPORT_BOTH_UNITS_PAUSE_SIMILARLY",
       "purpose": "Verify animation selection and primary shot timing; one shot only",
-      "report": "docs/TYPE20_PATH_CONTROL.md"
+      "report": "docs/TYPE20_PATH_CONTROL.md",
+      "animation_selection_confirmed": false,
+      "archived": true
+    },
+    "current_burst_test": {
+      "display_name": "TYPE20 BURST TEST - two timed shots",
+      "status": "USER_CONFIRMED_TWO_SHOT_BURST_THEN_RELOAD",
+      "report": "docs/TYPE20_BURST_TEST.md",
+      "shot_interval_seconds": 0.15,
+      "automatic_fire_confirmed": false,
+      "stats_changed": false,
+      "burst_fire_confirmed_by_user": true,
+      "sustained_automatic_fire_confirmed": false,
+      "exact_runtime_interval_confirmed": false
     }
   }
 }

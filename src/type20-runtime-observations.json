@@ -1,0 +1,33 @@
+{
+  "observations": [
+    {
+      "date": "2026-10-21",
+      "timezone": "Asia/Singapore",
+      "build_sha256": "3CDF8ADF3DDEC46FDD9E3379D37530B353DD8DCC5A55827E11FF9DF5B870768C",
+      "initial_user_report": "yeah i think it work shot then wait 4 secs then shoots",
+      "comparison_user_report": "Both units pause about the same",
+      "assessment": "INCONCLUSIVE_NO_CONTROL_SPECIFIC_DELAY",
+      "automatic_fire": "UNIMPLEMENTED",
+      "animation_path_consumed": "NOT_ESTABLISHED"
+    },
+    {
+      "date": "2026-10-21",
+      "timezone": "Asia/Singapore",
+      "build_sha256": "0B497A435F4E28C2C068D7C90B60BA9D0C0FFA353BABD46242EF2FED2222D270",
+      "build_identification": "Latest installed burst build per conversation; not independently rechecked during user gameplay",
+      "user_report": "yep confirmed two bullets and a reload",
+      "assessment": "USER_CONFIRMED_TWO_SHOT_BURST_FOLLOWED_BY_RELOAD",
+      "sustained_automatic_fire": "NOT_CONFIRMED",
+      "exact_shot_interval": "NOT_MEASURED_IN_GAME",
+      "reload_animation_replacement": "NOT_ESTABLISHED_BY_REPORT",
+      "limits": "User gameplay observation; no recording or instrumented per-event trace."
+    }
+  ],
+  "pending_test": {
+    "date": "2026-10-21",
+    "display_name": "TYPE20 BURST TEST - two timed shots",
+    "build_sha256": "0B497A435F4E28C2C068D7C90B60BA9D0C0FFA353BABD46242EF2FED2222D270",
+    "status": "USER_CONFIRMED_TWO_BULLETS_THEN_RELOAD",
+    "hypothesis": "Private registry selected, two timed projectiles per firing animation; no reload or damage changes"
+  }
+}

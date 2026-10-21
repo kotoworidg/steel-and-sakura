@@ -1,3 +1,14 @@
+## 2026-10-21: isolated Type 20 burst test installed — runtime unconfirmed
+
+Current instructions and engine evidence: [TYPE20_BURST_TEST.md](TYPE20_BURST_TEST.md).
+Oda ranged infantry: **TYPE20 BURST TEST - two timed shots**. Unique registry,
+two timed events 0.15 s apart, repeated source recoil poses, and aimed recovery.
+Combat DB statistics and all 20 working fallback payloads are unchanged.
+No sustained automatic-fire success is claimed. The previous path control was
+inconclusive. Build/validate/install: `powershell -File scripts/build_type20_burst.ps1 -Install`.
+Rollback: `python scripts/type20_burst.py rollback`. See the report for exact
+installed hash, backup record and short gameplay test. Historical entries follow.
+
 > Current result: the user tested the separate Type 20 unit and reports no automatic fire. The two-event experiment failed its gameplay objective. A one-shot animation-path control is now installed; see [TYPE20_PATH_CONTROL.md](TYPE20_PATH_CONTROL.md). Historical build details below are retained.
 
 # Type 20 infantry: firing-system research and bounded experiment
