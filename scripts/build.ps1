@@ -29,6 +29,8 @@ if ($ModernArtillery) {
     if ($LASTEXITCODE -ne 0) { throw 'Modern artillery preparation failed' }
     pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action build-modern
     if ($LASTEXITCODE -ne 0) { throw 'Modern artillery build failed' }
+    python scripts\clean_pack_metadata.py build\steel_sakura_modern_artillery_prototype.pack
+    if ($LASTEXITCODE -ne 0) { throw 'Metadata cleanup failed' }
     pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action validate-modern
     if ($LASTEXITCODE -ne 0) { throw 'Modern artillery validation failed' }
     python scripts\validate_modern_artillery.py
@@ -49,6 +51,8 @@ python scripts\generate_infantry_icon.py
 if ($LASTEXITCODE -ne 0) { throw 'Icon generation failed' }
 pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action build
 if ($LASTEXITCODE -ne 0) { throw 'Pack build failed' }
+python scripts\clean_pack_metadata.py build\steel_sakura_infantry_prototype.pack
+if ($LASTEXITCODE -ne 0) { throw 'Metadata cleanup failed' }
 pwsh -NoProfile -File scripts\rpfm_mcp.ps1 -Action validate
 if ($LASTEXITCODE -ne 0) { throw 'Pack validation failed' }
 python scripts\validate_offline.py

@@ -1,0 +1,12 @@
+{
+  "game_root": "D:\\Games\\Total War - SHOGUN 2",
+  "install_subdirectory": "data",
+  "pack_filename": "steel_sakura_combined_test.pack",
+  "legacy_subdirectory": "data/MyMods",
+  "retired_pack_filenames": [
+    "steel_sakura_infantry_prototype.pack",
+    "steel_sakura_modern_artillery_prototype.pack",
+    "steel_sakura_artillery_mechanics_test.pack"
+  ],
+  "milestone": "PENDING_USER_CONFIRMATION"
+}

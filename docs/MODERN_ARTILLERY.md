@@ -66,20 +66,11 @@ Edit authored values in `src/modern_artillery.json`. Generated game-derived
 rows stay in ignored `source/modern_artillery/`, outside the source release.
 The local prototype ZIP is for this licensed installation.
 
-## Optional manual installation
+## Current installation
 
-This prototype has not been installed automatically. Back up the existing
-game-root `mod_list.txt` and any previous copy of this optional pack first.
-Copy the pack into `D:\Games\Total War - SHOGUN 2\data\MyMods`.
-Following the installation's existing mod-list convention, append:
-
-```text
-steel_sakura_modern_artillery_prototype.pack
-```
-
-Preserve the mod list's existing encoding and entries. See `INSTALL.md` for
-the installation's launcher caveats. To remove it, restore the backed-up
-mod list and move only this optional pack out of `MyMods`. Do not touch saves.
+Install the combined test pack directly into game data using
+scripts/install_combined.py. MyMods is superseded. Do not enable individual
+packs alongside the combined build. See ../INSTALL.md and COMBINED_TEST.md.
 
 ## Next in-game checks
 

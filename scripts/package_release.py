@@ -66,6 +66,21 @@ def main():
             archive.write(modern_report, "modern-artillery-report.json")
         for file in (modern, modern_zip):
             manifest[file.name] = {"bytes": file.stat().st_size, "sha256": sha(file)}
+    combined = ROOT / "build" / "steel_sakura_combined_test.pack"
+    if combined.exists():
+        combined_report = ROOT / "build/combined/validation-report.json"
+        receipt = json.loads(combined_report.read_text())
+        if receipt.get("pack_sha256") != sha(combined) or receipt.get("references_and_release_contents") != "VERIFIED":
+            raise SystemExit("Combined pack needs a matching validation report")
+        combined_zip = OUT / "steel-and-sakura-combined-test-local.zip"
+        with zipfile.ZipFile(combined_zip, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.write(combined, combined.name)
+            archive.write(combined_report, "validation-report.json")
+            archive.write(ROOT / "INSTALL.md", "INSTALL.md")
+            archive.write(ROOT / "docs/COMBINED_TEST.md", "COMBINED_TEST.md")
+            archive.write(ROOT / "docs/COMBAT_DIAGNOSTIC.md", "COMBAT_DIAGNOSTIC.md")
+        for file in (combined, combined_zip):
+            manifest[file.name] = {"bytes": file.stat().st_size, "sha256": sha(file)}
     (OUT / "SHA256SUMS.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     for name, info in manifest.items():
         print(f"{name}: {info['bytes']} bytes SHA256 {info['sha256']}")

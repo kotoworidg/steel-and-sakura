@@ -262,7 +262,8 @@ if ($Action -eq 'list') {
     $null = Invoke-Tool 'open_packfiles' @{ paths=@($loc) }
     $decoded = Invoke-Tool 'decode_packed_file' @{ pack_key=$loc; path='text/db/unit_abilities.loc'; source='PackFile' }
     $decoded.content[0].text | Set-Content 'build\inventory\loc_unit_abilities.json' -Encoding utf8
-    $mod = Join-Path (Join-Path $GameRoot 'data\MyMods') 'mods_modern_units_otomo.pack'
+    $mod = Join-Path (Join-Path $GameRoot 'data') 'mods_modern_units_otomo.pack'
+    if (!(Test-Path -LiteralPath $mod)) { $mod = Join-Path (Join-Path $GameRoot 'data\MyMods') 'mods_modern_units_otomo.pack' }
     if (Test-Path -LiteralPath $mod) {
         $null = Invoke-Tool 'open_packfiles' @{ paths=@($mod) }
         foreach ($name in @('gun_types','gun_type_to_projectiles','projectiles','projectiles_explosions','uniforms','unit_abilities','unit_special_abilities','unit_to_unit_abilities_junctions')) {
@@ -327,7 +328,8 @@ if ($Action -eq 'list') {
     $matches | Select-Object -First 80
 } else {
     $null = Invoke-Tool 'set_game_selected' @{ game_name='shogun_2'; rebuild_dependencies=$false }
-    $mod = Join-Path (Join-Path $GameRoot 'data\MyMods') 'mods_modern_units_otomo.pack'
+    $mod = Join-Path (Join-Path $GameRoot 'data') 'mods_modern_units_otomo.pack'
+    if (!(Test-Path -LiteralPath $mod)) { $mod = Join-Path (Join-Path $GameRoot 'data\MyMods') 'mods_modern_units_otomo.pack' }
     $null = Invoke-Tool 'open_packfiles' @{ paths=@($mod) }
     $result = Invoke-Tool 'get_packed_files_names_starting_with_path_from_all_sources' @{ path='{"Folder":"db"}' }
     $parsed = $result.content[0].text | ConvertFrom-Json -AsHashtable

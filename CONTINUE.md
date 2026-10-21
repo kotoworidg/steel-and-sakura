@@ -1,4 +1,55 @@
-## Equipment direction — 2026-10-21
+> Current result: the user tested the separate Type 20 unit and reports no automatic fire. The two-event experiment failed its gameplay objective. A one-shot animation-path control is now installed; see [TYPE20_PATH_CONTROL.md](docs/TYPE20_PATH_CONTROL.md). Historical build details below are retained.
+
+# Current Type 20 research status
+
+2026-10-21: the research pass found real numbered human firing events.
+See [technical report](docs/TYPE20_RESEARCH.md) and
+[test checklist](tests/type20-event-test.md).
+
+Installed: data/steel_sakura_combined_test.pack, with the new separate
+Steel & Sakura Type 20 Automatic Fire Test alongside the unchanged riflemen.
+This is an unconfirmed two-event experiment, not working automatic fire.
+All original rifle, grenade, artillery and recruitment pack payloads are preserved.
+
+## Active infantry-only fragmentation test - 2026-10-21
+
+Grenade activation and faster rifle reload are user-confirmed. True automatic
+fire remains unimplemented; inspected data provides no verified human fire-loop
+route. This pass preserves rifle, artillery, recruitment and UI payloads exactly.
+Adds unique fragmentation assets and the user-approved temporary shared vanilla
+grenade-ability relink. Both grenade baseline and rifle fallbacks are preserved.
+See [fragmentation changes, test and rollback](docs/FRAGMENTATION_TEST.md).
+Use scripts/build_frag_test.ps1 and scripts/select_frag_test.py test/fallback;
+older combined-build commands restore earlier experiments. Gameplay confirmation
+of grenade lethality and return to rifle fire remains pending.
+
+## Automatic-fire investigation - 2026-10-21
+
+User confirms faster reload. True automatic fire remains unimplemented. Actual
+animation tables show human FIRE/reload states versus a separate Gatling
+ENGINE_FIRE_LOOP and skeleton. Preserved the working faster-repeat fallback.
+Built an optional one-variable matchlock-to-none scheduling experiment, not
+automatic fire; artillery, ability and projectile payloads identical. Experiment
+is not installed. See docs/AUTOMATIC_FIRE_FINDINGS.md for opt-in and rollback.
+
+## Active engine diagnostic V1 - 2026-10-21
+
+Both units were visible, but no custom buttons and no modern combat behavior
+were observed. The previous custom UI experiment failed. Current diagnostic uses
+separate normal combat projectile/gun keys and supported vanilla Blinding Grenades
+and Shrapnel Shot buttons with vanilla special ammunition unchanged. One temporary
+grenade technology-unlock flag affects vanilla ninjas while enabled. See
+[combat diagnostic and low-FPS test](docs/COMBAT_DIAGNOSTIC.md). Rebuild with
+scripts/build_combat_diagnostic.ps1. Milestone remains PENDING_USER_CONFIRMATION.
+
+## Combined correction - 2026-10-21
+
+Use scripts/build_combined.ps1 and scripts/install_combined.py. Install directly
+into game data; older MyMods notes are superseded. Test Oda gun infantry and
+siege/artillery. Both units/buttons require user confirmation. See
+docs/COMBINED_TEST.md and INSTALL.md.
+
+## Equipment direction â€” 2026-10-21
 
 Active priorities: Modern Infantry Squad inspired by the Howa Type 20
 (40 soldiers, Throw Grenades) and Modern Artillery Battery inspired by the
@@ -7,7 +58,7 @@ assets remain temporary foundations. Tank deferred; aircraft stopped.
 See [equipment findings and acceptance checks](docs/EQUIPMENT_DIRECTION.md).
 New artillery checks preserve four guns and the observed mounted-firing flags.
 
-## Current priorities — 2026-10-21
+## Current priorities â€” 2026-10-21
 
 Focus on rifle infantry and artillery. Keep Chi-Ha research for later; do not
 continue tank experiments now. Aircraft remains removed. Added a provisional
@@ -16,7 +67,7 @@ Seven DB rows and seven strings passed RPFM reopening; 119 offline checks and
 three existing tests pass. Visible throwing and custom button remain unverified.
 The installed infantry pack is still the older version. See `docs/RIFLE_GRENADES.md`.
 
-## Scope decision — 2026-10-21
+## Scope decision â€” 2026-10-21
 
 This decision supersedes earlier aircraft and four-unit plans below. Stop all
 Zero/aircraft development. Prioritize the rifle squad and artillery. Investigate

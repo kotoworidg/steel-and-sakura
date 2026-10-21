@@ -1,3 +1,7 @@
+> Current correction: install the combined test pack directly into game data.
+> Earlier MyMods notes are historical and superseded. See ../INSTALL.md and
+> COMBINED_TEST.md. Both units/buttons still require user confirmation.
+
 # Ability UI and artillery compatibility inspection
 
 ## Observed in installed files

@@ -1,88 +1,58 @@
-## Equipment direction — 2026-10-21
+> Current result: the user tested the separate Type 20 unit and reports no automatic fire. The two-event experiment failed its gameplay objective. A one-shot animation-path control is now installed; see [TYPE20_PATH_CONTROL.md](docs/TYPE20_PATH_CONTROL.md). Historical build details below are retained.
 
-Active priorities: Modern Infantry Squad inspired by the Howa Type 20
-(40 soldiers, Throw Grenades) and Modern Artillery Battery inspired by the
-FH70 155 mm towed howitzer (four guns, Nuclear Shell). Tosa and Armstrong
-assets remain temporary foundations. Tank deferred; aircraft stopped.
-See [equipment findings and acceptance checks](docs/EQUIPMENT_DIRECTION.md).
-New artillery checks preserve four guns and the observed mounted-firing flags.
+# Current Type 20 research status
+
+2026-10-21: the research pass found real numbered human firing events.
+See [technical report](docs/TYPE20_RESEARCH.md) and
+[test checklist](tests/type20-event-test.md).
+
+Installed: data/steel_sakura_combined_test.pack, with the new separate
+Steel & Sakura Type 20 Automatic Fire Test alongside the unchanged riflemen.
+This is an unconfirmed two-event experiment, not working automatic fire.
+All original rifle, grenade, artillery and recruitment pack payloads are preserved.
+
+## Active infantry-only fragmentation test - 2026-10-21
+
+Grenade activation and faster rifle reload are user-confirmed. True automatic
+fire remains unimplemented; inspected data provides no verified human fire-loop
+route. This pass preserves rifle, artillery, recruitment and UI payloads exactly.
+Adds unique fragmentation assets and the user-approved temporary shared vanilla
+grenade-ability relink. Both grenade baseline and rifle fallbacks are preserved.
+See [fragmentation changes, test and rollback](docs/FRAGMENTATION_TEST.md).
+Use scripts/build_frag_test.ps1 and scripts/select_frag_test.py test/fallback;
+older combined-build commands restore earlier experiments. Gameplay confirmation
+of grenade lethality and return to rifle fire remains pending.
+
+## Active engine diagnostic V1 - 2026-10-21
+
+Both units were visible, but no custom buttons and no modern combat behavior
+were observed. The previous custom UI experiment failed. Current diagnostic uses
+separate normal combat projectile/gun keys and supported vanilla Blinding Grenades
+and Shrapnel Shot buttons with vanilla special ammunition unchanged. One temporary
+grenade technology-unlock flag affects vanilla ninjas while enabled. See
+[combat diagnostic and low-FPS test](docs/COMBAT_DIAGNOSTIC.md). Rebuild with
+scripts/build_combat_diagnostic.ps1. Milestone remains PENDING_USER_CONFIRMATION.
 
 # Steel & Sakura
 
-**Current scope (2026-10-21):** Develop the rifle squad and modern artillery. Defer the Chi-Ha for later. Aircraft development has stopped. The two built prototypes have passed structural checks; neither has gameplay evidence. The user currently cannot launch the game because there is no working GPU. See [PROGRESS.md](PROGRESS.md), [LIMITATIONS.md](LIMITATIONS.md), and [TESTING.md](TESTING.md).
+Original non-Steam Shogun 2 Sengoku test mod, with FoTS assets installed.
+Two active units: forty-soldier Type 20-inspired infantry with Throw Grenades,
+and four-gun FH70-inspired towed artillery with Nuclear Shell. Tosa/Armstrong
+assets remain placeholders. Tank deferred; aircraft stopped.
 
-Research and development workspace for a manual-install Shogun 2 mod targeting
-the original Sengoku campaign with Fall of the Samurai content installed.
+## Current milestone
 
-## Current status
+PENDING_USER_CONFIRMATION: the first battle showed repeating-rifle behavior
+and no grenade button. Artillery had never been installed. The combined test
+addresses the data-folder destination, Oda permissions, Sengoku artillery
+category, and missing custom ability UI textures. Custom key recognition and
+both selectable buttons still require the user's game test.
 
-The rifle squad now includes an experimental Throw Grenades ability: two
-20-second activations with a 90-second recharge. See
-[grenade findings and battle checks](docs/RIFLE_GRENADES.md). Visible throwing
-and rifle animation compatibility are unverified; this build is not installed.
+Build: `pwsh -NoProfile -File scripts/build_combined.ps1`.
+Install: `python scripts/install_combined.py` (supports `--dry-run`).
+Target: `D:\Games\Total War - SHOGUN 2\data\steel_sakura_combined_test.pack`.
+MyMods is a legacy inspection location, not an installation destination.
 
-The active roster targets rifle infantry, modern artillery with a nuclear-shell
-skill, and a Chi-Ha only if its required behavior can be demonstrated. Build this optional prototype with
-`pwsh -NoProfile -File scripts/build.ps1 -ModernArtillery`.
-It uses Armstrong gun graphics and a namespaced projectile-switching ability,
-with one 30-second activation and increased blast parameters. It is not
-installed. The ability button and actual firing behavior remain unverified;
-see [modern artillery findings and instructions](docs/MODERN_ARTILLERY.md).
-
-The first infantry prototype is in
-`build/steel_sakura_infantry_prototype.pack`. RPFM reopened it and verified
-seven DB rows, seven English localization strings, and five original TGA cards,
-including a 40-soldier land unit. It has **not** been tested in
-the game. Its weapon is based on the installed FoTS Tosa repeating rifle;
-automatic fire remains unverified. The tank is deferred for later, with no custom unit entry.
-The Zero is removed from active scope; previous aircraft findings are retained
-only as historical documentation.
-
-A separate, uninstalled artillery mechanics test pack can be built with
-`pwsh -NoProfile -File scripts/build.ps1 -ArtilleryTest`. It exposes the
-installed game's dormant limbered gun for future movement testing; it is not
-a Chi-Ha and is excluded from release archives.
-
-The prototype was copied to `data\MyMods` and added to the root
-`mod_list.txt`. That file was backed up first; original archives and saves
-remain unchanged. Project and mod-list backups are under `backups/`.
-
-## Build and validation
-
-On this Windows workspace, run:
-
-```powershell
-pwsh -NoProfile -File scripts/build.ps1
-```
-
-The script prepares source rows from decoded installed tables, starts the
-project-local RPFM backend if needed, builds the pack, reopens it, and checks
-the DB, localization, and icon files. RPFM's configuration redirect must point to
-`tools/rpfm-config/data`. The tool bundle is in `tools/rpfm-5.2.0/`.
-
-The command also runs offline data checks and Python regression tests.
-Run `python scripts/package_release.py` to create a safe source ZIP, local
-provisional pack ZIP, and SHA-256 manifest in `dist/`. Generated game data and
-tool binaries are excluded from the shareable source ZIP.
-
-Source rows and their provenance are under `source/infantry/`; decoded game
-tables used for research are under `build/inventory/`. See
-[technical findings](docs/technical-findings.md) and [progress](docs/progress.md).
-
-## Read-only inventory
-
-Once the game installation directory is known, run:
-
-```powershell
-python scripts/inventory_game.py "C:\path\to\Shogun 2"
-```
-
-The script only reads files. It inventories `.pack` archives and records sizes;
-it does not unpack, edit, or copy game files. Use `--hash` to request SHA-256
-hashes (this is slow for multi-gigabyte archives). Its report is written under
-`build/inventory/` in this project.
-
-RPFM v5.2.0 is stored under `tools/rpfm-5.2.0/`. Its backend uses a reversible
-redirect at `%APPDATA%\FrodoWazEre\rpfm\config\config_folder.txt`, so all
-generated RPFM settings remain in the project. The game installation remains
-read-only. See [what is needed](docs/needed-from-user.md) for in-game checks.
+See [installation](INSTALL.md), [combined diagnosis/test](docs/COMBINED_TEST.md),
+[equipment direction](docs/EQUIPMENT_DIRECTION.md) and [progress](PROGRESS.md).
+Legacy unit builds remain for development; enable only the combined test pack.

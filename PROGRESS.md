@@ -1,4 +1,65 @@
-## Equipment direction � 2026-10-21
+> Current result: the user tested the separate Type 20 unit and reports no automatic fire. The two-event experiment failed its gameplay objective. A one-shot animation-path control is now installed; see [TYPE20_PATH_CONTROL.md](docs/TYPE20_PATH_CONTROL.md). Historical build details below are retained.
+
+# Current Type 20 research status
+
+2026-10-21: the research pass found real numbered human firing events.
+See [technical report](docs/TYPE20_RESEARCH.md) and
+[test checklist](tests/type20-event-test.md).
+
+Installed: data/steel_sakura_combined_test.pack, with the new separate
+Steel & Sakura Type 20 Automatic Fire Test alongside the unchanged riflemen.
+This is an unconfirmed two-event experiment, not working automatic fire.
+All original rifle, grenade, artillery and recruitment pack payloads are preserved.
+
+## Active infantry-only fragmentation test - 2026-10-21
+
+Grenade activation and faster rifle reload are user-confirmed. True automatic
+fire remains unimplemented; inspected data provides no verified human fire-loop
+route. This pass preserves rifle, artillery, recruitment and UI payloads exactly.
+Adds unique fragmentation assets and the user-approved temporary shared vanilla
+grenade-ability relink. Both grenade baseline and rifle fallbacks are preserved.
+See [fragmentation changes, test and rollback](docs/FRAGMENTATION_TEST.md).
+Use scripts/build_frag_test.ps1 and scripts/select_frag_test.py test/fallback;
+older combined-build commands restore earlier experiments. Gameplay confirmation
+of grenade lethality and return to rifle fire remains pending.
+
+## Automatic-fire investigation - 2026-10-21
+
+User confirms faster reload. True automatic fire remains unimplemented. Actual
+animation tables show human FIRE/reload states versus a separate Gatling
+ENGINE_FIRE_LOOP and skeleton. Preserved the working faster-repeat fallback.
+Built an optional one-variable matchlock-to-none scheduling experiment, not
+automatic fire; artillery, ability and projectile payloads identical. Experiment
+is not installed. See docs/AUTOMATIC_FIRE_FINDINGS.md for opt-in and rollback.
+
+## Active engine diagnostic V1 - 2026-10-21
+
+Both units were visible, but no custom buttons and no modern combat behavior
+were observed. The previous custom UI experiment failed. Current diagnostic uses
+separate normal combat projectile/gun keys and supported vanilla Blinding Grenades
+and Shrapnel Shot buttons with vanilla special ammunition unchanged. One temporary
+grenade technology-unlock flag affects vanilla ninjas while enabled. See
+[combat diagnostic and low-FPS test](docs/COMBAT_DIAGNOSTIC.md). Rebuild with
+scripts/build_combat_diagnostic.ps1. Milestone remains PENDING_USER_CONFIRMATION.
+
+Installed combined test directly into game data on 2026-10-21. SHA256 C60B0D87B9D3D0015333C3C3328B323156A19228E170BDD76D5B8EC14067B6E9. Both loading lists now enable only this Steel & Sakura pack; old copies archived under C:\Users\Lenovo\Documents\Codex\2026-10-18\you-are-my-lead-developer-for\backups\combined-install-20261021-185244-282860. Otomo hashes preserved. Milestone remains PENDING_USER_CONFIRMATION.
+
+## Combined correction - 2026-10-21
+
+Use scripts/build_combined.ps1 and scripts/install_combined.py. Install directly
+into game data; older MyMods notes are superseded. Test Oda gun infantry and
+siege/artillery. Both units/buttons require user confirmation. See
+docs/COMBINED_TEST.md and INSTALL.md.
+
+## User battle failure — 2026-10-21
+
+User reports repeating-rifle behavior and failed grenades. The modern automatic
+rifle target has not been achieved. Treat the grenade experiment as failed, not
+working. User clarified that the grenade button is missing. Identical empty editor metadata
+conflicts with the intro-skip pack; release cleanup now removes editor entries
+while preserving every game payload. This does not repair grenade mechanics.
+
+## Equipment direction — 2026-10-21
 
 Active priorities: Modern Infantry Squad inspired by the Howa Type 20
 (40 soldiers, Throw Grenades) and Modern Artillery Battery inspired by the
@@ -7,7 +68,7 @@ assets remain temporary foundations. Tank deferred; aircraft stopped.
 See [equipment findings and acceptance checks](docs/EQUIPMENT_DIRECTION.md).
 New artillery checks preserve four guns and the observed mounted-firing flags.
 
-## Current priorities � 2026-10-21
+## Current priorities — 2026-10-21
 
 Focus on rifle infantry and artillery. Keep Chi-Ha research for later; do not
 continue tank experiments now. Aircraft remains removed. Added a provisional
@@ -16,7 +77,7 @@ Seven DB rows and seven strings passed RPFM reopening; 119 offline checks and
 three existing tests pass. Visible throwing and custom button remain unverified.
 The installed infantry pack is still the older version. See `docs/RIFLE_GRENADES.md`.
 
-## Scope decision � 2026-10-21
+## Scope decision — 2026-10-21
 
 - Removed the Zero from active unit specifications at the user's request.
 - Priorities: rifle squad, modern artillery, then conditional Chi-Ha feasibility.
@@ -53,7 +114,7 @@ The installed infantry pack is still the older version. See `docs/RIFLE_GRENADES
 - [ ] Publish to the user-provided GitHub repository once it is accessible; never push extracted game rows, packs, backups, or editor binaries without separate review.
 
 See `docs/progress.md` for the detailed dated history and `docs/github.md` for repository access state.
-# Modern artillery addition — 2026-10-20
+# Modern artillery addition â€” 2026-10-20
 
 - Backed up the 41 previously tracked project files to `backups/before-modern-artillery-2026-10-20`.
 - User extended the roster to four units with modern artillery and a nuclear-shell skill.
@@ -65,14 +126,18 @@ See `docs/progress.md` for the detailed dated history and `docs/github.md` for r
   explosion behavior, recruitment and interactions with the existing Otomo mod in-game.
 - No modern model or nuclear-specific visual effect exists yet. Pack remains uninstalled.
 - Details: `docs/MODERN_ARTILLERY.md`; rebuild: `scripts/build.ps1 -ModernArtillery`.
-# Ability UI research — 2026-10-20
+# Ability UI research â€” 2026-10-20
 
 - Backed up tracked sources under `backups/before-ability-ui-20261020-233734`.
 - Extracted four installed UI files read-only; found seven generic ability slots.
 - Added repeatable UI extraction and a hash/byte-offset evidence report.
-- Compared shared Armstrong keys with the existing Otomo mod: range 550→600,
-  explosion radius 4→5 and speed 10→15 are potential runtime interactions.
+- Compared shared Armstrong keys with the existing Otomo mod: range 550â†’600,
+  explosion radius 4â†’5 and speed 10â†’15 are potential runtime interactions.
 - Documented the range mismatch with Nuclear Shell and adjusted its manual test plan.
 - TODO: establish custom button binding in-game; then decide whether to isolate
   ordinary ammunition from other mods. No runtime claims or UI binary edits.
 - See `docs/ABILITY_UI_FINDINGS.md`.
+
+Installed metadata-only conflict fix on 2026-10-21. All 13 game payloads are
+byte-identical to the previous installed pack. The intro-skip pack was preserved.
+This fixes shared editor-entry paths only; rifle and grenade mechanics remain failed.

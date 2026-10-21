@@ -1,3 +1,11 @@
+> Current correction: install the combined test pack directly into game data.
+> Earlier MyMods notes are historical and superseded. See ../INSTALL.md and
+> COMBINED_TEST.md. Both units/buttons still require user confirmation.
+
+> Runtime result, 2026-10-21: user reports grenade button is missing and rifle
+> remains repeating fire. The experimental ability has failed its first reported
+> battle test. Previous offline passes establish structure only.
+
 Current equipment direction: see [Type 20 / FH70 specification](EQUIPMENT_DIRECTION.md).
 Historical assets remain temporary; equipment accuracy has not been established.
 

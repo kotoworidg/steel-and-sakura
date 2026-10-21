@@ -1,3 +1,20 @@
+> Current result: the user tested the separate Type 20 unit and reports no automatic fire. The two-event experiment failed its gameplay objective. A one-shot animation-path control is now installed; see [TYPE20_PATH_CONTROL.md](TYPE20_PATH_CONTROL.md). Historical build details below are retained.
+
+# Current Type 20 research status
+
+2026-10-21: the research pass found real numbered human firing events.
+See [technical report](TYPE20_RESEARCH.md) and
+[test checklist](../tests/type20-event-test.md).
+
+Installed: data/steel_sakura_combined_test.pack, with the new separate
+Steel & Sakura Type 20 Automatic Fire Test alongside the unchanged riflemen.
+This is an unconfirmed two-event experiment, not working automatic fire.
+All original rifle, grenade, artillery and recruitment pack payloads are preserved.
+
+> Current correction: install the combined test pack directly into game data.
+> Earlier MyMods notes are historical and superseded. See ../INSTALL.md and
+> COMBINED_TEST.md. Both units/buttons still require user confirmation.
+
 # Progress log
 
 ## 2026-10-18 — Initial workspace inspection

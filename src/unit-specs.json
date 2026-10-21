@@ -3,7 +3,7 @@
   "units": [
     {
       "name": "Modern Infantry Squad",
-      "status": "PROVISIONAL",
+      "status": "FASTER_REPEATED_FIRE_AND_GRENADE_ACTIVATION_CONFIRMED",
       "target_soldiers": 40,
       "current_prototype": "FoTS Tosa repeating-rifle data with a Sengoku unit and Fort recruitment row",
       "unverified": [
@@ -24,7 +24,20 @@
         "implementation": "Inspiration only; Tosa equipment and animations remain temporary"
       },
       "gameplay_target": "Modern automatic-rifle behavior with visible individual firing and usable reload cycles",
-      "stable_unit_key": "SteelSakura_Automatic_Rifle_Squad"
+      "stable_unit_key": "SteelSakura_Automatic_Rifle_Squad",
+      "runtime_findings": {
+        "source": "User battle test on 2026-10-21",
+        "rifle": "Repeating-rifle behavior observed; automatic-rifle target not met",
+        "grenades": "User confirms vanilla button activates; original grenade weak/blinding",
+        "firing_update": "Faster reload confirmed; still repeating fire, no true automatic fire"
+      },
+      "automatic_fire_research": "Parsed v1 human FIRE_TIME/FIRE_TIME_2 events; separate two-event unit installed alongside this unchanged fallback. Runtime two-shot dispatch unconfirmed. See docs/TYPE20_RESEARCH.md.",
+      "fragmentation_test": {
+        "projectile": "steel_sakura_frag_projectile_v1",
+        "status": "OFFLINE_VERIFIED_RUNTIME_PENDING",
+        "scope": "User-approved temporary shared ability relink",
+        "rifle_changes": "none"
+      }
     },
     {
       "name": "Type 97 Chi-Ha",
@@ -65,5 +78,30 @@
       "status": "REMOVED_FROM_SCOPE",
       "reason": "User stopped aircraft development on 2026-10-21; retain historical research only."
     }
-  ]
+  ],
+  "active_test_build": {
+    "filename": "steel_sakura_combined_test.pack",
+    "install_subdirectory": "data",
+    "faction": "oda",
+    "milestone": "PENDING_GRENADE_DAMAGE_AND_COMBINED_BEHAVIOR_TEST",
+    "ability_ui": "Vanilla blinding_grenade / shrapnel_shot controls; final named custom skills deferred until buttons activate",
+    "mode": "INFANTRY_FRAGMENTATION_TEST_V1",
+    "automatic_fire": "NOT_IMPLEMENTED"
+  },
+  "experimental_infantry": {
+    "key": "steel_sakura_type20_automatic_fire_test",
+    "name": "Steel & Sakura \u2014 Type 20 Automatic Fire Test",
+    "status": "USER_REPORT_NO_AUTOMATIC_FIRE",
+    "men": 40,
+    "report": "docs/TYPE20_RESEARCH.md",
+    "purpose": "Test numbered second shot marker with unchanged reload/ballistics; not proven automatic fire",
+    "campaign_recruitment": false,
+    "visuals": "Spencer/Tosa placeholder; original blockout exported separately, not installed",
+    "current_control": {
+      "display_name": "TYPE20 ANIMATION CHECK - 4s HOLD / ONE SHOT",
+      "status": "INSTALLED_RUNTIME_PENDING",
+      "purpose": "Verify animation selection and primary shot timing; one shot only",
+      "report": "docs/TYPE20_PATH_CONTROL.md"
+    }
+  }
 }
