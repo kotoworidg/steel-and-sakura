@@ -44,6 +44,7 @@ def main():
         for name in ("INSTALL.md", "TESTING.md", "LIMITATIONS.md"):
             archive.write(ROOT / name, name)
         archive.write(report, "offline-report.json")
+        archive.write(ROOT / "docs" / "EQUIPMENT_DIRECTION.md", "EQUIPMENT_DIRECTION.md")
         archive.write(ROOT / "docs" / "RIFLE_GRENADES.md", "RIFLE_GRENADES.md")
     manifest = {file.name: {"bytes": file.stat().st_size, "sha256": sha(file)}
                 for file in (source_zip, prototype_zip, PACK)}
@@ -58,6 +59,7 @@ def main():
         modern_zip = OUT / "steel-and-sakura-modern-artillery-prototype-local.zip"
         with zipfile.ZipFile(modern_zip, "w", compression=zipfile.ZIP_DEFLATED) as archive:
             archive.write(modern, modern.name)
+            archive.write(ROOT / "docs" / "EQUIPMENT_DIRECTION.md", "EQUIPMENT_DIRECTION.md")
             archive.write(ROOT / "INSTALL.md", "INSTALL.md")
             archive.write(ROOT / "docs" / "MODERN_ARTILLERY.md", "MODERN_ARTILLERY.md")
             archive.write(ROOT / "docs" / "ABILITY_UI_FINDINGS.md", "ABILITY_UI_FINDINGS.md")

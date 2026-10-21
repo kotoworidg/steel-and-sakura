@@ -12,5 +12,8 @@
   "display_name": "Modern Artillery Battery",
   "ability_name": "Nuclear Shell",
   "ability_description": "Temporarily fires experimental high-blast shells. One activation per battle. Keep friendly troops clear.",
-  "status": "PROVISIONAL: uses Armstrong guns and existing explosion graphics; no runtime evidence."
+  "status": "PROVISIONAL: FH70 inspiration only; uses Armstrong towed artillery foundations; deployment and ground stabilization untested.",
+  "equipment_inspiration": "FH70 155 mm towed field howitzer",
+  "target_guns": 4,
+  "target_crew": 40
 }

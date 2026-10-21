@@ -1,3 +1,6 @@
+Current equipment direction: see [Type 20 / FH70 specification](EQUIPMENT_DIRECTION.md).
+Historical assets remain temporary; equipment accuracy has not been established.
+
 # Rifle squad grenade prototype
 
 The rifle squad now has an experimental **Throw Grenades** skill. The build

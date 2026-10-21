@@ -3,17 +3,17 @@
   "entries": [
     {
       "key": "units_on_screen_name_SteelSakura_Automatic_Rifle_Squad",
-      "text": "Automatic Rifle Squad",
+      "text": "Modern Infantry Squad",
       "tooltip": true
     },
     {
       "key": "unit_description_texts_description_text_SteelSakura_Automatic_Rifle_Squad",
-      "text": "Forty riflemen equipped with fast-firing repeating rifles.",
+      "text": "Forty riflemen with an experimental grenade ability.",
       "tooltip": true
     },
     {
       "key": "unit_description_texts_long_description_text_SteelSakura_Automatic_Rifle_Squad",
-      "text": "This experimental Steel & Sakura formation fields forty soldiers with repeating rifles. It is intended to deliver sustained ranged fire, but its actual rate of fire, battlefield appearance, and campaign behavior still require in-game testing.",
+      "text": "A forty-soldier formation inspired by the Howa Type 20. This prototype currently uses historical repeating-rifle equipment and animations. Automatic firing and grenade throwing remain experimental.",
       "tooltip": true
     },
     {

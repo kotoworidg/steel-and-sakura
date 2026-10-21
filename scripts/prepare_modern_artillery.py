@@ -89,7 +89,7 @@ def main():
         "units_on_screen_name_" + unit: config["display_name"],
         "unit_description_texts_description_text_" + unit: "Experimental artillery with a nuclear-shell firing ability.",
         "unit_description_texts_long_description_text_" + unit:
-            "An experimental modern artillery battery. This prototype uses Armstrong guns with forty crew and four cannons. Nuclear Shell enables a brief high-blast firing window once per battle.",
+            "An experimental battery inspired by the FH70 155 mm towed howitzer. This prototype uses Armstrong guns with forty crew and four cannons. Nuclear Shell enables a brief high-blast firing window once per battle.",
         "unit_description_texts_strengths_and_weaknesses_" + unit:
             "Long-range artillery.||Experimental high-blast shells.||Protect the crew and keep friendly troops clear.",
         "unit_abilities_bullet_text_" + ability: config["ability_name"],

@@ -1,3 +1,12 @@
+## Equipment direction — 2026-10-21
+
+Active priorities: Modern Infantry Squad inspired by the Howa Type 20
+(40 soldiers, Throw Grenades) and Modern Artillery Battery inspired by the
+FH70 155 mm towed howitzer (four guns, Nuclear Shell). Tosa and Armstrong
+assets remain temporary foundations. Tank deferred; aircraft stopped.
+See [equipment findings and acceptance checks](docs/EQUIPMENT_DIRECTION.md).
+New artillery checks preserve four guns and the observed mounted-firing flags.
+
 # Steel & Sakura
 
 **Current scope (2026-10-21):** Develop the rifle squad and modern artillery. Defer the Chi-Ha for later. Aircraft development has stopped. The two built prototypes have passed structural checks; neither has gameplay evidence. The user currently cannot launch the game because there is no working GPU. See [PROGRESS.md](PROGRESS.md), [LIMITATIONS.md](LIMITATIONS.md), and [TESTING.md](TESTING.md).

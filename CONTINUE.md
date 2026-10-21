@@ -1,3 +1,12 @@
+## Equipment direction — 2026-10-21
+
+Active priorities: Modern Infantry Squad inspired by the Howa Type 20
+(40 soldiers, Throw Grenades) and Modern Artillery Battery inspired by the
+FH70 155 mm towed howitzer (four guns, Nuclear Shell). Tosa and Armstrong
+assets remain temporary foundations. Tank deferred; aircraft stopped.
+See [equipment findings and acceptance checks](docs/EQUIPMENT_DIRECTION.md).
+New artillery checks preserve four guns and the observed mounted-firing flags.
+
 ## Current priorities — 2026-10-21
 
 Focus on rifle infantry and artillery. Keep Chi-Ha research for later; do not

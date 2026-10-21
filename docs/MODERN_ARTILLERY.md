@@ -1,3 +1,6 @@
+Current equipment direction: see [Type 20 / FH70 specification](EQUIPMENT_DIRECTION.md).
+Historical assets remain temporary; equipment accuracy has not been established.
+
 # Modern Artillery Battery — provisional fourth unit
 
 Added at the user's request on 2026-10-20, extending the original three-unit scope.

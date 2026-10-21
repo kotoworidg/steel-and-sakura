@@ -79,7 +79,7 @@ for table_name, column, candidate in (
 emit("unit_stats_land", "Boshin_Inf_Light_Tosa_Riflemen", {"key": KEY, "men": 40})
 emit("units", "Inf_Missile_Matchlock_Ashigaru", {
     "key": KEY,
-    "on_screen_name": "Automatic Rifle Squad",
+    "on_screen_name": "Modern Infantry Squad",
     "unit_description_text": KEY,
     "unique_index": 1464,
 })

@@ -47,6 +47,10 @@ def main():
     require(rows["unit_special_abilities"]["num_uses"] == 1, "Expected one activation")
     require(rows["unit_stats_land"]["gun_type"] == "boshin_armstrong_cannon", "Ordinary gun type changed")
     require(rows["unit_stats_land"]["men"] == 40, "Expected forty crew")
+    require(rows["unit_stats_land"]["guns"] == config["target_guns"] == 4, "Expected four guns")
+    require(rows["unit_stats_land"]["articulated_entity"] == "gun_train_2_horse", "Preserve observed towed prototype entity")
+    require(rows["unit_stats_land"]["can_fire_mounted_whilst_moving"] is False, "Prototype must not enable mounted firing while moving")
+    require(rows["unit_stats_land"]["does_fire_mounted_by_default"] is False, "Preserve dismounted firing default")
     pack = ROOT / "build" / "steel_sakura_modern_artillery_prototype.pack"
     report_path = ROOT / "build" / "validation" / "modern-artillery-report.json"
     report = json.loads(report_path.read_text(encoding="utf-8-sig"))

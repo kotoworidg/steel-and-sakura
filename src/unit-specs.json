@@ -2,7 +2,7 @@
   "target": "Original Shogun 2 Sengoku campaign, with Fall of the Samurai data installed",
   "units": [
     {
-      "name": "Automatic Rifle Squad",
+      "name": "Modern Infantry Squad",
       "status": "PROVISIONAL",
       "target_soldiers": 40,
       "current_prototype": "FoTS Tosa repeating-rifle data with a Sengoku unit and Fort recruitment row",
@@ -17,7 +17,14 @@
         "rifle-to-grenade animation switching",
         "grenade throwing and return to rifle fire"
       ],
-      "ability": "Throw Grenades: provisional projectile-switching ability, two 20-second activations, 90-second recharge."
+      "ability": "Throw Grenades: provisional projectile-switching ability, two 20-second activations, 90-second recharge.",
+      "equipment_inspiration": {
+        "weapon": "Howa Type 20",
+        "caliber": "5.56 mm",
+        "implementation": "Inspiration only; Tosa equipment and animations remain temporary"
+      },
+      "gameplay_target": "Modern automatic-rifle behavior with visible individual firing and usable reload cycles",
+      "stable_unit_key": "SteelSakura_Automatic_Rifle_Squad"
     },
     {
       "name": "Type 97 Chi-Ha",
@@ -37,8 +44,19 @@
         "projectile switching",
         "blast damage and visuals",
         "recruitment",
-        "modern model"
-      ]
+        "modern model",
+        "deployed firing",
+        "ground stabilization",
+        "towing and deployment transitions"
+      ],
+      "equipment_inspiration": {
+        "weapon": "FH70",
+        "caliber": "155 mm",
+        "type": "Conventional towed field howitzer",
+        "implementation": "Inspiration only; Armstrong equipment and animations remain temporary"
+      },
+      "target_guns": 4,
+      "gameplay_target": "Deployed and stabilized on the ground while firing; towed repositioning"
     }
   ],
   "excluded_units": [
