@@ -21,6 +21,23 @@
       "exact_shot_interval": "NOT_MEASURED_IN_GAME",
       "reload_animation_replacement": "NOT_ESTABLISHED_BY_REPORT",
       "limits": "User gameplay observation; no recording or instrumented per-event trace."
+    },
+    {
+      "date": "2026-10-21",
+      "timezone": "Asia/Singapore",
+      "build_sha256": "56CCB4B44FC1520C379045ED3EC30D3EA13D6B3FB5BCF701A7259CC19EAD1299",
+      "user_report": "yep two burst shot without reload animation. I want this continue developing continous fire. i think make the full automatic as ability secondary to suppresive fire ability",
+      "assessment": "USER_CONFIRMED_TWO_SHOT_BURSTS_WITHOUT_RELOAD_ANIMATION",
+      "sustained_automatic_fire": "NOT_CONFIRMED",
+      "ammo_accounting_and_stop_fire": "NOT_REPORTED"
+    },
+    {
+      "date": "2026-10-21",
+      "timezone": "Asia/Singapore",
+      "build_sha256": "11B6BF8D14B868C31327495AD8E29CA35513DFFD3EA805DCF288D7E81B90BBD1",
+      "user_report": "what did you change exactly cause its just the same as the burst earlier prolly a faster interval but thats it no ssupressive fire ability so idk. Improve it please make it work.",
+      "assessment": "SUPPRESSIVE_BUTTON_ABSENT_PAIRED_BURSTS_ONLY",
+      "conclusion": "Unused registered dummy key did not yield a visible player ability. Faster interval is not continuous fire."
     }
   ],
   "pending_test": {
@@ -29,5 +46,48 @@
     "build_sha256": "0B497A435F4E28C2C068D7C90B60BA9D0C0FFA353BABD46242EF2FED2222D270",
     "status": "USER_CONFIRMED_TWO_BULLETS_THEN_RELOAD",
     "hypothesis": "Private registry selected, two timed projectiles per firing animation; no reload or damage changes"
+  },
+  "pending_auto_cycle": {
+    "date": "2026-10-21",
+    "timezone": "Asia/Singapore",
+    "display_name": "TYPE20 AUTO CYCLE TEST - continuous trial",
+    "build_sha256": "56CCB4B44FC1520C379045ED3EC30D3EA13D6B3FB5BCF701A7259CC19EAD1299",
+    "status": "USER_CONFIRMED_PAIRED_SHOTS_WITHOUT_RELOAD_ANIMATION",
+    "hypothesis": "Short two-event human firing and aimed recovery states repeat without a perceptible reload gap; zero rifle timer runtime behavior unconfirmed",
+    "confirmed_burst_build_preserved": true
+  },
+  "requested_fire_mode": {
+    "ui": "One Suppressive Fire button also enables Full Auto",
+    "burst_request": "Increase burst fire; acceptable realistic gun behavior",
+    "status": "RESEARCH_AND_IMPLEMENTATION_PENDING_RUNTIME"
+  },
+  "pending_suppression_test": {
+    "date": "2026-10-21",
+    "timezone": "Asia/Singapore",
+    "display_name": "TYPE20 SUPPRESSIVE AUTO TEST",
+    "build_sha256": "11B6BF8D14B868C31327495AD8E29CA35513DFFD3EA805DCF288D7E81B90BBD1",
+    "status": "FAILED_USER_REPORT_BUTTON_ABSENT_NO_CONTINUOUS_FIRE",
+    "button": "Suppressive Fire",
+    "engine_key": "dummy_suppression_fire",
+    "tests": [
+      "button visible and usable",
+      "activation changes firing cadence",
+      "continuous stream versus paired bursts and pauses",
+      "activation expires and ammo decreases",
+      "fire-at-will off and movement interrupt firing"
+    ],
+    "longer_individual_burst": "NOT_IMPLEMENTED_TWO_TIMED_SHOTS_ONLY"
+  },
+  "pending_native_suppression_test": {
+    "date": "2026-10-21",
+    "timezone": "Asia/Singapore",
+    "status": "INSTALLED_AWAITING_USER_GAMEPLAY_OBSERVATION",
+    "display_name": "TYPE20 SUPPRESSION FIX R2",
+    "button": "Suppression Fire",
+    "build_sha256": "1737D02D67F0C9100BBCC5255057C12B532F9805482D18ADC910542653D96DCD",
+    "shared_override_approved_by_user": true,
+    "active_seconds": 30,
+    "recharge_seconds": 120,
+    "no_further_animation_or_stat_changes": true
   }
 }

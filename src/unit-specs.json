@@ -83,10 +83,10 @@
     "filename": "steel_sakura_combined_test.pack",
     "install_subdirectory": "data",
     "faction": "oda",
-    "milestone": "USER_CONFIRMED_TWO_SHOT_BURST_THEN_RELOAD",
+    "milestone": "PENDING_NATIVE_BUTTON_ACTIVATION_AND_FIRING_CONFIRMATION",
     "ability_ui": "Vanilla blinding_grenade / shrapnel_shot controls; final named custom skills deferred until buttons activate",
-    "mode": "TYPE20_ISOLATED_BURST_HYPOTHESIS",
-    "automatic_fire": "TWO_SHOT_BURST_USER_CONFIRMED_SUSTAINED_FIRE_UNCONFIRMED"
+    "mode": "TYPE20_NATIVE_SUPPRESSION_FIX_R2",
+    "automatic_fire": "NOT_ESTABLISHED_ANIMATIONS_UNCHANGED"
   },
   "experimental_infantry": {
     "key": "steel_sakura_type20_automatic_fire_test",
@@ -116,5 +116,64 @@
       "sustained_automatic_fire_confirmed": false,
       "exact_runtime_interval_confirmed": false
     }
+  },
+  "experimental_auto_cycle": {
+    "key": "steel_sakura_type20_auto_cycle_test",
+    "display_name": "TYPE20 AUTO CYCLE TEST - continuous trial",
+    "men": 40,
+    "status": "USER_CONFIRMED_PAIRED_SHOTS_WITHOUT_RELOAD_ANIMATION",
+    "report": "docs/TYPE20_AUTO_CYCLE.md",
+    "firing_clip_duration_seconds": 0.3,
+    "shot_times_seconds": [
+      0.05,
+      0.2
+    ],
+    "ready_clip_duration_seconds": 0.05,
+    "base_reload_time": 0,
+    "firing_mechanism": "none",
+    "confirmed_burst_preserved": true,
+    "campaign_recruitment": false,
+    "sustained_automatic_fire_confirmed": false,
+    "magazine_reload_implemented": false,
+    "reload_animation_removed_confirmed_by_user": true
+  },
+  "experimental_suppression": {
+    "key": "steel_sakura_type20_suppressive_test",
+    "display_name": "TYPE20 SUPPRESSIVE AUTO TEST",
+    "ability_engine_key": "dummy_suppression_fire",
+    "button_label": "Suppressive Fire",
+    "active_seconds": 10,
+    "recharge_seconds": 30,
+    "status": "FAILED_USER_REPORT_NO_BUTTON_PAIRED_BURSTS_ONLY",
+    "report": "docs/TYPE20_SUPPRESSION_TEST.md",
+    "shot_times_seconds": [
+      0,
+      0.1
+    ],
+    "shots_per_animation": 2,
+    "firing_clip_seconds": 0.2,
+    "projectiles_per_event": 1,
+    "normal_reload": 1,
+    "activated_reload": 0,
+    "longer_individual_burst_implemented": false,
+    "continuous_fire_confirmed": false,
+    "vanilla_suppression_unchanged": true
+  },
+  "prepared_native_suppression_fix": {
+    "display_name": "TYPE20 SUPPRESSION FIX R2",
+    "unit": "steel_sakura_type20_suppressive_test",
+    "ability": "suppression_fire",
+    "status": "INSTALLED_SHARED_SCOPE_APPROVED_RUNTIME_PENDING",
+    "report": "docs/TYPE20_NATIVE_SUPPRESSION_FIX.md",
+    "shared_fields": [
+      "requires_effect_enabling",
+      "activated_projectile"
+    ],
+    "firing_mechanics_changed": false,
+    "continuous_fire_confirmed": false,
+    "installed_sha256": "1737D02D67F0C9100BBCC5255057C12B532F9805482D18ADC910542653D96DCD",
+    "button_label": "Suppression Fire",
+    "active_seconds": 30,
+    "recharge_seconds": 120
   }
 }
