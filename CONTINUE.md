@@ -1,3 +1,90 @@
+# Current Burst5 R3 — 2026-10-22
+
+Offline trace proved the first hook wrongly applied a target-reference predicate to the shooter. R3 corrects that scope, retains conservative target/reference and identity/ammo/cancellation gates, and adds bounded native evidence independent of admission. Passed 51 scenarios, 1,000 randomized schedules, 11 instruction assertions, nine code masks and synthetic transport. R3 has NOT attached to the game. Five shots remain unproven; no immediate battle requested. See docs/BURST5_EXPERIMENT.md and build/burst5/validity-research.json. Earlier live outcome below remains valid for the preserved first release.
+
+# Current Burst5 result — 2026-10-22
+
+Approved integrated hook ran and detached. No extra shots: admission rejected 703 validity checks and 10 animation mismatches. Read docs/BURST5_LIVE_RESULT.md. Review native validity and pointer mapping offline before another battle. Working packs unchanged.
+
+## 2026-10-22: integrated Burst5 experiment prepared; hook NOT activated
+
+`dist/burst5/Burst5Experiment.exe` is an external x86 debug-controller experiment
+that attempts native two shots plus three paced extra dispatches. Exact dual-key
+identity, native ammo calibration, animation/target continuity and memory guards
+must pass; unresolved identity leaves ordinary firing unchanged. Sustained auto
+is disabled. Build, offline scenarios, randomized schedules, synthetic transport,
+binary compatibility and rollback checks are included. No game-hook execution,
+installation, game binary edits, or installed-pack changes occurred.
+See [BURST5_EXPERIMENT](docs/BURST5_EXPERIMENT.md). One complete battle is proposed
+only after separate explicit engine-hook approval; no small repeated tests needed.
+Rollback: `python -B scripts/burst5_rollback.py`.
+
+## 2026-10-22: first live debugger trace captured and detached
+
+[Runtime evidence](docs/ENGINE_BURST_LIVE_TRACE.md): candidate B performs slot 0/1
+lookups and reaches shared native firing calls. 83 shared-call samples returned to
+B and 13 to A; exact custom-unit identity and ammunition accounting remain unmapped.
+The second sample was confounded by cavalry overrunning the riflemen. No five-shot
+or sustained-fire implementation exists. Debugger detached/closed; original state
+ACL restored, all seed hashes unchanged. Game DLL, installed pack, four fallbacks
+and all 220 debugger files retain their hashes. All writes have backup manifests.
+Next: isolated foot-infantry identity/accounting/cancellation capture, then a scoped
+controller adapter design; no further reload/stat experiments are indicated.
+
+## 2026-10-22: debugger setup verified; controlled trace approved
+
+Official portable x32dbg is unpacked inside tools/x64dbg/2026.05.27, archive hash
+matches GitHub and all 220 file hashes were rechecked. Signature Valid. See
+[DEBUGGER_SETUP](docs/DEBUGGER_SETUP.md) for provenance, backup receipts and rollback.
+User approved the debugger trace; no debugger was launched or attached. No game
+process found: waiting for a paused Custom Battle with working two-shot Type 20
+versus melee infantry. Game DLL, installed pack and four fallback archives retain
+their hashes. Five-round/sustained fire remain unimplemented; no patch installed.
+
+## 2026-10-22: engine research resumed; earlier controller scope corrected
+
+Current evidence: [ENGINE_BURST_RESEARCH](docs/ENGINE_BURST_RESEARCH.md).
+The earlier two-shot routines are not proven to be the foot-rifle controller;
+new wrapper context points toward naval/grenade actions. Two metadata fire-time
+slots remain verified, but a universal infantry hard limit is not established.
+An offline five-shot scheduler contract and reversible pass-through DLL-copy
+scaffold were validated only in the workspace. No game DLL/EXE, installed pack
+or running process was changed. All file writes now use timestamped hash-backed
+transactions via scripts/tracked_files.py. Next gate: approved runtime mapping
+of the actual rifle callback, not another reload or speculative .pack experiment.
+
+## 2026-10-22: artillery Nuclear Shell test installed — gameplay pending
+
+[Current artillery report](docs/ARTILLERY_NUCLEAR_TEST.md). Oda artillery/siege:
+**FH70 BATTERY - NUCLEAR TEST**, four Armstrong placeholder guns; intended button
+**Nuclear Shell (TEST)**. One 15-second activation, private radius-40/damage-100
+explosion, existing large explosion visual. No mushroom cloud is implemented.
+The user approved the temporary shared Shrapnel Shot relink; other assigned
+artillery also receive this test ammunition/label while enabled. Working rifle,
+grenade and Suppression Fire data are unchanged. Pack installed directly in data;
+backups and installed/build hash verified. No gameplay success is claimed yet.
+Rollback: `python scripts/artillery_nuclear.py rollback`.
+
+## 2026-10-22: artillery/nuclear-shell feasibility audit
+
+Current installed pack retains the four-gun artillery definition and Oda permission,
+but latest in-game availability is not confirmed; user reports the last test only
+had infantry. Nuclear projectile/explosion rows are absent from this build.
+See [ARTILLERY_NUCLEAR_AUDIT](docs/ARTILLERY_NUCLEAR_AUDIT.md). Large native blast
+parameters provide a plausible nuclear-style shell route, not verified gameplay
+or mushroom-cloud visuals. Current pack and working infantry remain unchanged.
+
+## 2026-10-22: Suppression Fire confirmed; five-shot controller limit investigated
+
+User confirms the native ability activates, but bursts remain two shots and
+continuous fire does not work. The requested five-shot burst is not implemented.
+Read-only executable analysis found two scalar fire-time slots and two recovered
+dispatch loops with a hard-coded count of two and two fired flags. See
+[FIVE_SHOT_FEASIBILITY](docs/TYPE20_FIVE_SHOT_FEASIBILITY.md) for instruction addresses,
+reproducible audit, limits and the next technical gate. This is not a proof that
+every engine controller has the same limit. R2 remains installed unchanged;
+no fake five-shot build or further reload adjustment was made.
+
 ## 2026-10-21: native Suppression Fire R2 installed with user approval
 
 The user approved the temporary shared native-ability override. Installed hash:

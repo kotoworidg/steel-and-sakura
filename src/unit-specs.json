@@ -49,9 +49,9 @@
     },
     {
       "name": "Modern Artillery Battery",
-      "status": "PROVISIONAL",
-      "current_prototype": "FoTS Armstrong battery with forty crew, four guns, and a namespaced Nuclear Shell projectile-switching ability",
-      "ability": "One 30-second activation; not guaranteed exactly one shell",
+      "status": "NUCLEAR_TEST_INSTALLED_RUNTIME_UNCONFIRMED",
+      "current_prototype": "Four-gun Armstrong placeholder battery with private high-blast shell and native Shrapnel Shot test relink",
+      "ability": "Nuclear Shell (TEST): one 15-second activation; a four-gun volley is possible, exactly one shell not guaranteed.",
       "unverified": [
         "custom ability button",
         "projectile switching",
@@ -69,7 +69,8 @@
         "implementation": "Inspiration only; Armstrong equipment and animations remain temporary"
       },
       "target_guns": 4,
-      "gameplay_target": "Deployed and stabilized on the ground while firing; towed repositioning"
+      "gameplay_target": "Deployed and stabilized on the ground while firing; towed repositioning",
+      "report": "docs/ARTILLERY_NUCLEAR_TEST.md"
     }
   ],
   "excluded_units": [
@@ -83,10 +84,10 @@
     "filename": "steel_sakura_combined_test.pack",
     "install_subdirectory": "data",
     "faction": "oda",
-    "milestone": "PENDING_NATIVE_BUTTON_ACTIVATION_AND_FIRING_CONFIRMATION",
+    "milestone": "PENDING_ARTILLERY_ROSTER_BUTTON_PROJECTILE_SWITCH_AND_BLAST_CONFIRMATION",
     "ability_ui": "Vanilla blinding_grenade / shrapnel_shot controls; final named custom skills deferred until buttons activate",
-    "mode": "TYPE20_NATIVE_SUPPRESSION_FIX_R2",
-    "automatic_fire": "NOT_ESTABLISHED_ANIMATIONS_UNCHANGED"
+    "mode": "ARTILLERY_NUCLEAR_TEST_WITH_WORKING_RIFLES",
+    "automatic_fire": "CONTINUOUS_FIRE_NOT_WORKING_PER_USER"
   },
   "experimental_infantry": {
     "key": "steel_sakura_type20_automatic_fire_test",
@@ -163,7 +164,7 @@
     "display_name": "TYPE20 SUPPRESSION FIX R2",
     "unit": "steel_sakura_type20_suppressive_test",
     "ability": "suppression_fire",
-    "status": "INSTALLED_SHARED_SCOPE_APPROVED_RUNTIME_PENDING",
+    "status": "USER_CONFIRMED_NATIVE_ABILITY_WORKS_BURST_REMAINS_TWO",
     "report": "docs/TYPE20_NATIVE_SUPPRESSION_FIX.md",
     "shared_fields": [
       "requires_effect_enabling",
@@ -174,6 +175,49 @@
     "installed_sha256": "1737D02D67F0C9100BBCC5255057C12B532F9805482D18ADC910542653D96DCD",
     "button_label": "Suppression Fire",
     "active_seconds": 30,
-    "recharge_seconds": 120
-  }
+    "recharge_seconds": 120,
+    "ability_activation_confirmed_by_user": true
+  },
+  "five_shot_investigation": {
+    "requested_shots": 5,
+    "status": "NOT_IMPLEMENTED_INFANTRY_CONTROLLER_UNRESOLVED_METADATA_TWO_SLOTS",
+    "report": "docs/ENGINE_BURST_RESEARCH.md",
+    "audit_script": "scripts/audit_five_shot_limit.py",
+    "game_files_changed": false,
+    "installed_pack_unchanged": true,
+    "next_gate": "Approved runtime trace of actual infantry callback, emission ABI, unit identity, ammo and cancellation.",
+    "earlier_scope_correction": "Recovered two-shot dispatchers are not positively identified as foot-rifle code; neighboring bindings suggest naval/grenade contexts."
+  },
+  "artillery_nuclear_audit": {
+    "date": "2026-10-22",
+    "status": "OFFLINE_ARTILLERY_ENTRY_PRESENT_ROSTER_UNCONFIRMED_NUCLEAR_ROWS_ABSENT",
+    "report": "docs/ARTILLERY_NUCLEAR_AUDIT.md",
+    "next_gates": [
+      "Verify four-gun battery selectable in Oda Sengoku Custom Battle",
+      "Prove private high-blast shell on land",
+      "Verify native artillery ability activation before relinking special ammunition",
+      "Assess nuclear-style visuals separately from blast damage"
+    ],
+    "working_infantry_preserved": true
+  },
+  "artillery_nuclear_test": {
+    "display_name": "FH70 BATTERY - NUCLEAR TEST",
+    "status": "INSTALLED_SHARED_SCOPE_APPROVED_RUNTIME_PENDING",
+    "projectile": "steel_sakura_nuclear_projectile_v1",
+    "explosion": "steel_sakura_nuclear_explosion_v1",
+    "blast_radius": 40,
+    "blast_damage": 100,
+    "crew": 40,
+    "guns": 4,
+    "ability_engine_key": "shrapnel_shot",
+    "button": "Nuclear Shell (TEST)",
+    "uses": 1,
+    "active_seconds": 15,
+    "shell_reload": 60,
+    "visual": "Existing large explosion, no mushroom cloud",
+    "rifle_and_suppression_data_unchanged": true,
+    "installed_sha256": "2D57C29074E15A3903E6C7900D652770CB27D7023A8A349BDF0C1C5BDDB67AB3",
+    "report": "docs/ARTILLERY_NUCLEAR_TEST.md"
+  },
+  "active_focus": "Engine-level infantry burst feasibility; working artillery/rifle installation unchanged"
 }

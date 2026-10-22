@@ -38,6 +38,23 @@
       "user_report": "what did you change exactly cause its just the same as the burst earlier prolly a faster interval but thats it no ssupressive fire ability so idk. Improve it please make it work.",
       "assessment": "SUPPRESSIVE_BUTTON_ABSENT_PAIRED_BURSTS_ONLY",
       "conclusion": "Unused registered dummy key did not yield a visible player ability. Faster interval is not continuous fire."
+    },
+    {
+      "date": "2026-10-22",
+      "timezone": "Asia/Singapore",
+      "build_sha256": "1737D02D67F0C9100BBCC5255057C12B532F9805482D18ADC910542653D96DCD",
+      "user_report": "yeah suppresive fire works ut not the continous fire. the burst still stays 2. make it i think 5 burst",
+      "assessment": "NATIVE_SUPPRESSION_ACTIVATES_TWO_SHOT_BURST_PERSISTS",
+      "continuous_fire": "NOT_WORKING_PER_USER",
+      "requested_burst_size": 5
+    },
+    {
+      "date": "2026-10-22",
+      "timezone": "Asia/Singapore",
+      "user_report": "I think you forgot that artillery isn't added last test only the infantry",
+      "assessment": "ARTILLERY_AVAILABILITY_NOT_CONFIRMED_IN_LATEST_USER_TEST",
+      "offline_findings": "Installed R2 retains artillery unit/stats, four guns, Oda permission and native shrapnel_shot assignment. No custom nuclear projectile/explosion rows.",
+      "ability_activation": "NOT_TESTED_OR_NOT_CONFIRMED"
     }
   ],
   "pending_test": {
@@ -81,7 +98,7 @@
   "pending_native_suppression_test": {
     "date": "2026-10-21",
     "timezone": "Asia/Singapore",
-    "status": "INSTALLED_AWAITING_USER_GAMEPLAY_OBSERVATION",
+    "status": "USER_CONFIRMED_ABILITY_WORKS_STILL_TWO_SHOT_BURSTS",
     "display_name": "TYPE20 SUPPRESSION FIX R2",
     "button": "Suppression Fire",
     "build_sha256": "1737D02D67F0C9100BBCC5255057C12B532F9805482D18ADC910542653D96DCD",
@@ -89,5 +106,13 @@
     "active_seconds": 30,
     "recharge_seconds": 120,
     "no_further_animation_or_stat_changes": true
+  },
+  "five_shot_research": {
+    "date": "2026-10-22",
+    "requested": 5,
+    "status": "CONTROLLER_LIMIT_IDENTIFIED_NO_NEW_GAMEPLAY_BUILD",
+    "evidence": "build/type20-five-shot/limit-audit.json",
+    "installed_pack_unchanged": true,
+    "five_shot_burst_confirmed": false
   }
 }

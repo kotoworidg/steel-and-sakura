@@ -1,3 +1,54 @@
+## Integrated experiment pending approval
+
+Prepared Burst5 build: see [BURST5_EXPERIMENT](BURST5_EXPERIMENT.md).
+No further reload changes or repeated user micro-tests. Next evidence is one
+complete battle after explicit engine-hook activation approval. Five-shot/full-auto
+remain unverified; sustained mode is disabled.
+
+## 2026-10-22: engine research resumed; earlier controller scope corrected
+
+Current evidence: [ENGINE_BURST_RESEARCH](ENGINE_BURST_RESEARCH.md).
+The earlier two-shot routines are not proven to be the foot-rifle controller;
+new wrapper context points toward naval/grenade actions. Two metadata fire-time
+slots remain verified, but a universal infantry hard limit is not established.
+An offline five-shot scheduler contract and reversible pass-through DLL-copy
+scaffold were validated only in the workspace. No game DLL/EXE, installed pack
+or running process was changed. All file writes now use timestamped hash-backed
+transactions via scripts/tracked_files.py. Next gate: approved runtime mapping
+of the actual rifle callback, not another reload or speculative .pack experiment.
+
+## 2026-10-22: artillery Nuclear Shell test installed — gameplay pending
+
+[Current artillery report](ARTILLERY_NUCLEAR_TEST.md). Oda artillery/siege:
+**FH70 BATTERY - NUCLEAR TEST**, four Armstrong placeholder guns; intended button
+**Nuclear Shell (TEST)**. One 15-second activation, private radius-40/damage-100
+explosion, existing large explosion visual. No mushroom cloud is implemented.
+The user approved the temporary shared Shrapnel Shot relink; other assigned
+artillery also receive this test ammunition/label while enabled. Working rifle,
+grenade and Suppression Fire data are unchanged. Pack installed directly in data;
+backups and installed/build hash verified. No gameplay success is claimed yet.
+Rollback: `python scripts/artillery_nuclear.py rollback`.
+
+## 2026-10-22: artillery/nuclear-shell feasibility audit
+
+Current installed pack retains the four-gun artillery definition and Oda permission,
+but latest in-game availability is not confirmed; user reports the last test only
+had infantry. Nuclear projectile/explosion rows are absent from this build.
+See [ARTILLERY_NUCLEAR_AUDIT](ARTILLERY_NUCLEAR_AUDIT.md). Large native blast
+parameters provide a plausible nuclear-style shell route, not verified gameplay
+or mushroom-cloud visuals. Current pack and working infantry remain unchanged.
+
+## 2026-10-22: Suppression Fire confirmed; five-shot controller limit investigated
+
+User confirms the native ability activates, but bursts remain two shots and
+continuous fire does not work. The requested five-shot burst is not implemented.
+Read-only executable analysis found two scalar fire-time slots and two recovered
+dispatch loops with a hard-coded count of two and two fired flags. See
+[FIVE_SHOT_FEASIBILITY](TYPE20_FIVE_SHOT_FEASIBILITY.md) for instruction addresses,
+reproducible audit, limits and the next technical gate. This is not a proof that
+every engine controller has the same limit. R2 remains installed unchanged;
+no fake five-shot build or further reload adjustment was made.
+
 ## 2026-10-21: native Suppression Fire R2 installed with user approval
 
 The user approved the temporary shared native-ability override. Installed hash:

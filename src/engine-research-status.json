@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-22",
+  "timezone": "Asia/Singapore",
+  "status": "LIVE_TWO_SLOT_PATH_OBSERVED_UNIT_IDENTITY_UNRESOLVED",
+  "lab_directory": "C:\\Users\\Lenovo\\Documents\\Codex\\2026-10-18\\you-are-my-lead-developer-for\\build\\engine-burst-research\\lab-20261022T062927.417894Z",
+  "scheduler_contract_scenarios": 9,
+  "pass_through_only": true,
+  "copy_sha256": "0741968D4BFD9CEF3C40373652606A3B9ADCB72B3ED9B2334A87FCEB2160D281",
+  "original_game_dll_sha256": "022FAE2E2DA92B59B8B1B8EE52887003C624E3C8ECA060B209F5D792A7F874F5",
+  "installed_pack_sha256": "2D57C29074E15A3903E6C7900D652770CB27D7023A8A349BDF0C1C5BDDB67AB3",
+  "runtime_attach_performed": true,
+  "experimental_patch_installed": false,
+  "scope_correction": true,
+  "next_test": "A later single integrated battle only after explicit revised-hook activation approval; no immediate retest requested.",
+  "debugger_setup": {
+    "status": "EXECUTED_AND_DETACHED_STATE_RESTORED",
+    "receipt": "C:\\Users\\Lenovo\\Documents\\Codex\\2026-10-18\\you-are-my-lead-developer-for\\build\\tool-downloads\\x64dbg\\setup-20261022T064414.938388Z.json",
+    "x32dbg": "C:\\Users\\Lenovo\\Documents\\Codex\\2026-10-18\\you-are-my-lead-developer-for\\tools\\x64dbg\\2026.05.27\\release\\x32\\x32dbg.exe",
+    "source_commit": "9c8ca1cae0b6d56cc44f31fddcb10e3b02ffbb87",
+    "archive_sha256": "D41966DFC5B435A372798245300CA0AB7BB8E48BDBF48512C6FB20FCCA427697",
+    "runtime_trace_approved": true
+  },
+  "live_trace": {
+    "session": "C:\\Users\\Lenovo\\Documents\\Codex\\2026-10-18\\you-are-my-lead-developer-for\\build\\engine-burst-research\\runtime-20261022T065501.372693Z",
+    "report": "docs/ENGINE_BURST_LIVE_TRACE.md",
+    "counts": {
+      "TRACE_B": 32,
+      "TRACE_GET": 32,
+      "TRACE_FIRE": 90,
+      "TRACE_SPAWN": 96,
+      "TRACE_POST": 90
+    },
+    "unit_key_verified": false,
+    "ammo_semantics_verified": false,
+    "five_shot_implemented": false,
+    "sustained_fire_implemented": false,
+    "detached": true,
+    "cavalry_confounded_sample2": true
+  },
+  "prepared_experiment": {
+    "path": "dist/burst5/Burst5Experiment.exe",
+    "status": "R3_TARGET_REFERENCE_CORRECTION_BUILT_OFFLINE_NOT_ACTIVATED",
+    "five_round_attempt": true,
+    "sustained_auto_enabled": false,
+    "engine_hook_executed": false,
+    "unit_identity_runtime_verified": false,
+    "ammo_runtime_verified": false,
+    "next_test": "A later single integrated battle only after explicit revised-hook activation approval; no immediate retest requested.",
+    "rollback": "python -B scripts/burst5_rollback.py",
+    "runtime_session": "build/burst5/runtime/20261022T101927.563542Z",
+    "additional_shots": 0,
+    "detached": true,
+    "previous_live_attempt": {
+      "status": "LIVE_ATTEMPT_REFUSED_BY_VALIDITY_GUARD_DETACHED",
+      "runtime_session": "build/burst5/runtime/20261022T101927.563542Z",
+      "additional_shots": 0,
+      "detached": true
+    },
+    "revision": "TARGET_REFERENCE_SCOPE_R3",
+    "offline_scenarios": 51,
+    "fuzz_scenarios": 1000,
+    "native_predicate_assertions": 11,
+    "source_evidence": "build/burst5/validity-research.json"
+  }
+}

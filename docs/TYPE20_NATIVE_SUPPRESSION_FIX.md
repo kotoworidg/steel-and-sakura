@@ -1,3 +1,14 @@
+## 2026-10-22: Suppression Fire confirmed; five-shot controller limit investigated
+
+User confirms the native ability activates, but bursts remain two shots and
+continuous fire does not work. The requested five-shot burst is not implemented.
+Read-only executable analysis found two scalar fire-time slots and two recovered
+dispatch loops with a hard-coded count of two and two fired flags. See
+[FIVE_SHOT_FEASIBILITY](TYPE20_FIVE_SHOT_FEASIBILITY.md) for instruction addresses,
+reproducible audit, limits and the next technical gate. This is not a proof that
+every engine controller has the same limit. R2 remains installed unchanged;
+no fake five-shot build or further reload adjustment was made.
+
 ## 2026-10-21: native Suppression Fire R2 installed with user approval
 
 The user approved the temporary shared native-ability override. Installed hash:

@@ -1,3 +1,15 @@
+## 2026-10-22: artillery Nuclear Shell test installed — gameplay pending
+
+[Current artillery report](docs/ARTILLERY_NUCLEAR_TEST.md). Oda artillery/siege:
+**FH70 BATTERY - NUCLEAR TEST**, four Armstrong placeholder guns; intended button
+**Nuclear Shell (TEST)**. One 15-second activation, private radius-40/damage-100
+explosion, existing large explosion visual. No mushroom cloud is implemented.
+The user approved the temporary shared Shrapnel Shot relink; other assigned
+artillery also receive this test ammunition/label while enabled. Working rifle,
+grenade and Suppression Fire data are unchanged. Pack installed directly in data;
+backups and installed/build hash verified. No gameplay success is claimed yet.
+Rollback: `python scripts/artillery_nuclear.py rollback`.
+
 ## 2026-10-21: native Suppression Fire R2 installed with user approval
 
 The user approved the temporary shared native-ability override. Installed hash:

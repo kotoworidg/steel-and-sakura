@@ -24,3 +24,6 @@ __pycache__/
 
 # Project-local disassembly dependency (user approved)
 /tools/python-research/
+
+# Approved portable debugger; binaries stay local
+/tools/x64dbg/

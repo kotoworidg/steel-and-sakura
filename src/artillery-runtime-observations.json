@@ -1,0 +1,18 @@
+{
+  "observations": [],
+  "pending_test": {
+    "date": "2026-10-22",
+    "timezone": "Asia/Singapore",
+    "display_name": "FH70 BATTERY - NUCLEAR TEST",
+    "build_sha256": "2D57C29074E15A3903E6C7900D652770CB27D7023A8A349BDF0C1C5BDDB67AB3",
+    "status": "AWAITING_USER_GAMEPLAY_OBSERVATION",
+    "checks": [
+      "unit selectable under Oda",
+      "four visible Armstrong placeholder guns",
+      "Nuclear Shell (TEST) button visible and activates",
+      "actual high-blast impacts and casualties",
+      "normal ammunition returns after ability",
+      "working rifles remain unchanged"
+    ]
+  }
+}
