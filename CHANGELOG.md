@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-25 — Type 20 playable upgrade and five-round candidate
+
+- Preserve the confirmed two-shot source tag and archive; include the improved
+  supported-mechanics two-shot build and guarded one-command restoration.
+- Improve rifle precision, velocity, usable range, formation spacing, guard
+  behavior and finite native ammunition; configure native timed rifle abilities.
+- Add a paired pack and removable, version-locked x86 runtime which re-arms the
+  current native primary firing slot three times while preserving engine shot
+  validation, projectile creation, ammo debit and action lifetime. No EXE/DLL edit.
+- Ship compiled helper, project-owned source, deterministic pack/ZIP generation,
+  transactional installer, stop/report controls, both fallbacks and checksums.
+- Pass 31 Python tests, 22 native-adapter cases / 839 assertions, synthetic debug
+  transport cleanup, independent pack reopening and actual recovery dry-runs.
+- Candidate installed with approval; runtime not attached and five-round combat
+  remains unverified. Full-auto suppression and individual magazines are absent.
+
 ## 2026-10-20
 
 - Added observed English unit localization keys and four authored strings.

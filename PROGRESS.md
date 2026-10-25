@@ -1,3 +1,31 @@
+# Type 20 five-round runtime candidate — 25 October 2026
+
+Third and final gameplay iteration: an actual external x86 adapter and matching
+0.2.0 pack are implemented, compiled, packaged and installed with approval.
+Five-round firing is NOT in-game verified; the helper has not attached. It
+re-arms only native action+0x6C three times before the paired 500 ms event, using
+native validation, ammunition debit, projectile spawning and action completion.
+No completed-action hold, installed binary patch, direct emitter or ammo write.
+The original two-shot archive and improved 0.1.0 fallback are preserved and ship
+with guarded recovery. Restorable tag: steel-sakura/confirmed-two-shot-20261025.
+
+Retained playable changes include 850 projectile speed, accuracy 80, 450 range,
+210 native ammo, wider all-rank formation, guard/no skirmish, Rapid Volley and
+an optional 30s/120s native Suppression Fire module. Continuous full-auto and
+individual magazine reloads are not implemented. Exact five-shot emission,
+real damage, stop/move/death cancellation, ability expiry and stability require
+a focused in-game battle. Existing grenade activation is preserved; damage is
+not inferred. Three meaningful gameplay builds are complete; no research restart.
+
+Offline: 31 Python tests, 22 shared-adapter scenarios / 839 assertions, synthetic
+Win32 transport restoration/detach, 205 native instruction checks, independent
+RPFM reopening, pack/ZIP reproducibility and four actual recovery/install dry-runs
+passed. Original EXE/DLL hashes, three Modern Otomo copies and loading lists were
+verified unchanged. The actual installation receipt restores the preceding B0E51
+0.1.0 pack, rather than the original 0B497 archive assumed in earlier notes.
+Current instructions: top of INSTALL.md. Release:
+dist/five_round/steel-and-sakura-five-round-0.2.0-candidate.zip.
+
 # Type 20 playable release — 25 October 2026
 
 The user replaced diagnostic work with playable implementation. Do not resume

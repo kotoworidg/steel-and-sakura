@@ -1,3 +1,141 @@
+<!-- CURRENT-FIVE-ROUND-INSTALL -->
+# Type 20 0.2.0 candidate — current installation and recovery
+
+This section supersedes historical installation/rollback instructions below.
+The five-round candidate was installed with approval on 25 October 2026. The
+runtime has **not** attached to the game. Five-round firing is not game-verified.
+No installed EXE/DLL was changed. Three gameplay build iterations are complete.
+
+The core unit is Oda's **JSDF Type 20 - Five-Round Runtime** in a Sengoku custom
+battle. A separate x86 helper re-arms the current native primary firing slot
+three times inside the paired firing window. The engine still validates shots,
+spends ammunition, emits projectiles, and completes/cancels its own actions.
+Without the helper this candidate fires two native shots. Coarse simulation
+updates or interrupted actions can shorten a burst; extras are never emitted
+as a catch-up volley. Stable movement, damage, exact five-shot counts and crash
+absence still require one focused battle verification.
+
+Retained supported improvements: accuracy 45 to 80; projectile speed 200 to 850;
+450 range (replacing the diagnostic 900); 210 shared native ammunition; all-rank
+fire; wider spacing; guard enabled and skirmishing disabled. Core Rapid Volley
+is configured for 60 seconds with 300-second recharge. The optional native
+Suppression Fire module is configured for 30 seconds and 120-second recharge,
+faster loading and lower accuracy, then native expiry restores its modifiers.
+It is **not continuous full-auto**. It changes shared native Suppression Fire
+for other units already assigned that ability. Per-soldier magazines and
+independent magazine reloads are not implemented. Existing grenade activation
+is preserved; grenade damage is not established by that fact.
+
+Extract the ZIP into its own writable directory. Standard-library Python 3.10+
+is required. Commands below run from that extracted directory in PowerShell.
+The runtime also requires the installed Windows .NET Framework 4.x x86 runtime.
+Close SHOGUN 2 before any pack install, rollback, or restoration.
+
+```powershell
+python -B .\install_type20.py install --dry-run
+python -B .\install_type20.py install
+```
+
+`Install-Core.cmd` performs the second command. Packs go directly into
+`D:\Games\Total War - SHOGUN 2\data`; the installer manages only its two pack
+names and own entries in the two loading lists, with immutable backups first.
+It refuses unknown pack edits and unsupported executable/DLL hashes.
+`Install-With-Suppression.cmd` adds the optional shared module; it is not
+currently installed. Inspect its scope above before choosing it.
+
+The already-approved initial runtime session is limited to 90 seconds. Launch
+the game with this pack loaded; prepare a paused custom battle with the named
+unit and slow melee opponents, abilities off. Then run:
+
+```powershell
+python -B .\run_five_round.py start --approved-engine-hook --seconds 90
+python -B .\run_five_round.py status
+```
+
+Unpause and give normal attack orders. Expected: repeating five separate native
+shots where the engine updates sufficiently often, actual enemy damage and
+ammunition use, and prompt obedience to halt/move/cease-fire orders. Stop for a
+crash, unrelated-unit effect, continued fire after cancellation, unexplained
+ammunition changes, or persistent shorter bursts. A log reporting five debit/
+spawn-path pairs is evidence of native emission accounting, not proof of visual
+hits or casualties. Hardware breakpoints may slow the game. This run has not
+performed this game test, and the launcher never opens or controls the game.
+
+```powershell
+python -B .\run_five_round.py stop
+python -B .\run_five_round.py report
+```
+
+Stop requests graceful cleanup of an unconsumed flag reset, restoration of owned
+debug registers, and detach. Report refuses to finalize until detach/end are
+logged. Do not force-kill the helper while it is attached; request stop and wait.
+Closing the game also removes process memory changes. `Run-Five-Round.cmd` is a
+one-hour option for later use after the initial test; only the initial 90-second
+session has been approved in this task. No automatic startup or persistence exists.
+
+If the candidate is unsuitable, close the game and install the supported two-shot
+0.1.0 fallback, which keeps the projectile, precision, formation and native ability
+improvements without the external helper:
+
+```powershell
+python -B .\supported\install_type20.py install --dry-run
+python -B .\supported\install_type20.py install
+```
+
+`Install-Supported-Fallback.cmd` performs the second command. For the original,
+user-confirmed two-shot archive instead, use `Restore-Confirmed.cmd` or:
+
+```powershell
+python -B .\restore_confirmed.py --dry-run
+python -B .\restore_confirmed.py
+```
+
+That restores SHA-256
+`0B497A435F4E28C2C068D7C90B60BA9D0C0FFA353BABD46242EF2FED2222D270`,
+removes this package's optional module, retains unrelated mods and creates its
+own reversible receipt. The source tag is
+`steel-sakura/confirmed-two-shot-20261025` at `c4628a6`.
+
+To remove a new installation and restore its exact pre-install state, use the
+receipt printed by that installation, including its complete absolute path:
+
+```powershell
+python -B .\install_type20.py rollback --receipt "C:\full\path\to\manifest.json" --dry-run
+python -B .\install_type20.py rollback --receipt "C:\full\path\to\manifest.json"
+```
+
+For the installation already performed in this workspace, the exact rollback is:
+
+```powershell
+python -B "C:\Users\Lenovo\Documents\Codex\2026-10-18\you-are-my-lead-developer-for\dist\five_round\0.2.0\install_type20.py" rollback --receipt "C:\Users\Lenovo\Documents\Codex\2026-10-18\you-are-my-lead-developer-for\dist\five_round\0.2.0\backups\type20-20261025T084021.672895Z-46abf51f\manifest.json"
+```
+
+This receipt restores the immediately preceding supported 0.1.0 pack
+`B0E51ABC7D1FC4FB0D1DE37CA106B72AD55C6DE230B19C309C3BF92AF2EA2280`.
+Earlier notes saying the pre-install active pack was the original 0B497 archive
+were superseded by the actual installation receipt. Never use an older research
+rollback script for this candidate. Keep all receipts and backup originals.
+
+Build commands from the existing repository (requires the preserved build inputs,
+installed supported binaries, pefile, .NET 4 x86 csc and bundled RPFM 5.2.0):
+
+```powershell
+python -B scripts/five_round_build.py build
+python -B scripts/validate_five_round.py
+python -B -m unittest discover -s tests -v
+python -B scripts/package_five_round.py
+```
+
+These commands build/test/package without game attachment. No fourth changed
+candidate is permitted in this run. Pack generation and ZIP assembly are checked
+for byte reproducibility; legacy csc executable reproducibility is not asserted.
+Project-owned native sources and the exact compiled host are included in the ZIP.
+Original game binaries remain only in ignored local development backups.
+`engine-profile.json` records supported sizes/hashes, live-code checks and each
+runtime change/restore operation; unsupported versions are refused.
+
+<!-- END-CURRENT-FIVE-ROUND-INSTALL -->
+
 ## 2026-10-22: artillery Nuclear Shell test installed — gameplay pending
 
 [Current artillery report](docs/ARTILLERY_NUCLEAR_TEST.md). Oda artillery/siege:
