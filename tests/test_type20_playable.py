@@ -22,6 +22,14 @@ class PlayablePackTests(unittest.TestCase):
     if p not in self.base or p in playable.PATHS.values():
      if p.startswith('db/'):
       spec=self.specs[p.split('/')[1].removesuffix('_tables')];prefix,rows=db_read(b,spec);self.assertEqual(db_bytes(prefix,rows,spec),b)
+ def test_added_tables_have_unique_deterministic_guids(self):
+  guids=[b[6:78] for p,b in {**self.core,**self.optional}.items() if p.startswith('db/')]
+  self.assertEqual(len(guids),len(set(guids)))
+  second,optional,_=playable.planned(self.profile,self.base,self.r2,self.specs)
+  self.assertEqual(second,self.core);self.assertEqual(optional,self.optional)
+  changed=dict(self.core);raw=changed[playable.JUNCTION];original=self.base['db/unit_to_unit_abilities_junctions_tables/steel_sakura_combined']
+  changed[playable.JUNCTION]=raw[:6]+original[6:78]+raw[78:]
+  with self.assertRaises(ValueError):self.check(changed)
  def test_rejects_modified_firing_animation(self):
   core=dict(self.core);p=next(p for p in core if p.endswith('.anim'));core[p]=core[p][:-1]+bytes([core[p][-1]^1])
   with self.assertRaises(ValueError):self.check(core)

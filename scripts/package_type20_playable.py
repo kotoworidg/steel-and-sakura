@@ -27,7 +27,7 @@ def main():
  iterations=load(OUT/'iterations.json')
  release=dict(format=1,version=profile['version'],unit_name=profile['title'],source_commit=source_commit,source_base_commit='c4628a6b3fc66bfc2e2609fe50155f6f01aa325e',
   iteration=pointer['iteration'],pack_sha256={n:digest(files[n]) for n in ['steel_sakura_combined_test.pack','steel_sakura_type20_suppression.pack']},
-  previous_core_hashes=[i['core_sha256'] for i in iterations[:-1]],previous_suppression_hashes=[i['optional_sha256'] for i in iterations[:-1]],
+  previous_core_hashes=[i['core_sha256'] for i in iterations[:-1]],previous_suppression_hashes=[i.get('optional_sha256') or digest((OUT/('iteration-%02d'%i['iteration'])/'steel_sakura_type20_suppression.pack').read_bytes()) for i in iterations[:-1]],
   optional_shared_scope=validation['changes']['optional_shared_scope'],core_only_is_default=True,offline_validation=True,in_game_verified=False,
   five_round_bursts=False,true_full_auto=False,per_soldier_magazine_reload=False,source_sha256=tests['source_sha256'])
  files['release.json']=(json.dumps(release,indent=2)+'\n').encode()

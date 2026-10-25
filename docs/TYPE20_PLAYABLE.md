@@ -61,17 +61,20 @@ visuals remain placeholders. No campaign recruitment or JSDF faction is added.
 From the existing checkout:
 
 ```powershell
-python -B scripts/type20_playable.py build --iteration 1
 python -B scripts/type20_playable.py validate
 python -B scripts/validate_type20_rpfm.py run
 python -B -m unittest discover -s tests -p 'test_*.py' -v
 python -B scripts/package_type20_playable.py
 ```
 
-The build script limits this version to three meaningful iterations. Iteration
-1 passed; no additional gameplay rebuild was needed. Revalidating or packaging
+The build script limits this version to three meaningful iterations. A fresh
+local build ledger starts with `build --iteration 1`; this checkout has already
+completed iterations 1 and 2. Existing builds can be validated and packaged
+without rebuilding. Iteration
+2 passed after the final package audit assigned unique deterministic IDs to added
+DB tables. Gameplay tuning stayed unchanged from iteration 1. Revalidating or packaging
 does not create another gameplay iteration. Build output is under
-`build/type20-playable/iteration-01/`. The ZIP is under
+`build/type20-playable/iteration-02/`. The ZIP is under
 `dist/type20-playable/steel-and-sakura-type20-0.1.0.zip`.
 
 The builder requires the preserved baseline/R2 packs and existing RPFM-decoded

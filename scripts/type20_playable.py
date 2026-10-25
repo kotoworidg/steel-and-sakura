@@ -1,7 +1,7 @@
 """Build and validate a supported-mechanics playable Type 20 upgrade.
 Preserves the confirmed firing animations and unrelated baseline payloads.
 """
-import argparse,copy,datetime,hashlib,io,json,struct,zipfile
+import argparse,copy,datetime,hashlib,io,json,struct,uuid,zipfile
 from pathlib import Path
 from tracked_files import ROOT,write_bytes,write_text,digest
 from type20_pack_codec import pack_entries,pack_bytes,db_read,db_bytes,loc_read,loc_bytes
@@ -33,6 +33,12 @@ def decode_lossless(raw,spec):
  if db_bytes(prefix,rows,spec)!=raw:raise ValueError('existing RPFM payload does not roundtrip')
  return prefix,rows
 
+def unique_prefix(prefix,path):
+ # New packed tables receive stable unique IDs; existing table headers stay intact.
+ value=str(uuid.uuid5(uuid.NAMESPACE_URL,'steel-and-sakura/type20-supported/0.1.0/'+path))
+ if prefix[:4]!=bytes.fromhex('fdfefcff') or struct.unpack_from('<H',prefix,4)[0]!=36:raise ValueError('unexpected GUID header')
+ return prefix[:6]+value.encode('utf-16-le')+prefix[78:]
+
 def planned(profile,base,r2,specs):
  core=dict(base);before={};after={};modified=[]
  for name,path in PATHS.items():
@@ -52,14 +58,16 @@ def planned(profile,base,r2,specs):
  core[LOC]=loc_bytes(prefix,loc);modified.append(LOC)
  spec=specs['unit_to_unit_abilities_junctions'];template='db/unit_to_unit_abilities_junctions_tables/steel_sakura_combined'
  prefix,_=decode_lossless(base[template],spec)
- core[JUNCTION]=db_bytes(prefix,[{'unit_name':TYPE20,'ability':profile['core_ability']}],spec)
+ core[JUNCTION]=db_bytes(unique_prefix(prefix,JUNCTION),[{'unit_name':TYPE20,'ability':profile['core_ability']}],spec)
  optional={}
- optional[JUNCTION.replace('steel_sakura_type20_playable',OPTIONAL)]=db_bytes(prefix,[{'unit_name':TYPE20,'ability':profile['optional_ability']}],spec)
+ optional_junction=JUNCTION.replace('steel_sakura_type20_playable',OPTIONAL)
+ optional[optional_junction]=db_bytes(unique_prefix(prefix,optional_junction),[{'unit_name':TYPE20,'ability':profile['optional_ability']}],spec)
  for n in ['unit_abilities','unit_special_abilities']:
   path='db/'+n+'_tables/steel_sakura_type20_native_suppression';prefix,rows=decode_lossless(r2[path],specs[n])
   if len(rows)!=1 or rows[0]['key']!='suppression_fire':raise ValueError('native suppression template differs')
   if n=='unit_special_abilities':rows[0]['activated_projectile']=profile['suppression_projectile']['key']
-  optional['db/'+n+'_tables/'+OPTIONAL]=db_bytes(prefix,rows,specs[n])
+  optional_path='db/'+n+'_tables/'+OPTIONAL
+  optional[optional_path]=db_bytes(unique_prefix(prefix,optional_path),rows,specs[n])
  return core,optional,dict(before=before,after=after,modified_payloads=modified,added_payloads=[JUNCTION],optional_shared_scope='Native suppression_fire unlock and activated projectile apply to every unit already assigned this ability. Core-only installation has no shared ability overrides.')
 
 def validate_bytes(core_raw,optional_raw,profile=None):
@@ -67,6 +75,12 @@ def validate_bytes(core_raw,optional_raw,profile=None):
  core=pack_entries(core_raw);optional=pack_entries(optional_raw);expected,expected_optional,changes=planned(profile,base,r2,specs)
  if core!=expected or optional!=expected_optional:raise ValueError('unexpected payload or field changes')
  if set(core)-set(base)!={JUNCTION} or set(base)-set(core):raise ValueError('baseline roster payloads missing')
+ guids={}
+ for name,raw in {**core,**optional}.items():
+  if name.startswith('db/'):
+   guid=raw[6:78].decode('utf-16-le')
+   if guid in guids:raise ValueError('duplicate DB GUID: '+guids[guid]+' / '+name)
+   guids[guid]=name
  allowed=set(PATHS.values())|{LOC}
  changed={k for k in base if core[k]!=base[k]}
  if changed!=allowed:raise ValueError('unexpected baseline change footprint')
@@ -111,7 +125,7 @@ def build(iteration):
  core_raw=pack_bytes(core);optional_raw=pack_bytes(optional);validation=validate_bytes(core_raw,optional_raw,profile)
  session=OUT/('iteration-%02d'%iteration)
  if session.exists():raise ValueError('iteration directory already exists')
- save(OUT/'iterations.json',state+[dict(iteration=iteration,profile_sha256=digest(PROFILE.read_bytes()),core_sha256=digest(core_raw),status='BUILT')],'bounded iteration ledger')
+ save(OUT/'iterations.json',state+[dict(iteration=iteration,profile_sha256=digest(PROFILE.read_bytes()),core_sha256=digest(core_raw),optional_sha256=digest(optional_raw),status='BUILT')],'bounded iteration ledger')
  write_bytes(session/'steel_sakura_combined_test.pack',core_raw,'Type20 playable build core gameplay pack, iteration '+str(iteration))
  write_bytes(session/'steel_sakura_type20_suppression.pack',optional_raw,'Type20 playable build optional native suppression module, iteration '+str(iteration))
  save(session/'validation.json',validation,'exact gameplay deltas, finite ammunition and baseline preservation evidence')

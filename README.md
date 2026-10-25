@@ -7,7 +7,7 @@ native Suppression Fire has explicit shared scope. Five-round/full-auto fire and
 per-soldier magazines remain unimplemented. No new gameplay success is claimed.
 
 See [changes, installation and verification](docs/TYPE20_PLAYABLE.md).
-Builds: `build/type20-playable/iteration-01/`; installable ZIP:
+Builds: `build/type20-playable/iteration-02/`; installable ZIP:
 `dist/type20-playable/steel-and-sakura-type20-0.1.0.zip`.
 The installed game remains on the preserved two-shot baseline. No game binaries
 or unrelated Otomo files were changed. Historical development entries follow.
