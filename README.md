@@ -1,3 +1,17 @@
+## Type 20 playable release — 25 October 2026
+
+**JSDF Type 20 Rifle Section 0.1.0** is built and offline-validated. It upgrades
+projectile speed/precision, all-rank firing, spacing, finite ammunition and native
+fire-control abilities while retaining the confirmed two-shot clips. Optional
+native Suppression Fire has explicit shared scope. Five-round/full-auto fire and
+per-soldier magazines remain unimplemented. No new gameplay success is claimed.
+
+See [changes, installation and verification](docs/TYPE20_PLAYABLE.md).
+Builds: `build/type20-playable/iteration-01/`; installable ZIP:
+`dist/type20-playable/steel-and-sakura-type20-0.1.0.zip`.
+The installed game remains on the preserved two-shot baseline. No game binaries
+or unrelated Otomo files were changed. Historical development entries follow.
+
 ## 2026-10-22: artillery Nuclear Shell test installed — gameplay pending
 
 [Current artillery report](docs/ARTILLERY_NUCLEAR_TEST.md). Oda artillery/siege:

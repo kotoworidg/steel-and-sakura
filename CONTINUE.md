@@ -1,3 +1,19 @@
+# Type 20 playable release — 25 October 2026
+
+The user replaced diagnostic work with playable implementation. Do not resume
+tracer/GUI repair work for this milestone. Read docs/TYPE20_PLAYABLE.md.
+Supported-mechanics release 0.1.0: native two-shot firing preserved, precision and
+fast damaging bullets, all-rank fire, wider spacing, skirmish disabled, finite
+210 ammo, Rapid Volley, and an optional native timed Suppression Fire module.
+Five-shot/full-auto/per-soldier magazines remain unimplemented. Shared suppression
+scope is opt-in; core adds no new shared ability overrides. Iteration 1 passed
+strict preservation/reference validation and independent RPFM reopening. Game
+verification remains pending; the installed 0B497A43 baseline is unchanged.
+Build: build/type20-playable/iteration-01/; ZIP:
+dist/type20-playable/steel-and-sakura-type20-0.1.0.zip. Standard-library installer
+and guarded rollback are included. Current completed source changes are committed
+separately from the previously uncommitted research work.
+
 # Current Burst5 R3 — 2026-10-22
 
 Offline trace proved the first hook wrongly applied a target-reference predicate to the shooter. R3 corrects that scope, retains conservative target/reference and identity/ammo/cancellation gates, and adds bounded native evidence independent of admission. Passed 51 scenarios, 1,000 randomized schedules, 11 instruction assertions, nine code masks and synthetic transport. R3 has NOT attached to the game. Five shots remain unproven; no immediate battle requested. See docs/BURST5_EXPERIMENT.md and build/burst5/validity-research.json. Earlier live outcome below remains valid for the preserved first release.
