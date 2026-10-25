@@ -32,6 +32,9 @@ def main():
  for name,cmd in commands.items():files[name+'.cmd']=('@echo off\r\n'+cmd+'\r\npause\r\n').encode()
  commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
  release=dict(format=1,version='0.2.0-five-round-candidate',source_commit=commit,pack_sha256={n:digest(files[n]) for n in [CORE,SUPP]},previous_core_hashes=['B0E51ABC7D1FC4FB0D1DE37CA106B72AD55C6DE230B19C309C3BF92AF2EA2280','1ABB8206F1B20677808500EB7FDA83C97A880883E0158BCE56D4F312D1A48F1B'],previous_suppression_hashes=['303C662A8B70B60A32E36E802CC8D84DDE59C61A25D8B854E5CE3D0D87F8A01B'],optional_shared_scope='Other units already assigned native Suppression Fire also receive its shared unlock and private suppressive ammunition.',gameplay_verified=False,runtime_required=True,confirmed_baseline_sha256=CONFIRMED,confirmed_source_tag='steel-sakura/confirmed-two-shot-20261025')
+ live=load(OUT/'live-test-outcome.json') if (OUT/'live-test-outcome.json').is_file() else None
+ if live:files['live-test-outcome.json']=(json.dumps(live,indent=2)+'\n').encode()
+ release.update(distribution_revision='launcher-fix',gameplay_candidate_unchanged=True,live_gameplay_objective_met=False if live else None)
  files['release.json']=(json.dumps(release,indent=2)+'\n').encode()
  stable=ROOT/'build/type20-playable/iteration-02'
  for name in [CORE,SUPP]:files['supported/'+name]=(stable/name).read_bytes()
@@ -47,9 +50,9 @@ def main():
  if data!=archive_bytes(dict(reversed(list(files.items())))):raise ValueError('archive assembly not reproducible')
  with zipfile.ZipFile(io.BytesIO(data)) as z:
   if z.testzip() or any(z.read(n)!=b for n,b in files.items()):raise ValueError('archive differs')
- destination=ROOT/'dist/five_round/0.2.0'
+ destination=ROOT/'dist/five_round/0.2.0-launcher-fix'
  for name,raw in files.items():write_bytes(destination/name,raw,'Five-round release member '+name)
- archive=ROOT/'dist/five_round/steel-and-sakura-five-round-0.2.0-candidate.zip';write_bytes(archive,data,'Five-round publish installable native runtime candidate with supported fallback')
- result=dict(status='FIVE_ROUND_RUNTIME_IMPLEMENTED_NOT_GAME_VERIFIED',source_commit=commit,zip=str(archive),zip_sha256=digest(data),directory=str(destination),pack_sha256=latest['pack_sha256'],exe_sha256=latest['exe_sha256'],adapter_cases=v['adapter_cases'],assertions=v['adapter_assertions'],python_tests=load(session/'delivery-verification.json')['python_tests'],gameplay_build_iteration=3,game_attached=False,archive_byte_reproducible=True,confirmed_baseline_sha256=CONFIRMED,original_game_binaries_packaged=False)
+ archive=ROOT/'dist/five_round/steel-and-sakura-five-round-0.2.0-launcher-fix.zip';write_bytes(archive,data,'Five-round publish installable native runtime candidate with supported fallback')
+ result=dict(status='LIVE_TEST_NO_USER_OBSERVED_IMPROVEMENT' if live else 'FIVE_ROUND_RUNTIME_IMPLEMENTED_NOT_GAME_VERIFIED',source_commit=commit,zip=str(archive),zip_sha256=digest(data),directory=str(destination),pack_sha256=latest['pack_sha256'],exe_sha256=latest['exe_sha256'],adapter_cases=v['adapter_cases'],assertions=v['adapter_assertions'],python_tests=load(session/'delivery-verification.json')['python_tests'],gameplay_build_iteration=3,game_attachment_observed=bool(live),runtime_active_at_packaging=False,gameplay_objective_met=False,distribution_revision='launcher-fix',archive_byte_reproducible=True,confirmed_baseline_sha256=CONFIRMED,original_game_binaries_packaged=False)
  save(OUT/'release.json',result,'runtime release and validation provenance');print(json.dumps(result,indent=2))
 if __name__=='__main__':main()

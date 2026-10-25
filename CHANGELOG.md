@@ -2,6 +2,10 @@
 
 ## 2026-10-25 — Type 20 playable upgrade and five-round candidate
 
+- Live firing test attached and detached cleanly, but the user reported no visible
+  change. Native firing-path/ammo counters do not verify five damaging projectiles.
+  Correct launcher startup acknowledgement and visible access-error reporting;
+  leave the requested candidate installed with the helper disabled. 36 tests pass.
 - Preserve the confirmed two-shot source tag and archive; include the improved
   supported-mechanics two-shot build and guarded one-command restoration.
 - Improve rifle precision, velocity, usable range, formation spacing, guard

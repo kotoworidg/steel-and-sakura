@@ -3,13 +3,18 @@
 
 This section supersedes historical installation/rollback instructions below.
 The five-round candidate was installed with approval on 25 October 2026. The
-runtime has **not** attached to the game. Five-round firing is not game-verified.
+runtime attached for an approved 90-second firing test and detached cleanly.
+It recorded 659 five-count firing-path groups, but the user reported that gameplay
+still looked unchanged. Five distinct damaging projectiles are NOT verified;
+this candidate has not met the requested gameplay objective. The helper is off.
 No installed EXE/DLL was changed. Three gameplay build iterations are complete.
+This launcher revision changes startup/error reporting, not gameplay data.
 
 The core unit is Oda's **JSDF Type 20 - Five-Round Runtime** in a Sengoku custom
 battle. A separate x86 helper re-arms the current native primary firing slot
-three times inside the paired firing window. The engine still validates shots,
-spends ammunition, emits projectiles, and completes/cancels its own actions.
+three times inside the paired firing window. Added requests use the existing
+validation, ammunition and firing paths; five distinct damaging projectiles have
+not been established. The engine retains ownership of action completion.
 Without the helper this candidate fires two native shots. Coarse simulation
 updates or interrupted actions can shorten a burst; extras are never emitted
 as a catch-up volley. Stable movement, damage, exact five-shot counts and crash
@@ -43,9 +48,14 @@ It refuses unknown pack edits and unsupported executable/DLL hashes.
 `Install-With-Suppression.cmd` adds the optional shared module; it is not
 currently installed. Inspect its scope above before choosing it.
 
-The already-approved initial runtime session is limited to 90 seconds. Launch
-the game with this pack loaded; prepare a paused custom battle with the named
-unit and slow melee opponents, abilities off. Then run:
+The completed tests used 90-second sessions; the first expired while paused.
+Do not mistake a successful attach or a firing-path counter for verified bursts.
+No further firing experiment is scheduled. If explicitly choosing another test,
+launch the game with this pack loaded and the named unit. The battle must run
+and the unit must actually fire during the timed window. This installation runs
+SHOGUN 2 with elevated privileges: right-click `Test-Five-Round-90s.cmd`, choose
+**Run as administrator**, and accept the normal Windows UAC prompt. For a manual
+command, use an administrator PowerShell window:
 
 ```powershell
 python -B .\run_five_round.py start --approved-engine-hook --seconds 90
@@ -56,10 +66,11 @@ Unpause and give normal attack orders. Expected: repeating five separate native
 shots where the engine updates sufficiently often, actual enemy damage and
 ammunition use, and prompt obedience to halt/move/cease-fire orders. Stop for a
 crash, unrelated-unit effect, continued fire after cancellation, unexplained
-ammunition changes, or persistent shorter bursts. A log reporting five debit/
-spawn-path pairs is evidence of native emission accounting, not proof of visual
-hits or casualties. Hardware breakpoints may slow the game. This run has not
-performed this game test, and the launcher never opens or controls the game.
+ammunition changes, or persistent shorter bursts. A log reporting five firing-path
+visits with ammunition debits does not establish five damaging projectiles. Hardware breakpoints may slow the game. This run has not
+verified the requested visual/damage result, and the launcher never opens or
+controls the game. It now waits for an actual attachment log, reports startup
+access errors directly, and requests graceful stop if startup times out.
 
 ```powershell
 python -B .\run_five_round.py stop
@@ -70,8 +81,8 @@ Stop requests graceful cleanup of an unconsumed flag reset, restoration of owned
 debug registers, and detach. Report refuses to finalize until detach/end are
 logged. Do not force-kill the helper while it is attached; request stop and wait.
 Closing the game also removes process memory changes. `Run-Five-Round.cmd` is a
-one-hour option for later use after the initial test; only the initial 90-second
-session has been approved in this task. No automatic startup or persistence exists.
+one-hour option for later use; it is not activated by this task. The completed
+90-second sessions do not authorize an automatic longer run. No automatic startup or persistence exists.
 
 If the candidate is unsuitable, close the game and install the supported two-shot
 0.1.0 fallback, which keeps the projectile, precision, formation and native ability

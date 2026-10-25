@@ -1,7 +1,7 @@
 """Run/stop/report the five-round native adapter. No game binary installation.
 Activation requires separate human approval for this specific runtime hook.
 """
-import argparse,collections,datetime,json,os,subprocess,sys,uuid
+import argparse,collections,datetime,json,os,subprocess,sys,time,uuid
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT/'scripts'))
@@ -31,9 +31,37 @@ def latest():
 def report(session):
  rows=[r for f in sorted(session.glob('log-*.json')) for r in loaded(f)];names=collections.Counter(r['name'] for r in rows)
  shots=[r['detail'] for r in rows if r['name']=='native-shot-confirmed'];counts=collections.Counter(r['detail'].get('reason','') for r in rows if r['name']=='cancel')
- return dict(session=str(session),events=dict(names),native_debit_spawn_pairs=len(shots),additional_native_pairs=sum(bool(s['extra']) for s in shots),five_native_bursts=names['five-native-emissions-accounted'],
+ return dict(session=str(session),events=dict(names),firing_path_ammo_debit_pairs=len(shots),added_firing_path_pairs=sum(bool(s['extra']) for s in shots),five_count_groups=names['five-native-emissions-accounted'],
   short_bursts=names['short-native-burst'],cancellation_reasons=dict(counts),detached=bool(names['detached']),finished=bool(names['end']),
-  native_exceptions=[r['detail'] for r in rows if r['name']=='native-exception'],runtime_errors=[r['detail'] for r in rows if r['name'] in ['version-or-access-refused','runtime-error','admission-refused']],visual_projectile_damage_verification=False)
+  native_exceptions=[r['detail'] for r in rows if r['name']=='native-exception'],runtime_errors=[r['detail'] for r in rows if r['name'] in ['version-or-access-refused','runtime-error','fail-closed']],guard_refusals=[r['detail'] for r in rows if r['name']=='admission-refused'],measurement='Native firing-path visits with delta-one ammunition debits; these counts do not establish projectile counts, visible bursts or damage.',projectile_count_verified=False,visual_projectile_damage_verification=False)
+
+
+def request_stop(session,reason):
+ path=session/'STOP'
+ if not path.exists():write_text(path,reason+'\n','Five-round graceful stop request')
+
+
+def await_attachment(proc,session,timeout=15):
+ """A spawned process is not a successful attachment; await the real host log."""
+ deadline=time.monotonic()+timeout
+ while True:
+  try:state=report(session)
+  except (OSError,json.JSONDecodeError):state=None
+  if state and state['runtime_errors']:
+   if state['events'].get('attached') and not state['detached']:request_stop(session,'Startup error: restore owned state and detach.')
+   detail=json.dumps(state['runtime_errors'])
+   if 'Access is denied' in detail:raise RuntimeError('Windows denied access to SHOGUN 2; startup did not complete normally. Right-click Test-Five-Round-90s.cmd and choose Run as administrator. '+detail)
+   raise RuntimeError('Runtime failed during startup: '+detail)
+  if state and state['events'].get('attached'):
+   if state['detached'] or state['finished'] or proc.poll() is not None:raise RuntimeError('Runtime attached but already stopped; it is not active.')
+   return dict(status='ATTACHED_GAMEPLAY_NOT_VERIFIED',attached=True,session=str(session),host_pid=proc.pid)
+  code=proc.poll()
+  if code is not None:raise RuntimeError('Runtime exited before attachment, exit code '+str(code)+'. Inspect session '+str(session))
+  if time.monotonic()>=deadline:
+   request_stop(session,'No attachment acknowledgement before startup timeout; stop if startup finishes later.')
+   raise RuntimeError('No attachment acknowledgement; graceful stop requested. Inspect session '+str(session))
+  time.sleep(.1)
+
 
 def main():
  ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('action',choices=['start','stop','status','report']);ap.add_argument('--approved-engine-hook',action='store_true');ap.add_argument('--pid',type=int);ap.add_argument('--seconds',type=int,default=90);ap.add_argument('--game-root',type=Path,default=Path('D:/Games/Total War - SHOGUN 2'));a=ap.parse_args()
@@ -57,12 +85,11 @@ def main():
   if user.is_file():preserved[str(user)]=digest(user.read_bytes())
   save(session/'request.json',dict(game_pid=pid,mode='five-round native action re-arm',duration_seconds=a.seconds,write_offset='action+0x6C only',completion_and_ammo_writes=False,preserved_hashes=preserved),'exact approved runtime intent before activation')
   proc=subprocess.Popen([str(ROOT/'Type20FiveRound.exe'),'--run','--five-round-runtime-approved',str(pid),str(ROOT),sys.executable,str(session)],creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-  result=dict(session=str(session),host_pid=proc.pid,game_pid=pid);save(ROOT/'build/five_round/active.json',result,'active host and graceful-stop target');print(json.dumps(result,indent=2))
+  result=dict(session=str(session),host_pid=proc.pid,game_pid=pid);save(ROOT/'build/five_round/active.json',result,'spawned host and graceful-stop target; attachment not yet confirmed');ack=await_attachment(proc,session);print(json.dumps({**result,**ack},indent=2))
  else:
   _,session=latest()
   if a.action=='stop':
-   path=session/'STOP'
-   if not path.exists():print(write_text(path,'Stop extra shots, restore any unconsumed re-arm and owned debug registers, then detach.\n','Five-round graceful stop request'))
+   request_stop(session,'Stop extra shots, restore any unconsumed re-arm and owned debug registers, then detach.');print('Graceful stop requested; use status to confirm detach.')
   else:
    r=report(session)
    if a.action=='report':

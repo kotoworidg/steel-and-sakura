@@ -1,3 +1,19 @@
+# Live Type 20 result — 25 October 2026
+
+User reports the candidate still looks unchanged in a running battle. The
+approved elevated helper did attach, record 3306 native firing-path/ammunition
+debit pairs and 659 five-count groups, then detach without native exceptions.
+Those counters do not establish five distinct damaging projectiles. The requested
+five-round gameplay improvement is not verified and has not been demonstrated.
+The earlier session expired while the battle was paused. Installed binary,
+pack, loading-list and recorded unrelated-mod hashes remained unchanged.
+
+User explicitly chose to leave the candidate installed; helper is off. No fourth
+gameplay build or new trace was made. Launcher-only correction waits for actual
+attachment, exposes Windows access errors with administrator instructions, and
+requests graceful stop on startup timeout. Expected guard refusals are separated
+from fatal startup errors. 36 Python tests pass. Preserve all prior baselines.
+
 # Type 20 five-round runtime candidate — 25 October 2026
 
 Third and final gameplay iteration: an actual external x86 adapter and matching
