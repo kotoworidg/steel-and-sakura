@@ -1,3 +1,13 @@
+## Current prepared Type 20 release — 27 October 2026
+
+**Type 20 Rifle and Grenade Section 0.3.0** adds the actual unit's missing grenade
+ability, armour 8 and wider selectable loose formation, while preserving native
+two-shot rifle firing. [Changes, installation and one acceptance battle](docs/TYPE20_FIELD_RELEASE.md).
+Built and offline-validated; not installed or verified in-game. Five-round fire
+was unsuccessful in the latest test; full-auto and individual magazines remain
+unfinished. The installed C89B3F9F candidate is unchanged, helper off.
+Older progress entries below are historical.
+
 ## Type 20 playable release — 25 October 2026
 
 **JSDF Type 20 Rifle Section 0.1.0** is built and offline-validated. It upgrades

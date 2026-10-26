@@ -58,7 +58,7 @@ def planned(profile,base,r2,specs):
  core[LOC]=loc_bytes(prefix,loc);modified.append(LOC)
  spec=specs['unit_to_unit_abilities_junctions'];template='db/unit_to_unit_abilities_junctions_tables/steel_sakura_combined'
  prefix,_=decode_lossless(base[template],spec)
- core[JUNCTION]=db_bytes(unique_prefix(prefix,JUNCTION),[{'unit_name':TYPE20,'ability':profile['core_ability']}],spec)
+ core[JUNCTION]=db_bytes(unique_prefix(prefix,JUNCTION),[{'unit_name':TYPE20,'ability':ability} for ability in profile.get('core_abilities',[profile['core_ability']])],spec)
  optional={}
  optional_junction=JUNCTION.replace('steel_sakura_type20_playable',OPTIONAL)
  optional[optional_junction]=db_bytes(unique_prefix(prefix,optional_junction),[{'unit_name':TYPE20,'ability':profile['optional_ability']}],spec)

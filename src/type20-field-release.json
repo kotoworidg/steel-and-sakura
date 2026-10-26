@@ -1,0 +1,57 @@
+{
+  "version": "0.3.0",
+  "title": "JSDF Type 20 - Rifle and Grenade Section",
+  "unit": "steel_sakura_type20_automatic_fire_test",
+  "baseline_sha256": "0B497A435F4E28C2C068D7C90B60BA9D0C0FFA353BABD46242EF2FED2222D270",
+  "stats": {
+    "core_marksmanship": 80,
+    "core_loading_skill": 80,
+    "ammo": 210,
+    "morale": 12,
+    "rank_depth": 2,
+    "close_formation_spacing_horizontal": 1.4,
+    "close_formation_spacing_vertical": 2.4,
+    "skirmish": false,
+    "guard_mode": true,
+    "all_ranks_fire": true,
+    "armour": 8,
+    "loose_formation_spacing_horizontal": 3.0,
+    "loose_formation_spacing_vertical": 4.5
+  },
+  "projectile": {
+    "effective_range": 450,
+    "muzzle_velocity": 850.0,
+    "calibration_distance": 200.0,
+    "calibration_area": 0.75,
+    "can_penetrate_fortwall": false
+  },
+  "suppression_projectile": {
+    "key": "steel_sakura_type20_supported_suppression_bullet",
+    "shot_type": "suppression_shot",
+    "calibration_area": 1.5,
+    "damage": 2.0
+  },
+  "costs": {
+    "multiplayer_cost": 1200,
+    "multiplayer_late_cost": 1200,
+    "create_cost": 1200,
+    "upkeep_cost": 300
+  },
+  "core_ability": "rapid_volley",
+  "optional_ability": "suppression_fire",
+  "known_limits": {
+    "shots_per_cycle": 2,
+    "five_round_bursts": false,
+    "full_auto": false,
+    "per_soldier_magazines": false,
+    "campaign_recruitment_added": false,
+    "custom_model": false,
+    "grenade_damage_verified": false
+  },
+  "description": "Protected rifle section with native two-shot fire, selectable dispersed formation and fragmentation grenade ability. 450 range; 210 ammunition.",
+  "long_description": "Native two-shot rifle cycle with accuracy 80, velocity field 850, armour 8 and selectable loose spacing 3 x 4.5. Guard capable; skirmish retreat disabled. Blinding Grenades activates the existing fragmentation projectile at range 5-75, for 60s with 180s recharge; throw animation and explosion damage require in-game verification. Native Rapid Volley gives a temporary reload boost. Five-round bursts, full-auto and individual magazine reloads are not implemented. Existing Tosa/Spencer visuals remain placeholders.",
+  "core_abilities": [
+    "rapid_volley",
+    "blinding_grenade"
+  ]
+}

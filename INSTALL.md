@@ -1,3 +1,17 @@
+# Current prepared release — 27 October 2026
+
+The installable supported fallback is 0.3.0; see
+[Type 20 Rifle and Grenade Section](docs/TYPE20_FIELD_RELEASE.md).
+Location: dist/type20-field-release/0.3.0/.
+It adds the missing Type20 grenade assignment, armour 8 and wider selectable
+loose formation, restoring the confirmed two-shot clips. No helper is required.
+It is built and offline-validated, NOT installed or in-game verified.
+The C89B3F9F candidate remains installed with helper off, as the user chose.
+Use the release installer dry-run first; actual installation requires separate
+authorization. Its receipt restores the exact previous candidate and configs.
+Recovery also includes the original confirmed two-shot archive. The instructions
+below describe older releases; do not use an older installer for this package.
+
 <!-- CURRENT-FIVE-ROUND-INSTALL -->
 # Type 20 0.2.0 candidate — current installation and recovery
 

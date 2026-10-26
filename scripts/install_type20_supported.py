@@ -104,6 +104,7 @@ def transaction(game,changes,backup_root,reason,recover=True):
 def plan_install(package,game,suppression):
  release=json.loads((package/'release.json').read_text());game=verify_game(game);ensure_closed()
  if release.get('format')!=1:raise ValueError('Unsupported release manifest')
+ if suppression and not release.get('supports_suppression',True):raise ValueError('This recovery core does not contain the optional suppression projectile')
  for name in [CORE,SUPP]:
   if hashpath(package/name)!=release['pack_sha256'][name]:raise ValueError('Package hash mismatch: '+name)
  target=(game/'data'/CORE).resolve();optional=(game/'data'/SUPP).resolve()

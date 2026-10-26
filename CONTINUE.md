@@ -1,3 +1,16 @@
+# Current Type 20 fallback — 27 October 2026
+
+Use docs/TYPE20_FIELD_RELEASE.md and scripts/type20_field_release.py.
+Release 0.3.0 adds the missing Type20 grenade assignment, armour 8 and selectable
+3 x 4.5 loose spacing, retaining confirmed native two-shot clips and rifle data.
+One gameplay build in the newly authorized session; historical three-build
+ledger preserved. 52 offline tests and independent RPFM reopening pass.
+NOT installed or verified in-game. Installed C89B3F9F candidate remains, helper
+off; its last gameplay test was unsuccessful. Five-round/full-auto/magazines
+remain unfinished. Installation requires separate authorization.
+The prior uncommitted PROGRESS.md evidence review is preserved.
+Earlier continuation entries below are historical.
+
 # Type 20 playable release — 25 October 2026
 
 The user replaced diagnostic work with playable implementation. Do not resume

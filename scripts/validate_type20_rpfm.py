@@ -52,8 +52,9 @@ class Client:
   return result
  def tool(self,name,**args):return self.call('tools/call',{'name':name,'arguments':args})
 
-def run():
- validation=validate();pointer=load(ROOT/'build/type20-playable/latest.json');session=Path(pointer['session'])
+def run(session=None,validation=None,additional_specs=None,additional_paths=()):
+ if session is None:
+  validation=validate();pointer=load(ROOT/'build/type20-playable/latest.json');session=Path(pointer['session'])
  archive,coverage,logs=begin_coverage(session);owned=None;streams=[];decoded={}
  try:
   try:
@@ -74,10 +75,10 @@ def run():
   if version.get('version')!='5.2.0':raise ValueError('unexpected RPFM version')
   c=Client();c.call('initialize',dict(protocolVersion='2025-03-26',capabilities={},clientInfo=dict(name='steel-sakura-type20-playable',version='1')))
   c.tool('set_game_selected',game_name='shogun_2',rebuild_dependencies=False)
-  _,_,_,specs=evidence()
+  _,_,_,specs=evidence();specs.update(additional_specs or {})
   for filename in ['steel_sakura_combined_test.pack','steel_sakura_type20_suppression.pack']:
    path=session/filename;entries=pack_entries(path.read_bytes());c.tool('open_packfiles',paths=[str(path)])
-   targets=([*PATHS.values(),LOC,JUNCTION] if filename=='steel_sakura_combined_test.pack' else list(entries))
+   targets=([*PATHS.values(),LOC,JUNCTION,*additional_paths] if filename=='steel_sakura_combined_test.pack' else list(entries))
    for internal in targets:
     result=c.tool('decode_packed_file',pack_key=str(path),path=internal,source='PackFile');wrapper=json.loads(result['content'][0]['text'])
     if internal.endswith('.loc'):
