@@ -1,0 +1,14 @@
+# Banzai result — 24 October 2026
+
+No five-shot game release is ready. The original confirmed two-shot pack remains installed byte-for-byte; recovery gameplay has not been reconfirmed. No game/configuration changes, hook activation, debugger attachment, or game launch occurred.
+
+Implemented and compiled `src/banzai/BurstWindow.cs` and `Offline.cs` into `dist\banzai\20261024T044433.807370Z/BanzaiOffline.exe`. The new core schedules three intermediate shots within an existing two-marker animation window, never holds action completion, never catches up with a simultaneous volley, and leaves ammunition debit to the native pipeline. It requires positive identity, order, life, movement, battle and version evidence. **There is no live adapter or game-memory access in this executable.** Unknown evidence cancels the burst; this core is not proof of in-game firing.
+
+Passed 28 deterministic offline cases, 1,000 randomized schedules and 3251 assertions. Real trace replay: 64 private-projectile matches and 64 unit-ammo decrements of one; zero unit-key matches. No verified Stop/Move/death semantics were captured. Nine native instruction anchors verified against the original DLL. Actual rollback fixture passed, including multiple edits, preserving new files in backups before removal, and refusing later edits. Release rollback preflight passed.
+
+Crash evidence was narrowed: at `Empire.Retail.dll + 0xC0C624`, the intact loop counter and literal construction imply missing `land_level_01`, with zero records in that table at failure. This is an inference from four preserved dumps, not a captured heap key. Today's vanilla `data.pack` contains all 18 land/naval experience rows; inspected PFH3 custom packs do not replace this table. The cause of the empty runtime table and the separately reported firing freeze remain unresolved. All nine previously preserved dumps remain hash-verified. Do not claim recovery stability.
+
+Build/check: `python -B scripts/banzai.py build` / `python -B scripts/banzai.py check`.
+Workspace rollback: `python -B scripts/banzai.py rollback`. Timestamped originals and SHA256 receipts are under `backups/tracked-*` and `backups/banzai-compiler-*`; ledger: `build\banzai\20261024T044433.807370Z/rollback-ledger.json`. It archives this attempt's source/executables/release fallback and preserves evidence, tooling and the installed game. It does not undo last session's game recovery.
+
+Only next test: launch normally without Burst5/debugger; Oda, **TYPE20 BURST TEST - two timed shots**, protected by yari against slow melee, abilities off. Fire one burst, then Stop and Move. Report freeze/no freeze. Do not install the distribution's copied fallback alongside the installed pack. Five-shot activation is blocked by unmapped identity/cancellation, not by a claimed universal engine limit.

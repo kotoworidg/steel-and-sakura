@@ -63,7 +63,7 @@ public sealed class HookHost {
   ProcessModule module=null;foreach(ProcessModule m in p.Modules)if(String.Equals(m.ModuleName,"empire.retail.dll",StringComparison.OrdinalIgnoreCase))module=m;
   if(module==null||Hash(module.FileName)!="022FAE2E2DA92B59B8B1B8EE52887003C624E3C8ECA060B209F5D792A7F874F5")throw new InvalidOperationException("unrecognized engine hash");
   string pack=Path.Combine(Path.GetDirectoryName(module.FileName),"data","steel_sakura_combined_test.pack");
-  if(Hash(pack)!="2D57C29074E15A3903E6C7900D652770CB27D7023A8A349BDF0C1C5BDDB67AB3")throw new InvalidOperationException("pack differs from calibrated baseline");
+  if(Hash(pack)!="1737D02D67F0C9100BBCC5255057C12B532F9805482D18ADC910542653D96DCD")throw new InvalidOperationException("pack differs from calibrated baseline");
   image=unchecked((uint)module.BaseAddress.ToInt32());imageSize=(uint)module.ModuleMemorySize;process=p.Handle;memory=new NativeMemory(process);
   // Whole controller/wrapper byte masks are generated from the pinned file; relocations masked.
   var profile=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"engine-profile.json")));

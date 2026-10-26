@@ -391,3 +391,7 @@ Approved controller reached firing callbacks, refused all entries, scheduled no 
 ## Burst5 R3 offline correction — 2026-10-22
 
 Native helper at RVA 3A6630 dereferences wrapper+0C; caller supplies action+2C, so the relevant object is action+38 (target), not the shooter. Removed the unsupported shooter-zero requirement, retained conservative target restriction, added bounded non-authorizing pre/post evidence and live-value regression. 51 tests / 1,000 randomized schedules / 11 instruction checks / synthetic debugger transport passed. R3 compiled but not activated; no new game pack or engine-file change. First tested release preserved under build/burst5/preserved/first-live-refused-*.
+
+## Final attempt — 23 October 2026
+
+Preserved crash evidence, restored original confirmed two-shot pack plus loading entries, retained unrelated mods and all backups. New crash is experience-table null lookup at C0C624; exact key/mod unresolved. Eight-player source matches our engine hash but does not solve infantry identity/lifetime. No safe five-shot implementation established; stopped. See docs/FINAL_ATTEMPT.md.

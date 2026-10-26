@@ -14,11 +14,52 @@ dist/type20-playable/steel-and-sakura-type20-0.1.0.zip. Standard-library install
 and guarded rollback are included. Current completed source changes are committed
 separately from the previously uncommitted research work.
 
-# Current Burst5 R3 — 2026-10-22
+# Type 20 continuation — 25 October 2026
+
+User confirmed the handoff's Type 20 milestone is the implementation scope and
+explicitly approved one read-only lifecycle diagnostic session of up to 90 seconds.
+That session has NOT run. Both node_repl and cua_repl fail before returning a
+window: `failed to write kernel assets: The system cannot find the path specified.
+(os error 3)`. No game was launched or attached in this turn.
+
+Built `scripts/type20_lifecycle.py`: exact observed unit identity, synchronous
+native pre/post snapshots, and DWORD write watchpoints on one actor's raw state
+and selected-animation reference. Ten observer regressions and a synthetic-child
+transport test (two execution/two data sites, restored registers and detach) pass.
+Raw watched fields are not labelled as Stop/Move/death. No five-shot, magazine or
+full-auto gameplay implementation is claimed. No new pack was built or installed.
+
+Check/build: `python -B scripts/type20_lifecycle.py check` / `build`.
+Once battle controls are available, run the already-approved session with
+`python -B scripts/type20_lifecycle.py start --approved`; `stop` requests detach,
+`status`/`report` inspect evidence. Workspace undo: `rollback --dry-run` / `rollback`.
+The approved session is diagnostic only; it does not approve a mutating hook.
+
+Installed confirmed two-shot pack stays `0B497A43...`; binaries, loading lists,
+Modern Otomo files and all three confirmed fallback archives retain their hashes.
+Recovery backups and current rollback preconditions verified. Original 119-check
+validator and seven regression tests pass. The older Banzai preflight is blocked
+by missing Capstone package files; the new preflight uses exact PE byte anchors
+and needs no new software. Next: restore app control and capture cancellation
+semantics during the approved session before integrating a live shot scheduler.
+
+# Read-only capture â€” 24 October 2026
+
+Read docs/READ_ONLY_CAPTURE.md. User confirms recovery does not crash. Observer detached; 12 exact unit identities via unit+0x28 and 400 native ammo delta-one pairs observed. Stop/Move/death mapping still unverified; await user description of commands/selection. No gameplay changes. Rollback: python -B scripts/read_trace_rollback.py.
+
+# Banzai offline result â€” 24 October 2026
+
+Read docs/BANZAI_RESULT.md. Bounded intra-animation scheduler compiled and tested OFFLINE ONLY; no live adapter because unit identity and order/death cancellation remain unverified. Do not launch retired Burst5. Installed confirmed two-shot 0B497A43 remains unchanged. New evidence infers land_level_01 lookup failed with empty runtime table, although current vanilla rows exist. Recovery gameplay still unconfirmed. Workspace rollback: python -B scripts/banzai.py rollback.
+
+# Final attempt stopped â€” 23 October 2026
+
+Read docs/FINAL_ATTEMPT.md first. Original confirmed two-shot pack 0B497A43... restored with three-file backups; existing unrelated mods preserved. No new five-shot build or hook. Runtime unit identity and death/order cancellation unresolved; do not automatically resume automatic-fire development or launch Burst5. Recovery stability remains unconfirmed. One-command recovery undo: python -B scripts/final_recovery.py rollback.
+
+# Current Burst5 R3 â€” 2026-10-22
 
 Offline trace proved the first hook wrongly applied a target-reference predicate to the shooter. R3 corrects that scope, retains conservative target/reference and identity/ammo/cancellation gates, and adds bounded native evidence independent of admission. Passed 51 scenarios, 1,000 randomized schedules, 11 instruction assertions, nine code masks and synthetic transport. R3 has NOT attached to the game. Five shots remain unproven; no immediate battle requested. See docs/BURST5_EXPERIMENT.md and build/burst5/validity-research.json. Earlier live outcome below remains valid for the preserved first release.
 
-# Current Burst5 result — 2026-10-22
+# Current Burst5 result â€” 2026-10-22
 
 Approved integrated hook ran and detached. No extra shots: admission rejected 703 validity checks and 10 animation mismatches. Read docs/BURST5_LIVE_RESULT.md. Review native validity and pointer mapping offline before another battle. Working packs unchanged.
 
@@ -69,7 +110,7 @@ or running process was changed. All file writes now use timestamped hash-backed
 transactions via scripts/tracked_files.py. Next gate: approved runtime mapping
 of the actual rifle callback, not another reload or speculative .pack experiment.
 
-## 2026-10-22: artillery Nuclear Shell test installed — gameplay pending
+## 2026-10-22: artillery Nuclear Shell test installed â€” gameplay pending
 
 [Current artillery report](docs/ARTILLERY_NUCLEAR_TEST.md). Oda artillery/siege:
 **FH70 BATTERY - NUCLEAR TEST**, four Armstrong placeholder guns; intended button
@@ -125,7 +166,7 @@ relink. This uses shared native definitions and awaits explicit shared-scope
 approval before installation. Animations and firing statistics are unchanged.
 The current installed pack remains the preceding build until approval/install.
 
-## 2026-10-21: single-button Suppressive Fire test installed — runtime pending
+## 2026-10-21: single-button Suppressive Fire test installed â€” runtime pending
 
 Latest report: [TYPE20_SUPPRESSION_TEST.md](docs/TYPE20_SUPPRESSION_TEST.md).
 New Oda ranged infantry: **TYPE20 SUPPRESSIVE AUTO TEST**, intended button
@@ -159,7 +200,7 @@ Preserve this working burst build before any further experiments. No combat,
 animation, artillery, grenade, or installed pack changes were made for this update.
 The detailed report below retains the pre-test expectations as historical context.
 
-## 2026-10-21: isolated Type 20 burst test installed — runtime unconfirmed
+## 2026-10-21: isolated Type 20 burst test installed â€” runtime unconfirmed
 
 Current instructions and engine evidence: [TYPE20_BURST_TEST.md](docs/TYPE20_BURST_TEST.md).
 Oda ranged infantry: **TYPE20 BURST TEST - two timed shots**. Unique registry,
@@ -255,7 +296,7 @@ into game data; older MyMods notes are superseded. Test Oda gun infantry and
 siege/artillery. Both units/buttons require user confirmation. See
 docs/COMBINED_TEST.md and INSTALL.md.
 
-## Equipment direction — 2026-10-21
+## Equipment direction â€” 2026-10-21
 
 Active priorities: Modern Infantry Squad inspired by the Howa Type 20
 (40 soldiers, Throw Grenades) and Modern Artillery Battery inspired by the
@@ -264,7 +305,7 @@ assets remain temporary foundations. Tank deferred; aircraft stopped.
 See [equipment findings and acceptance checks](docs/EQUIPMENT_DIRECTION.md).
 New artillery checks preserve four guns and the observed mounted-firing flags.
 
-## Current priorities — 2026-10-21
+## Current priorities â€” 2026-10-21
 
 Focus on rifle infantry and artillery. Keep Chi-Ha research for later; do not
 continue tank experiments now. Aircraft remains removed. Added a provisional
@@ -273,7 +314,7 @@ Seven DB rows and seven strings passed RPFM reopening; 119 offline checks and
 three existing tests pass. Visible throwing and custom button remain unverified.
 The installed infantry pack is still the older version. See `docs/RIFLE_GRENADES.md`.
 
-## Scope decision — 2026-10-21
+## Scope decision â€” 2026-10-21
 
 This decision supersedes earlier aircraft and four-unit plans below. Stop all
 Zero/aircraft development. Prioritize the rifle squad and artillery. Investigate
