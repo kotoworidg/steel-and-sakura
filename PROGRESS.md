@@ -1,3 +1,32 @@
+# Projectile-path evidence review — 26 October 2026
+
+Current source HEAD is 645ef4a; the candidate pack remains C89B3F9F, helper off.
+Latest gameplay result remains UNSUCCESSFUL (user: "Still looked unchanged").
+No fourth gameplay build, hook activation, software install or binary change.
+This status supersedes older "helper never attached" and "spawned shots" claims.
+
+The 659 groups / 1983 extras measure post-path visits with ammo debits. Ammo is
+charged before creation. Native request40E9D0 -> validation420D00 -> direction
+427400 -> creation manager41C760 -> ctor40E2F0 -> append41C868 is statically mapped.
+At41C772/775 the manager can skip every constructor when definition+4C is zero;
+3D45B7 still counts afterward. This is a counter false-positive route, NOT a
+proven cause here: all12 older ordinary definition headers have count1.
+Both ordinary and additional visits rebuild requests; no immediate duplicate
+filter was found in the examined construction/registration body. No request,
+constructed object/serial, flight, collision or linked HP result was captured.
+Tests manually debit fixture ammo and call AfterFire with request0; they cannot
+close this gap. Full-auto and magazines remain unimplemented; player-order
+cancellation remains unverified.
+
+No evidence-supported combat correction is selected. Smallest missing comparison:
+ordinary vs extra request/count -> constructor object/serial -> same object in
+manager registration, with finite launch vector, then that ID through impact/HP.
+A proposed bounded observer would require separate scope approval; it is not
+implemented, activated, a new acceptance test or a completed combat feature.
+Do not request a build extension or repeat the action-byte/marker/reload changes
+without a demonstrated first divergence. Exact source hashes,16 verified native
+sites and proposed evidence gates: build/five_round/evidence-review-20261026.json.
+
 # Live Type 20 result — 25 October 2026
 
 User reports the candidate still looks unchanged in a running battle. The
