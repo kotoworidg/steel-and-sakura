@@ -1,3 +1,14 @@
+# Burst/full-auto continuation — 27 October 2026
+
+User priority is burst first, then full-auto; fallback work is frozen.
+Read docs/TYPE20_PROJECTILE_PATH.md. Last gameplay test remains unsuccessful.
+Prepared integrated projectile evidence mode passes offline checks; not activated
+and not a completed combat feature. No new gameplay build iteration consumed.
+Installed C89 candidate remains, helper off; original binaries/backups preserved.
+Do not reuse prior hook approval: changed sites require separate bounded approval.
+PROGRESS.md's pre-existing uncommitted evidence review remains untouched.
+Earlier entries below are historical.
+
 # Current Type 20 fallback — 27 October 2026
 
 Use docs/TYPE20_FIELD_RELEASE.md and scripts/type20_field_release.py.

@@ -30,10 +30,11 @@ def latest():
 
 def report(session):
  rows=[r for f in sorted(session.glob('log-*.json')) for r in loaded(f)];names=collections.Counter(r['name'] for r in rows)
- shots=[r['detail'] for r in rows if r['name']=='native-shot-confirmed'];counts=collections.Counter(r['detail'].get('reason','') for r in rows if r['name']=='cancel')
- return dict(session=str(session),events=dict(names),firing_path_ammo_debit_pairs=len(shots),added_firing_path_pairs=sum(bool(s['extra']) for s in shots),five_count_groups=names['five-native-emissions-accounted'],
+ shots=[r['detail'] for r in rows if r['name'] in ['native-shot-confirmed','native-path-ammo-debit']];counts=collections.Counter(r['detail'].get('reason','') for r in rows if r['name']=='cancel')
+ damage=[r['detail'] for r in rows if r['name']=='projectile-damage-store-after' and r['detail'].get('componentIntegrityDecreased') and r['detail'].get('moved')]
+ return dict(registered_projectile_observations=names['projectile-registered'],movement_observations=names['projectile-moved'],moved_component_damage_events=len(damage),ordinary_moved_component_damage=any(not x['extra'] for x in damage),additional_moved_component_damage=any(x['extra'] for x in damage),registration_failures=[r['detail'] for r in rows if r['name']=='projectile-registration-unconfirmed'],pairing_inconclusive=[r['detail'] for r in rows if r['name']=='projectile-pair-abandoned'],five_damaging_projectiles_verified=False,full_auto_verified=False,session=str(session),events=dict(names),firing_path_ammo_debit_pairs=len(shots),added_firing_path_pairs=sum(bool(s['extra']) for s in shots),five_count_groups=names['five-native-emissions-accounted'],
   short_bursts=names['short-native-burst'],cancellation_reasons=dict(counts),detached=bool(names['detached']),finished=bool(names['end']),
-  native_exceptions=[r['detail'] for r in rows if r['name']=='native-exception'],runtime_errors=[r['detail'] for r in rows if r['name'] in ['version-or-access-refused','runtime-error','fail-closed']],guard_refusals=[r['detail'] for r in rows if r['name']=='admission-refused'],measurement='Native firing-path visits with delta-one ammunition debits; these counts do not establish projectile counts, visible bursts or damage.',projectile_count_verified=False,visual_projectile_damage_verification=False)
+  native_exceptions=[r['detail'] for r in rows if r['name']=='native-exception'],runtime_errors=[r['detail'] for r in rows if r['name'] in ['version-or-access-refused','runtime-error','fail-closed']],guard_refusals=[r['detail'] for r in rows if r['name']=='admission-refused'],measurement='Legacy path/ammo counts prove no projectile. New registration, movement and component-integrity store observations are separate; no whole-soldier-health, five-round or full-auto claim.',projectile_count_verified=False,visual_projectile_damage_verification=False)
 
 
 def request_stop(session,reason):
@@ -63,12 +64,21 @@ def await_attachment(proc,session,timeout=15):
   time.sleep(.1)
 
 
+def activation_scope(profile,legacy_approved,evidence_approved,seconds):
+ evidence=profile.get('runtime_mode')=='bounded-projectile-evidence'
+ if evidence:
+  if not evidence_approved or not 10<=seconds<=90:raise ValueError('Changed projectile evidence hook requires its own explicit approval and at most90 seconds')
+  return '--projectile-evidence-approved'
+ if not legacy_approved or evidence_approved:raise ValueError('Approval does not match this historical runtime profile')
+ return '--five-round-runtime-approved'
+
+
 def main():
- ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('action',choices=['start','stop','status','report']);ap.add_argument('--approved-engine-hook',action='store_true');ap.add_argument('--pid',type=int);ap.add_argument('--seconds',type=int,default=90);ap.add_argument('--game-root',type=Path,default=Path('D:/Games/Total War - SHOGUN 2'));a=ap.parse_args()
+ ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('action',choices=['start','stop','status','report']);ap.add_argument('--approved-engine-hook',action='store_true');ap.add_argument('--approved-projectile-evidence',action='store_true');ap.add_argument('--pid',type=int);ap.add_argument('--seconds',type=int,default=90);ap.add_argument('--game-root',type=Path,default=Path('D:/Games/Total War - SHOGUN 2'));a=ap.parse_args()
  if a.action=='start':
-  if not a.approved_engine_hook:raise ValueError('Separate human approval is required for this mutating runtime hook')
+  if not (a.approved_engine_hook or a.approved_projectile_evidence):raise ValueError('Separate human approval is required for this specific runtime scope')
   if not 10<=a.seconds<=3600:raise ValueError('Runtime duration must be 10..3600 seconds')
-  m=verify();profile=loaded(ROOT/'engine-profile.json');game=a.game_root.resolve()
+  m=verify();profile=loaded(ROOT/'engine-profile.json');token=activation_scope(profile,a.approved_engine_hook,a.approved_projectile_evidence,a.seconds);game=a.game_root.resolve()
   if digest((game/'data/steel_sakura_combined_test.pack').read_bytes())!=profile['pack_sha256']:raise ValueError('Install the paired candidate pack with the game closed before starting it')
   busy=process_ids(['Type20FiveRound','Burst5Experiment','ReadOnlyTrace','Type20LifecycleTrace'])
   if busy:raise ValueError('Another controller/observer is running; stop and confirm its detach first')
@@ -83,8 +93,8 @@ def main():
   preserved.update({str(p):digest(p.read_bytes()) for p in (game/'data').glob('*otomo*.pack')})
   user=Path(os.environ['APPDATA'])/'The Creative Assembly/Shogun2/scripts/user.script.txt'
   if user.is_file():preserved[str(user)]=digest(user.read_bytes())
-  save(session/'request.json',dict(game_pid=pid,mode='five-round native action re-arm',duration_seconds=a.seconds,write_offset='action+0x6C only',completion_and_ammo_writes=False,preserved_hashes=preserved),'exact approved runtime intent before activation')
-  proc=subprocess.Popen([str(ROOT/'Type20FiveRound.exe'),'--run','--five-round-runtime-approved',str(pid),str(ROOT),sys.executable,str(session)],creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+  save(session/'request.json',dict(game_pid=pid,mode=profile.get('runtime_mode','five-round native action re-arm'),duration_seconds=a.seconds,write_offset='action+0x6C only',completion_and_ammo_writes=False,preserved_hashes=preserved),'exact approved runtime intent before activation')
+  proc=subprocess.Popen([str(ROOT/'Type20FiveRound.exe'),'--run',token,str(pid),str(ROOT),sys.executable,str(session)],creationflags=subprocess.CREATE_NO_WINDOW,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
   result=dict(session=str(session),host_pid=proc.pid,game_pid=pid);save(ROOT/'build/five_round/active.json',result,'spawned host and graceful-stop target; attachment not yet confirmed');ack=await_attachment(proc,session);print(json.dumps({**result,**ack},indent=2))
  else:
   _,session=latest()

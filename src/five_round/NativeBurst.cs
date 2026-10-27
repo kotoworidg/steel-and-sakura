@@ -26,7 +26,7 @@ namespace SteelSakura {
  public sealed class BurstState {
   public uint Action;public FireSnapshot Last;public string Token;
   public int Shots,Extras,LastShot=-1,Due,ResetTick;public bool InOriginal,Cancelled,PendingExtra,PendingNative;
-  public uint PendingSlot,Record;public float BeforeAmmo;public string Reason;
+  public uint PendingSlot,Record;public float BeforeAmmo;public string Reason;public PendingProjectile Proof;
  }
  public sealed class BurstController {
   public const string UnitKey="steel_sakura_type20_automatic_fire_test";
@@ -34,9 +34,9 @@ namespace SteelSakura {
   public const string SuppressionKey="steel_sakura_type20_supported_suppression_bullet";
   public const int Interval=100,MaxDuration=1500;
   public readonly Dictionary<uint,BurstState> States=new Dictionary<uint,BurstState>();
-  readonly IMemory memory;readonly Action<string,object> log;int refusals;
+  readonly IMemory memory;readonly Action<string,object> log;readonly ProjectileEvidence evidence;int refusals;
   public bool VersionVerified,Stopping;public uint ImageStart,ImageSize;
-  public BurstController(IMemory m,bool writes,Action<string,object> l){memory=m;Writes=writes;log=l;}
+  public BurstController(IMemory m,bool writes,Action<string,object> l,ProjectileEvidence proof=null){memory=m;Writes=writes;log=l;evidence=proof;}
   public bool Writes;public bool ExtendedInFlight{get{return false;}}
   public bool TryIdentity(uint actor,out uint unit,out uint key){
    unit=key=0;try{
@@ -74,6 +74,7 @@ namespace SteelSakura {
   public void Enter(uint action,uint metadata){
    // Called at RVA 3D438A, after the original completion/selection guards.
    FireSnapshot x;try{x=Read(action,metadata);}catch(Exception e){BurstState prior;if(States.TryGetValue(action,out prior))Cancel(prior,"current native firing frame no longer matches");try{uint u,k;if(refusals<8&&TryIdentity(Mem.U(memory,action+4),out u,out k)){refusals++;log("admission-refused",new{action=action,reason=e.Message});}}catch{}return;}
+   if(evidence!=null){evidence.Poll();if(evidence.LimitReached||evidence.Finished)Stopping=true;if(evidence.SelectedActor!=0&&evidence.SelectedActor!=x.Actor)return;}
    if(Stopping||!VersionVerified||!Writes||x.Complete!=0)return;
    BurstState s;
    if(States.TryGetValue(action,out s)&&!s.InOriginal&&x.Primary==0&&x.Secondary==0&&(x.Tick<s.Last.Tick||s.Cancelled)){States.Remove(action);s=null;}
@@ -99,6 +100,7 @@ namespace SteelSakura {
     if(!Same(s,x)||s.Cancelled||Stopping||!Projectile(record)||(s.Record!=0&&s.Record!=record))throw new InvalidDataException("native emission identity changed");
     if(slot>1||x.Ammo<1)throw new InvalidDataException("slot/ammunition unavailable");
     if(extra&&(x.Tick!=s.ResetTick||x.Tick>=500||s.Shots<1||s.Shots>=4))throw new InvalidDataException("extra shot selection/time gate failed");
+    s.Proof=evidence==null?null:evidence.Begin(action,x.Actor,x.Unit,record,request,extra);
     s.BeforeAmmo=x.Ammo;s.PendingSlot=slot;s.PendingNative=true;
     if(s.Record==0)s.Record=record;
     return true;
@@ -108,14 +110,16 @@ namespace SteelSakura {
    BurstState s;if(!States.TryGetValue(action,out s)||!s.PendingNative||s.PendingSlot!=slot)return;s.PendingNative=false;
    try{
     var x=Read(action,s.Last.Metadata);
+    if(evidence!=null&&!evidence.Complete(s.Proof))throw new InvalidDataException("projectile registration unconfirmed; additions cancelled");
+    s.Proof=null;
     if(!Same(s,x)||s.Cancelled||record!=s.Record||Math.Abs((s.BeforeAmmo-x.Ammo)-1)>.001f)throw new InvalidDataException("native debit/spawn pair not confirmed");
     if((int)x.Tick<=s.LastShot)throw new InvalidDataException("multiple shots at one simulation time");
     bool extra=slot==0&&s.PendingExtra;
     if(slot==0&&s.Shots>0&&!extra)throw new InvalidDataException("unscheduled primary dispatch");
     s.PendingExtra=false;s.Shots++;s.LastShot=(int)x.Tick;s.Due=s.LastShot+Interval;
-    log("native-shot-confirmed",new{action=action,actor=x.Actor,unit=x.Unit,slot=slot,shot=s.Shots,nativeMs=x.Tick,extra=extra,ammo=x.Ammo,delta=s.BeforeAmmo-x.Ammo});
+    log(evidence==null?"native-shot-confirmed":"native-path-ammo-debit",new{action=action,actor=x.Actor,unit=x.Unit,slot=slot,shot=s.Shots,nativeMs=x.Tick,extra=extra,ammo=x.Ammo,delta=s.BeforeAmmo-x.Ammo});
     if(s.Shots>5)throw new InvalidDataException("five-shot ceiling exceeded");
-    if(slot==1)log(s.Shots==5?"five-native-emissions-accounted":"short-native-burst",new{action=action,shots=s.Shots,extraAttempts=s.Extras});
+    if(slot==1)log(s.Shots==5?(evidence==null?"five-native-emissions-accounted":"five-registered-paths-damage-not-implied"):"short-native-burst",new{action=action,shots=s.Shots,extraAttempts=s.Extras});
    }catch(Exception e){Cancel(s,e.Message);}
   }
   void RestorePending(BurstState s){
@@ -128,7 +132,7 @@ namespace SteelSakura {
   public bool Leave(uint action,bool completedReturn){
    BurstState s;if(!States.TryGetValue(action,out s))return false;
    if(s.PendingExtra){RestorePending(s);Cancel(s,"extra native request rejected or emission missing");}
-   s.InOriginal=false;
+   s.InOriginal=false;s.Proof=null;s.PendingNative=false;
    try{byte[] flags=Flags(action);if(flags[2]==1||s.Cancelled||s.Shots>=5){log("burst-end",new{action=action,shots=s.Shots,cancelled=s.Cancelled});States.Remove(action);}}
    catch{States.Remove(action);}
    // Never overrides AL or retains the action, even when a burst is short.

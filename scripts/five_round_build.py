@@ -96,6 +96,9 @@ def compile_exe(session,host,bridge):
  return exe,dict(tests=tests,transport=transport,compiler_transactions=[init,str(archive/'manifest.json')])
 
 def build(prepare_only=False):
+ raise RuntimeError("Historical five-round candidate is frozen after the unsuccessful gameplay test. Use scripts/prepare_projectile_evidence.py prepare for the separately approved evidence mode; no new combat build is authorized by this command.")
+
+def _historical_build(prepare_only=False):
  core,pack_evidence=candidate();engine_profile=profile(digest(core));session=OUT/('build-'+utc())
  host=session/'NativeHost.cs';bridge=session/'BridgeTests.cs';write_text(host,host_source(digest(core)),'Five-round generate actual non-retaining native host');write_bytes(bridge,(ROOT/'src/burst5/BridgeTests.cs').read_bytes(),'Five-round preserve tested four-site transport fixture')
  exe,test_result=compile_exe(session,host,bridge)

@@ -33,4 +33,18 @@ class LauncherStartupTests(unittest.TestCase):
   self.log([('native-shot-confirmed',{'extra':True}),('five-native-emissions-accounted',{}),('admission-refused',{'reason':'private paired-window metadata differs'})]);r=launcher.report(self.session)
   self.assertEqual(r['firing_path_ammo_debit_pairs'],1);self.assertEqual(r['five_count_groups'],1);self.assertFalse(r['projectile_count_verified']);self.assertFalse(r['visual_projectile_damage_verification']);self.assertEqual(r['runtime_errors'],[]);self.assertEqual(len(r['guard_refusals']),1)
 
+class ProjectileScopeTests(unittest.TestCase):
+ def test_historical_approval_cannot_activate_changed_sites(self):
+  profile={'runtime_mode':'bounded-projectile-evidence'}
+  with self.assertRaises(ValueError):launcher.activation_scope(profile,True,False,90)
+  with self.assertRaises(ValueError):launcher.activation_scope(profile,False,True,91)
+  self.assertEqual(launcher.activation_scope(profile,False,True,90),'--projectile-evidence-approved')
+ def test_evidence_approval_cannot_be_reused_for_legacy_runtime(self):
+  with self.assertRaises(ValueError):launcher.activation_scope({},False,True,90)
+ def test_partial_object_damage_never_reports_five_round_completion(self):
+  rows=[{'name':'projectile-registered','detail':{}},{'name':'projectile-moved','detail':{}},{'name':'projectile-damage-store-after','detail':{'componentIntegrityDecreased':True,'moved':True,'extra':True}}]
+  fake=Mock();fake.glob.return_value=[Path('fixture.json')]
+  with patch.object(launcher,'loaded',return_value=rows):r=launcher.report(fake)
+  self.assertEqual(r['registered_projectile_observations'],1);self.assertTrue(r['additional_moved_component_damage']);self.assertFalse(r['ordinary_moved_component_damage']);self.assertFalse(r['five_damaging_projectiles_verified']);self.assertFalse(r['full_auto_verified'])
+
 if __name__=='__main__':unittest.main()

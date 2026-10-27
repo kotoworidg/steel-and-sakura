@@ -70,7 +70,8 @@ namespace SteelSakura {
    Test("explicit mutation switch off",()=>{var f=new EngineFixture();f.C.Writes=false;f.Run();Assert(f.NativeTimes.Count==2&&f.M.Writes.Count==0,"mutation guard");});
    Test("unterminated identity key",()=>{var f=new EngineFixture();int length=System.Text.Encoding.Unicode.GetByteCount(BurstController.UnitKey);f.M.Raw(EngineFixture.Key+(uint)length,new byte[]{1});f.Run();Assert(f.M.Writes.Count==0,"exact terminated identity");});
    Test("many independent firing actions stay bounded",()=>{for(int i=0;i<200;i++){var f=new EngineFixture();f.Run();Assert(f.NativeTimes.Count==5&&f.C.States.Count==0,"independent native action cleanup");OnlyPrimaryWrites(f);}});
-   Console.WriteLine(new JavaScriptSerializer().Serialize(new{status="PASS_SHARED_LIVE_ADAPTER_FIXTURES_GAME_NOT_RUN",cases=Cases,assertions=assertions,gameAttached=false,gameplayVerified=false,onlyPrimaryFlagWritten=true}));return 0;
+   int projectileCases=ProjectileEvidenceTests.Run();
+   Console.WriteLine(new JavaScriptSerializer().Serialize(new{projectileEvidenceCases=projectileCases,status="PASS_SHARED_LIVE_ADAPTER_FIXTURES_GAME_NOT_RUN",cases=Cases,assertions=assertions,gameAttached=false,gameplayVerified=false,onlyPrimaryFlagWritten=true}));return 0;
   }catch(Exception e){Console.Error.WriteLine(e.ToString());return 1;}}
  }
 }

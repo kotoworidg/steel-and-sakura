@@ -52,8 +52,12 @@ public sealed class RuntimeLog {
 public sealed class HookHost {
  readonly uint pid;readonly bool mutate;readonly string root,python,session;readonly Dictionary<uint,uint[]> saved=new Dictionary<uint,uint[]>();
  readonly Dictionary<uint,Stack<uint>> frames=new Dictionary<uint,Stack<uint>>();
+ sealed class PathFrame {public uint Action,Slot,Record,Request,Stack;}
+ readonly Dictionary<uint,PathFrame> pendingPaths=new Dictionary<uint,PathFrame>();
+ ProjectileEvidence evidence;
  Process processOwner;NativeMemory memory;BurstController controller;RuntimeLog log;uint image,imageSize;IntPtr process;bool draining,attached;int eventCount;double maxWallSeconds=90;
- readonly uint[] sites=new uint[]{0x3d438a,0x3b3042,0x3d453a,0x3d45b7};
+ const uint Entry=0x3d438a,Return=0x3b3042,Pre=0x3d453a,Post=0x3d45b7,DamagePre=0x424f4f,DamagePost=0x424f52;
+ readonly uint[] sites=new uint[]{Entry,Return,Pre,DamagePre,Post,DamagePost};
  public HookHost(uint id,bool writes,string workspace,string py,string dir){pid=id;mutate=writes;root=workspace;python=py;session=dir;}
  static string Hash(string path){using(var s=SHA256.Create())using(var f=File.OpenRead(path))return BitConverter.ToString(s.ComputeHash(f)).Replace("-","");}
  public void Verify(){
@@ -64,10 +68,11 @@ public sealed class HookHost {
   if(module==null||Hash(module.FileName)!="022FAE2E2DA92B59B8B1B8EE52887003C624E3C8ECA060B209F5D792A7F874F5")throw new InvalidOperationException("unrecognized engine hash");
   string pack=Path.Combine(Path.GetDirectoryName(module.FileName),"data","steel_sakura_combined_test.pack");
   if(Hash(pack)!="__FIVE_ROUND_PACK_SHA256__")throw new InvalidOperationException("pack differs from calibrated baseline");
-  var intent=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(session,"request.json")));maxWallSeconds=Convert.ToDouble(intent["duration_seconds"]);if(maxWallSeconds<10||maxWallSeconds>3600)throw new InvalidOperationException("invalid approved runtime duration");
+  var intent=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(session,"request.json")));maxWallSeconds=Convert.ToDouble(intent["duration_seconds"]);if(maxWallSeconds<10||maxWallSeconds>90)throw new InvalidOperationException("invalid approved runtime duration");
   image=unchecked((uint)module.BaseAddress.ToInt32());imageSize=(uint)module.ModuleMemorySize;process=p.Handle;memory=new NativeMemory(process);
   // Whole controller/wrapper byte masks are generated from the pinned file; relocations masked.
   var profile=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"engine-profile.json")));
+  if(!profile.ContainsKey("runtime_mode")||(string)profile["runtime_mode"]!="bounded-projectile-evidence")throw new InvalidOperationException("new projectile evidence profile and separate authorization required");
   foreach(object obj in (System.Collections.IEnumerable)profile["code_checks"]){var d=(Dictionary<string,object>)obj;uint r=Convert.ToUInt32(d["rva"]);byte[] expected=Convert.FromBase64String((string)d["bytes"]),mask=Convert.FromBase64String((string)d["mask"]);var current=memory.Read(image+r,expected.Length);for(int i=0;i<expected.Length;i++)if(mask[i]!=0&&expected[i]!=current[i])throw new InvalidOperationException("live controller code mismatch");}
  }
  void Arm(uint tid){
@@ -93,29 +98,42 @@ public sealed class HookHost {
  }
  void Hit(uint tid){
   using(var h=new ThreadHandle(tid))using(var c=new Registers(h.Handle)){
-   uint ip=c[184],rva=ip-image;Stack<uint> stack;if(!frames.TryGetValue(tid,out stack)){stack=new Stack<uint>();frames[tid]=stack;}
-   if(rva==sites[0]){
-    // Only the statically and dynamically recovered wrapper is admitted.
-    uint ret=Mem.U(memory,c[196]+0xf4);if(ret==image+sites[1]){uint action=c[160];controller.Enter(action,c[176]);stack.Push(action);}
-   }else if(rva==sites[1]){
+   uint rva=c[184]-image;Stack<uint> stack;if(!frames.TryGetValue(tid,out stack)){stack=new Stack<uint>();frames[tid]=stack;}
+   if(rva==Entry){
+    uint ret=Mem.U(memory,c[196]+0xf4);if(ret==image+Return){uint action=c[160];controller.Enter(action,c[176]);stack.Push(action);}
+   }else if(rva==Return){
+    if(pendingPaths.Remove(tid)){log.Add("projectile-pair-abandoned",new{thread=tid,reason="wrapper returned before paired post"});c[12]=image+Pre;}
     if(stack.Count>0){uint action=stack.Pop();controller.Leave(action,(c[176]&255)!=0);}
-   }else if(stack.Count>0&&stack.Peek()==c[160]){
-    uint action=c[160],slot=c[180];
-    if(rva==sites[2]&&!controller.BeforeFire(action,slot,c[156],c[196]+0x74))c[184]=image+0x3d45be;
-    if(rva==sites[3])controller.AfterFire(action,slot,c[156],c[196]+0x74);
+   }else if(rva==Pre){
+    if(stack.Count>0&&stack.Peek()==c[160]){
+     if(pendingPaths.ContainsKey(tid))throw new InvalidDataException("nested native path pairing");
+     uint action=c[160],slot=c[180],record=c[156],request=c[196]+0x74;
+     if(!controller.BeforeFire(action,slot,record,request)){c[184]=image+0x3d45be;c[12]=image+Pre;}
+     else {BurstState state;if(controller.States.TryGetValue(action,out state)&&state.PendingNative){pendingPaths[tid]=new PathFrame{Action=action,Slot=slot,Record=record,Request=request,Stack=c[196]};c[12]=image+Post;}}
+    }
+   }else if(rva==Post){
+    PathFrame f;if(!pendingPaths.TryGetValue(tid,out f))throw new InvalidDataException("pairing inconclusive: unpaired native path return");
+    pendingPaths.Remove(tid);c[12]=image+Pre;
+    if(stack.Count==0||stack.Peek()!=f.Action||c[160]!=f.Action||c[180]!=f.Slot||c[156]!=f.Record||c[196]!=f.Stack)throw new InvalidDataException("pairing inconclusive: native path owner/stack changed");
+    controller.AfterFire(f.Action,f.Slot,f.Record,f.Request);
+   }else if(rva==DamagePre){
+    // ESI=projectile, EBX=component, EDI=computed damage, EAX=clamped new value.
+    if(evidence.BeforeDamage(tid,c[160],c[164],c[156],c[176],c[196]))c[16]=image+DamagePost;
+   }else if(rva==DamagePost){
+    evidence.AfterDamage(tid,c[160],c[164],c[196]);c[16]=image+DamagePre;
    }
-   c[20]=0;c[192]|=0x10000;c.Save(h.Handle); // RF resumes the original instruction once.
+   c[20]=0;c[192]|=0x10000;c.Save(h.Handle);
   }
  }
  public int Run(){
-  log=new RuntimeLog(root,python,session);try{Verify();}catch(Exception e){log.Add("version-or-access-refused",e.ToString());log.Flush();return 1;}controller=new BurstController(memory,mutate,log.Add);controller.VersionVerified=true;controller.ImageStart=image;controller.ImageSize=imageSize;
-  log.Add("start",new{hostPid=Process.GetCurrentProcess().Id,pid=pid,image=image,mode=mutate?"guarded-five-shot":"diagnostic-only",maxShots=5,intervalMs=100,maxBurstMs=BurstController.MaxDuration,unit=BurstController.UnitKey});
+  log=new RuntimeLog(root,python,session);try{Verify();}catch(Exception e){log.Add("version-or-access-refused",e.ToString());log.Flush();return 1;}evidence=new ProjectileEvidence(memory,log.Add);controller=new BurstController(memory,mutate,log.Add,evidence);controller.VersionVerified=true;controller.ImageStart=image;controller.ImageSize=imageSize;
+  log.Add("start",new{hostPid=Process.GetCurrentProcess().Id,pid=pid,image=image,mode="bounded-projectile-evidence",sampleActors=1,maxRegisteredObjects=ProjectileEvidence.Limit,maxShots=5,intervalMs=100,maxBurstMs=BurstController.MaxDuration,unit=BurstController.UnitKey});
   IntPtr ev=Marshal.AllocHGlobal(96);bool processExited=false,firstBreak=true,restored=false,rollbackBreak=false,pending=false;uint pendingPid=0,pendingTid=0,pendingStatus=0x10002;double drainStarted=0,lastFlush=0;var timer=Stopwatch.StartNew();
   try{
    if(!Native.DebugActiveProcess(pid))throw new InvalidOperationException("attach denied "+Marshal.GetLastWin32Error());attached=true;log.Add("attached",new{pid=pid,temporaryPrimaryFlagWrites=true});
    if(!Native.DebugSetProcessKillOnExit(false))throw new InvalidOperationException("cannot disable kill-on-debugger-exit");
    while(!processExited){
-    if(log.Failed||File.Exists(Path.Combine(session,"STOP"))||timer.Elapsed.TotalSeconds>maxWallSeconds||eventCount>maxWallSeconds*20000){if(!draining){draining=true;drainStarted=timer.Elapsed.TotalSeconds;controller.Expire();log.Add("drain",new{events=eventCount,seconds=timer.Elapsed.TotalSeconds});}}
+    if(log.Failed||evidence.Finished||(evidence.LimitReached&&evidence.Registered==0)||File.Exists(Path.Combine(session,"STOP"))||timer.Elapsed.TotalSeconds>maxWallSeconds||eventCount>maxWallSeconds*20000){if(!draining){draining=true;drainStarted=timer.Elapsed.TotalSeconds;controller.Expire();log.Add("drain",new{events=eventCount,seconds=timer.Elapsed.TotalSeconds});}}
     if(timer.Elapsed.TotalSeconds-lastFlush>2){log.Flush();lastFlush=timer.Elapsed.TotalSeconds;}
     bool got=Native.WaitForDebugEvent(ev,50);
     if(!got){int error=Marshal.GetLastWin32Error();if(error!=121&&error!=0)throw new InvalidOperationException("debug event wait "+error);if(draining&&!controller.ExtendedInFlight&&!rollbackBreak){if(!Native.DebugBreakProcess(process))throw new InvalidOperationException("rollback system break failed");rollbackBreak=true;}continue;}
@@ -124,13 +142,13 @@ public sealed class HookHost {
      eventCount++;
      if(kind==3){IntPtr file=Marshal.ReadIntPtr(ev,12);if(file!=IntPtr.Zero)Native.CloseHandle(file);if(!draining)Arm(tid);}
      else if(kind==2&&!draining)Arm(tid);
-     else if(kind==4){saved.Remove(tid);Stack<uint> abandoned;if(frames.TryGetValue(tid,out abandoned))foreach(uint a in abandoned){BurstState state;if(controller.States.TryGetValue(a,out state)){controller.Cancel(state,"native thread exited");state.InOriginal=false;}}frames.Remove(tid);}
+     else if(kind==4){saved.Remove(tid);pendingPaths.Remove(tid);evidence.Abandon(tid,"native thread exited");Stack<uint> abandoned;if(frames.TryGetValue(tid,out abandoned))foreach(uint a in abandoned){BurstState state;if(controller.States.TryGetValue(a,out state)){controller.Cancel(state,"native thread exited");state.InOriginal=false;}}frames.Remove(tid);}
      else if(kind==5){controller.Expire();processExited=true;attached=false;stopAfter=true;}
      else if(kind==6){IntPtr file=Marshal.ReadIntPtr(ev,12);if(file!=IntPtr.Zero)Native.CloseHandle(file);}
      else if(kind==1){uint code=unchecked((uint)Marshal.ReadInt32(ev,12)),addr=unchecked((uint)Marshal.ReadInt32(ev,24));bool ours=false;foreach(uint r in sites)if(addr==image+r)ours=true;
       if(code==0x80000004&&ours)Hit(tid);
       else if(code==0x80000003&&(firstBreak||rollbackBreak)){firstBreak=false;rollbackBreak=false;}
-      else {status=0x80010001;log.Add("native-exception",new{code=code,address=addr,firstChance=Marshal.ReadInt32(ev,92)});}
+      else {pendingPaths.Remove(tid);evidence.Abandon(tid,"native exception");controller.Expire();draining=true;status=0x80010001;log.Add("native-exception",new{code=code,address=addr,firstChance=Marshal.ReadInt32(ev,92)});}
      }
     }catch(Exception e){controller.Expire();draining=true;drainStarted=timer.Elapsed.TotalSeconds;stopAfter=true;log.Add("fail-closed",e.ToString());}
     finally{if((stopAfter||draining&&!controller.ExtendedInFlight)&&!processExited){restored=Restore();}pendingStatus=status;if(!Native.ContinueDebugEvent(epid,tid,status))throw new InvalidOperationException("ContinueDebugEvent failed");pending=false;}
@@ -157,7 +175,7 @@ public sealed class HookHost {
     if(pending){while(!Native.ContinueDebugEvent(pendingPid,pendingTid,pendingStatus))System.Threading.Thread.Sleep(20);pending=false;}
     if(attached){while(!Native.DebugActiveProcessStop(pid))System.Threading.Thread.Sleep(100);attached=false;log.Add("detached",new{pid=pid,engineFilesModified=false});}
    }
-   Marshal.FreeHGlobal(ev);if(processOwner!=null)processOwner.Dispose();log.Add("end",new{events=eventCount,processExited=processExited});log.Flush();
+   Marshal.FreeHGlobal(ev);if(processOwner!=null)processOwner.Dispose();log.Add("end",new{events=eventCount,processExited=processExited,registeredObjects=evidence.Registered,ordinaryMovedComponentDamage=evidence.OrdinaryDamage,additionalMovedComponentDamage=evidence.AdditionalDamage,fiveDamagingProjectilesVerified=false,fullAutoVerified=false});log.Flush();
   }
   return 0;
  }
@@ -170,9 +188,9 @@ public static class Program {
    if(args.Length==2&&args[0]=="--toy-child")return BridgeTests.Child(args[1]);
    if(args.Length==1&&args[0]=="--bridge-self-test")return BridgeTests.Run();
    if(args.Length==1&&args[0]=="--self-test")return SelfTests.Run();
-   if(args.Length==6&&args[0]=="--run"&&args[1]=="--five-round-runtime-approved")return new HookHost(UInt32.Parse(args[2]),true,args[3],args[4],args[5]).Run();
+   if(args.Length==6&&args[0]=="--run"&&args[1]=="--projectile-evidence-approved")return new HookHost(UInt32.Parse(args[2]),true,args[3],args[4],args[5]).Run();
 
-   Console.WriteLine("Prepared experiment. No hook runs without explicit --run --five-round-runtime-approved. Use --self-test for offline tests.");return 2;
+   Console.WriteLine("Evidence preparation only. Requires separate --run --projectile-evidence-approved. Use --self-test for offline fixtures; no gameplay proof.");return 2;
   }catch(Exception e){Console.Error.WriteLine(e.ToString());return 1;}
  }
 }
